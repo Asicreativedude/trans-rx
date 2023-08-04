@@ -1,3 +1,8 @@
+interface webPapData {
+	[key: string]: string;
+}
+
+//form step indicator
 const indicators = document.querySelectorAll(
 	'.step-text-c'
 ) as NodeListOf<HTMLElement>;
@@ -22,11 +27,8 @@ indicators.forEach((indicator) => {
 	observer.observe(indicator as Node, options);
 });
 
-interface PatientData {
-	[key: string]: string;
-}
-
-const patientData: PatientData = {
+//webpap api
+const patientData: webPapData = {
 	fname: '',
 	lname: '',
 	mname: '',
@@ -46,24 +48,118 @@ const patientData: PatientData = {
 	EmerContactName: '',
 	EmerContactPhone1: '',
 };
-const patientIncomeData: PatientData = {
+const patientIncomeData: webPapData = {
 	patwages: '',
 	patdisab: '',
 	patunemploy: '',
 };
-//update patient json submit
+const doctorData: webPapData = {
+	fname: '',
+	mname: '',
+	lname: '',
+	email: '',
+	phone: '',
+	fax: '',
+	address: '',
+	city: '',
+	state: '',
+	zip: '',
+};
+
 const submitBtn = document.querySelector(
 	'[cd="submit-data"]'
 ) as HTMLButtonElement;
 
 let patientId: number = 0;
+let authToken: string = '';
 
-const createUrl = 'https://www.medserviceswebpap.com/api/patient/createpatient';
+// webPap get authtoken Api
+const createURL = 'https://www.medserviceswebpap.com/api/patient/createpatient';
 const createDoctorURL =
-	'https://www.medicalserviceswebpap.com/api/physician/createphysician';
+	'https://www.medserviceswebpap.com/api/physician/createphysician';
+const generalURL = 'https://www.medserviceswebpap.com/auth/token?hcpid=89';
+const authData = {
+	grant_type: 'password',
+	username: 'apiuser',
+	password: '123456',
+};
+async function getAuth(
+	url: string,
+	data: { grant_type: string; username: string; password: string }
+) {
+	const response = await fetch(url, {
+		method: 'POST',
+		headers: {
+			// 'Content-Type': 'application/json',
+			'Content-Type': 'application/x-www-form-urlencoded',
+		},
+		body: new URLSearchParams(data).toString(),
+	});
+	if (!response.ok) {
+		throw new Error(response.statusText);
+	}
+
+	return response.json();
+}
+
+async function postDoctorData(url: string, data: webPapData) {
+	try {
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${authToken}`,
+			},
+			body: JSON.stringify(data),
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		await response.json();
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+async function postData(url: string, data: webPapData) {
+	try {
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${authToken}`,
+			},
+			body: JSON.stringify(data),
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		const responseJson = await response.json();
+		patientId = responseJson.Id;
+	} catch (err) {
+		console.log(err);
+	}
+}
+async function postIncomeData(url: string, data: webPapData) {
+	try {
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${authToken}`,
+			},
+			body: JSON.stringify(data),
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+	} catch (err) {
+		console.log(err);
+	}
+}
 
 submitBtn.addEventListener('click', () => {
-	//patient address
+	// //patient address
 	//@ts-ignore
 	if (patientAddress) {
 		//@ts-ignore
@@ -88,8 +184,47 @@ submitBtn.addEventListener('click', () => {
 			}
 		});
 	}
+
+	//doctor address
+	//@ts-ignore
+	if (doctorAddress) {
+		//@ts-ignore
+		doctorAddress.forEach((component) => {
+			let componentType = component.types[0];
+			switch (componentType) {
+				case 'street_number': {
+					doctorData['address'] = `${component.long_name} `;
+					break;
+				}
+				case 'route': {
+					doctorData['address'] += component.short_name;
+					break;
+				}
+				case 'locality':
+					doctorData['city'] = component.long_name;
+					break;
+				case 'administrative_area_level_1': {
+					doctorData['state'] = component.short_name;
+					break;
+				}
+			}
+		});
+	}
 	//@ts-ignore
 	all_data.forEach((data: { field: string; value: string }) => {
+		if (
+			data.field === 'patwages' ||
+			data.field === 'patdisab' ||
+			data.field === 'patunemploy'
+		) {
+			patientIncomeData[data.field] = data.value;
+			return;
+		}
+		if (data.field.includes('doc-')) {
+			let field = data.field.split('-')[1];
+			doctorData[field] = data.value;
+			return;
+		}
 		if (data.field === 'month') {
 			patientData['dob'] = `${data.value}`;
 			return;
@@ -105,50 +240,13 @@ submitBtn.addEventListener('click', () => {
 		patientData[data.field] = data.value;
 	});
 
-	async function postData(url: string, data: PatientData) {
-		try {
-			const response = await fetch(url, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization:
-						'Bearer Bd7_aG9B_YHizPMt9zNOm9joC1etgQHoxR4hNVWAgcyX3NwzBth7JK6dyzbQdFQ8xVC_wtcVa-KqysCvkWefb9Hh-j0Numd81VdKZva_kYF3q3cwklRQunnKxQIQTt6XArEU4Qh3mAABIDoruv9kSR7PsTriOYD1qtNBwrojSu3kro38dNnF5zuJURZx2fZ4P5j3I-SzFxkofTC_7ZkF5Ko-n6zSqIwnmK1qE1wujTHwiVOEsMSG3lcu4CQc1dNFFMtWAxcpDadYo-736KbMzKtugxOjPGAEhrAQCeJY2q9qq0Lub_000xHT8gdRQAsjwJBNaQaoX43ujr-OjCGpfMQfvn0ntP8fOlQW5chRvfHswuFsinBkAcX-nlrjv5vS8xdQB4CHvmDZaTaSTwgu3LjanYkjGkvO_4r2LGC95CxwI9NM',
-				},
-				body: JSON.stringify(data),
-			});
-			if (!response.ok) {
-				throw new Error('Network response was not ok');
-			}
-			const responseJson = await response.json();
-			patientId = responseJson.Id;
-		} catch (err) {
-			console.log(err);
-		}
-	}
-	async function postIncomeData(url: string, data: PatientData) {
-		try {
-			const response = await fetch(url, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization:
-						'Bearer Bd7_aG9B_YHizPMt9zNOm9joC1etgQHoxR4hNVWAgcyX3NwzBth7JK6dyzbQdFQ8xVC_wtcVa-KqysCvkWefb9Hh-j0Numd81VdKZva_kYF3q3cwklRQunnKxQIQTt6XArEU4Qh3mAABIDoruv9kSR7PsTriOYD1qtNBwrojSu3kro38dNnF5zuJURZx2fZ4P5j3I-SzFxkofTC_7ZkF5Ko-n6zSqIwnmK1qE1wujTHwiVOEsMSG3lcu4CQc1dNFFMtWAxcpDadYo-736KbMzKtugxOjPGAEhrAQCeJY2q9qq0Lub_000xHT8gdRQAsjwJBNaQaoX43ujr-OjCGpfMQfvn0ntP8fOlQW5chRvfHswuFsinBkAcX-nlrjv5vS8xdQB4CHvmDZaTaSTwgu3LjanYkjGkvO_4r2LGC95CxwI9NM',
-				},
-				body: JSON.stringify(data),
-			});
-			if (!response.ok) {
-				throw new Error('Network response was not ok');
-			}
-		} catch (err) {
-			console.log(err);
-		}
-	}
-	postData(createUrl, patientData).then(() => {
-		let incomeUrl = `https://www.medserviceswebpap.com/api/patient/updatepatientincome?patientId=${patientId}`;
-		console.log(incomeUrl);
-		postIncomeData(incomeUrl, patientIncomeData).then((data) => {
-			console.log(data);
+	getAuth(generalURL, authData).then((data) => {
+		authToken = data.access_token;
+		postData(createURL, patientData).then(() => {
+			let incomeUrl = `https://www.medserviceswebpap.com/api/patient/updatepatientincome?patientId=${patientId}`;
+			postIncomeData(incomeUrl, patientIncomeData);
 		});
+		postDoctorData(createDoctorURL, doctorData);
 	});
 });
 
@@ -165,37 +263,3 @@ submitBtn.addEventListener('click', () => {
 // deletePatient(
 // 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=10'
 // );
-
-///////////////////////////////////
-// webPap get authtoken Api
-// const url = 'https://www.medserviceswebpap.com/auth/token?hcpid=89';
-// const data = {
-// 	grant_type: 'password',
-// 	username: 'apiuser',
-// 	password: '123456',
-// };
-// async function postData(
-// 	url: string,
-// 	data: { grant_type: string; username: string; password: string }
-// ) {
-// 	const response = await fetch(url, {
-// 		method: 'POST',
-// 		headers: {
-// 			// 'Content-Type': 'application/json',
-// 			'Content-Type': 'application/x-www-form-urlencoded',
-// 		},
-// 		body: new URLSearchParams(data).toString(),
-// 	});
-// 	if (!response.ok) {
-// 		throw new Error(response.statusText);
-// 	}
-
-// 	return response.json();
-// }
-
-// postData(url, data).then((data) => {
-// 	console.log(data);
-// });
-
-// //Create Patient Json
-// ('Bd7_aG9B_YHizPMt9zNOm9joC1etgQHoxR4hNVWAgcyX3NwzBth7JK6dyzbQdFQ8xVC_wtcVa-KqysCvkWefb9Hh-j0Numd81VdKZva_kYF3q3cwklRQunnKxQIQTt6XArEU4Qh3mAABIDoruv9kSR7PsTriOYD1qtNBwrojSu3kro38dNnF5zuJURZx2fZ4P5j3I-SzFxkofTC_7ZkF5Ko-n6zSqIwnmK1qE1wujTHwiVOEsMSG3lcu4CQc1dNFFMtWAxcpDadYo-736KbMzKtugxOjPGAEhrAQCeJY2q9qq0Lub_000xHT8gdRQAsjwJBNaQaoX43ujr-OjCGpfMQfvn0ntP8fOlQW5chRvfHswuFsinBkAcX-nlrjv5vS8xdQB4CHvmDZaTaSTwgu3LjanYkjGkvO_4r2LGC95CxwI9NM');

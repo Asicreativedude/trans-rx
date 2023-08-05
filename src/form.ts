@@ -3,7 +3,7 @@ interface webPapData {
 }
 
 //form step indicator
-const indicators = document.querySelectorAll(
+const stepIndicators = document.querySelectorAll(
 	'.step-text-c'
 ) as NodeListOf<HTMLElement>;
 const bar = document.querySelector('.progress-bar') as HTMLElement;
@@ -14,16 +14,16 @@ const options = {
 function callback(mutationList: MutationRecord[]) {
 	mutationList.forEach(function (mutation) {
 		if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-			let index = Array.from(indicators).findIndex((element) =>
+			let index = Array.from(stepIndicators).findIndex((element) =>
 				element.classList.contains('current')
 			);
-			bar!.style.width = `${((index + 1) / indicators.length) * 100}%`;
+			bar!.style.width = `${((index + 1) / stepIndicators.length) * 100}%`;
 		}
 	});
 }
 
 let observer = new MutationObserver(callback);
-indicators.forEach((indicator) => {
+stepIndicators.forEach((indicator) => {
 	observer.observe(indicator as Node, options);
 });
 
@@ -83,6 +83,7 @@ const authData = {
 	username: 'apiuser',
 	password: '123456',
 };
+
 async function getAuth(
 	url: string,
 	data: { grant_type: string; username: string; password: string }
@@ -184,7 +185,6 @@ submitBtn.addEventListener('click', () => {
 			}
 		});
 	}
-
 	//doctor address
 	//@ts-ignore
 	if (doctorAddress) {
@@ -235,6 +235,10 @@ submitBtn.addEventListener('click', () => {
 		}
 		if (data.field === 'residency' || data.field === 'disabled') {
 			patientData[data.field] = data.value === 'Yes' ? 'true' : 'false';
+			return;
+		}
+		if (data.field === 'ssn') {
+			patientData[data.field] = data.value.replace(/-/g, '');
 			return;
 		}
 		patientData[data.field] = data.value;

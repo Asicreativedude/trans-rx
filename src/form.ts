@@ -454,6 +454,14 @@ function validateForm(
 		} else {
 			phoneInput2.nextElementSibling!.classList.remove('active');
 		}
+
+		const zipCode = document.getElementById('zip') as HTMLInputElement;
+		if (zipCode.value.length !== 5) {
+			valid = false;
+			zipCode.nextElementSibling!.classList.add('active');
+		} else {
+			zipCode.nextElementSibling!.classList.remove('active');
+		}
 	}
 
 	if (currentStep === 2) {
@@ -517,6 +525,24 @@ function validateForm(
 				fax2.nextElementSibling!.classList.add('active');
 			} else {
 				fax2.nextElementSibling!.classList.remove('active');
+			}
+		}
+
+		const zipCode = document.getElementById('doc-zip-2') as HTMLInputElement;
+		const zipCode2 = document.getElementById('doc2-zip-2') as HTMLInputElement;
+
+		if (zipCode.value.length !== 5) {
+			valid = false;
+			zipCode.nextElementSibling!.classList.add('active');
+		} else {
+			zipCode.nextElementSibling!.classList.remove('active');
+		}
+		if (zipCode2.value !== '') {
+			if (zipCode2.value.length !== 5) {
+				valid = false;
+				zipCode2.nextElementSibling!.classList.add('active');
+			} else {
+				zipCode2.nextElementSibling!.classList.remove('active');
 			}
 		}
 	}

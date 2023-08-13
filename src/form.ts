@@ -243,95 +243,35 @@ submitBtn.addEventListener('click', () => {
 // 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=10'
 // );
 
-function setMedicationNames() {
-	const medNames = document.querySelectorAll('[cd=drug]');
-	medNames.forEach((medName) => {
-		const nameOption = document.createElement('option');
-		const medNameText = medName.textContent;
-		if (medNameText !== null) {
-			nameOption.text = medNameText;
-			nameOption.value = medNameText;
-			nameOption.setAttribute('cd', medNameText);
-			selectElement.add(nameOption);
-		}
-	});
-}
-
-function addOptionsToSelect(
-	selectElement: HTMLSelectElement,
-	options: string[]
-) {
-	if (options.length > 9) {
-		selectElement.innerHTML = '';
-		const defaultOption = document.createElement('option');
-		defaultOption.text = 'Select Medication First';
-		defaultOption.value = '';
-		selectElement.add(defaultOption);
-		return;
-	}
-	// Remove any previous options
-	selectElement.innerHTML = '';
-	const defaultOption = document.createElement('option');
-	defaultOption.text = 'Select Medication First';
-	defaultOption.value = '';
-	selectElement.add(defaultOption);
-	// Add new options
-
-	options.forEach((optionText) => {
-		console.log(optionText);
-		if (optionText === '') {
-			return;
-		}
-		const option = document.createElement('option');
-		option.text = optionText;
-		option.value = optionText;
-		selectElement.add(option);
-	});
-}
-
-const selectElement = document.getElementById(
-	'Medication-Name-9'
-) as HTMLSelectElement;
-const strengthSelect = document.getElementById(
-	'med-strength-2'
-) as HTMLSelectElement;
-selectElement.addEventListener('change', (event) => {
-	const value = (event.target as HTMLSelectElement).value
-		.replace(' ', '-')
-		.toLocaleLowerCase();
-
-	const drug = document.querySelector(`[cd-name=${value}]`)?.parentElement;
-
-	const strength = drug?.querySelectorAll('[cd=strength]');
-	strength?.forEach((strength) => {
-		const strengthOption = document.createElement('option');
-		const strengthText = strength.textContent;
-		if (strengthText !== null) {
-			strengthOption.text = strengthText;
-			strengthOption.value = strengthText;
-			strengthSelect?.add(strengthOption);
-		}
-	});
-});
-
 //@ts-ignore
 window.fsAttributes = window.fsAttributes || [];
 //@ts-ignore
 window.fsAttributes.push([
 	'cmsload',
 	(listInstances: any) => {
-		console.log('cmsload Successfully loaded!');
-
 		// The callback passes a `listInstances` array with all the `CMSList` instances on the page.
 		const [listInstance] = listInstances;
-
-		setMedicationNames();
+		for (let i = 1; i < 4; i++) {
+			setMedicationNames(
+				document.getElementById(`med-name-${i}`) as HTMLSelectElement
+			);
+		}
 		// The `renderitems` event runs whenever the list renders items after switching pages.
 		listInstance.on('renderitems', (renderedItems: any) => {
 			console.log(renderedItems);
 		});
 	},
 ]);
+
+//populate year select field
+const yearSelect = document.getElementById('year') as HTMLSelectElement;
+const years = 105;
+for (let i = years; i > 0; i--) {
+	const option = document.createElement('option');
+	option.text = `${i + 1900}`;
+	option.value = `${i + 1900}`;
+	yearSelect.add(option);
+}
 
 function createMultiStepForm(
 	elements: NodeListOf<HTMLElement>,
@@ -340,6 +280,7 @@ function createMultiStepForm(
 	indicatiors: NodeListOf<HTMLElement>
 ) {
 	let currentStep = 0;
+	prevButton.style.display = 'none';
 	const numSteps = elements.length;
 
 	// Hide all elements except the first one
@@ -348,13 +289,7 @@ function createMultiStepForm(
 			element.style.display = 'none';
 		}
 	});
-	indicatiors.forEach((indicator, index) => {
-		if (index !== currentStep) {
-			indicator.classList.remove('current');
-		} else {
-			indicator.classList.add('current');
-		}
-	});
+
 	// Add event listeners to the buttons
 	prevButton.addEventListener('click', () => {
 		if (currentStep > 0) {
@@ -362,13 +297,48 @@ function createMultiStepForm(
 			currentStep--;
 			elements[currentStep].style.display = 'block';
 		}
+		indicatiors.forEach((indicator, index) => {
+			if (index !== currentStep) {
+				indicator.classList.remove('current');
+			} else {
+				indicator.classList.add('current');
+			}
+		});
+		if (currentStep === 0) {
+			prevButton.style.display = 'none';
+		} else {
+			prevButton.style.display = 'block';
+		}
 	});
 
 	nextButton.addEventListener('click', () => {
-		if (currentStep < numSteps - 1) {
-			elements[currentStep].style.display = 'none';
-			currentStep++;
-			elements[currentStep].style.display = 'block';
+		const inputs = elements[currentStep].querySelectorAll(
+			'input'
+		) as NodeListOf<HTMLInputElement>;
+		const selects = elements[currentStep].querySelectorAll(
+			'select'
+		) as NodeListOf<HTMLSelectElement>;
+
+		if (!validateForm(inputs, selects, currentStep)) {
+			return;
+		} else {
+			if (currentStep < numSteps - 1) {
+				elements[currentStep].style.display = 'none';
+				currentStep++;
+				elements[currentStep].style.display = 'block';
+			}
+			indicatiors.forEach((indicator, index) => {
+				if (index !== currentStep) {
+					indicator.classList.remove('current');
+				} else {
+					indicator.classList.add('current');
+				}
+			});
+			if (currentStep === 0) {
+				prevButton.style.display = 'none';
+			} else {
+				prevButton.style.display = 'block';
+			}
 		}
 	});
 }
@@ -387,10 +357,237 @@ const indicators = document.querySelectorAll(
 ) as NodeListOf<HTMLElement>;
 createMultiStepForm(elements, prevButton, nextButton, indicators);
 
+//form step validation
+
+function validateForm(
+	inputs: NodeListOf<HTMLInputElement>,
+	selects: NodeListOf<HTMLSelectElement>,
+	currentStep: number
+) {
+	let valid = true;
+	inputs.forEach((input) => {
+		if (!input.required) {
+			return;
+		}
+		if (input.value === '') {
+			valid = false;
+			input.nextElementSibling!.classList.add('active');
+		} else {
+			input.nextElementSibling!.classList.remove('active');
+		}
+	});
+	selects.forEach((select) => {
+		if (!select.required) {
+			return;
+		}
+		if (select.value === '') {
+			valid = false;
+			select.nextElementSibling!.classList.add('active');
+		} else {
+			select.nextElementSibling!.classList.remove('active');
+		}
+	});
+
+	//radio buttons
+	const sexRadio = document.querySelectorAll('input[name=sex]:checked');
+	const citizenRadio = document.querySelectorAll(
+		'input[name=residency]:checked'
+	);
+	const disabledRadio = document.querySelectorAll(
+		'input[name=disabled]:checked'
+	);
+	if (sexRadio.length === 0) {
+		document.getElementById('sex-radio-error')!.classList.add('active');
+		valid = false;
+	} else {
+		document.getElementById('sex-radio-error')!.classList.remove('active');
+	}
+	if (citizenRadio.length === 0) {
+		document.getElementById('citizen-radio-error')!.classList.add('active');
+		valid = false;
+	} else {
+		document.getElementById('citizen-radio-error')!.classList.remove('active');
+	}
+	if (disabledRadio.length === 0) {
+		document.getElementById('disabled-radio-error')!.classList.add('active');
+		valid = false;
+	} else {
+		document.getElementById('disabled-radio-error')!.classList.remove('active');
+	}
+
+	//ssn
+	const ssn = document.getElementById('ssn') as HTMLInputElement;
+	if (ssn.value.length !== 11) {
+		valid = false;
+		document.getElementById('ssn-error')!.classList.add('active');
+	} else {
+		document.getElementById('ssn-error')!.classList.remove('active');
+	}
+
+	//email validation and phone number validation
+	if (currentStep === 1) {
+		const emailInput = document.getElementById('email') as HTMLInputElement;
+		if (!emailInput.required) {
+			return;
+		}
+		const re = /\S+@\S+\.\S+/;
+		if (!re.test(emailInput.value)) {
+			valid = false;
+			emailInput.nextElementSibling!.classList.add('active');
+		} else {
+			emailInput.nextElementSibling!.classList.remove('active');
+		}
+		const phoneInput = document.getElementById('dayphone') as HTMLInputElement;
+		const phoneInput2 = document.getElementById(
+			'EmerContactPhone'
+		) as HTMLInputElement;
+
+		if (phoneInput.value.length !== 10) {
+			valid = false;
+			phoneInput.nextElementSibling!.classList.add('active');
+		} else {
+			phoneInput.nextElementSibling!.classList.remove('active');
+		}
+		if (phoneInput2.value.length !== 10) {
+			valid = false;
+			phoneInput2.nextElementSibling!.classList.add('active');
+		} else {
+			phoneInput2.nextElementSibling!.classList.remove('active');
+		}
+	}
+
+	if (currentStep === 2) {
+		const emailInput = document.getElementById('doc-email') as HTMLInputElement;
+		const emailInput2 = document.getElementById(
+			'doc2-email'
+		) as HTMLInputElement;
+
+		if (!emailInput.required) {
+			return;
+		}
+
+		const re = /\S+@\S+\.\S+/;
+		if (!re.test(emailInput.value)) {
+			valid = false;
+			emailInput.nextElementSibling!.classList.add('active');
+		} else {
+			emailInput.nextElementSibling!.classList.remove('active');
+		}
+		if (emailInput2.value !== '') {
+			if (!re.test(emailInput2.value)) {
+				valid = false;
+				emailInput2.nextElementSibling!.classList.add('active');
+			}
+		} else {
+			emailInput2.nextElementSibling!.classList.remove('active');
+		}
+
+		const phoneInput = document.getElementById(
+			'doc-officephone-2'
+		) as HTMLInputElement;
+		const fax = document.getElementById('doc-fax') as HTMLInputElement;
+		const phoneInput2 = document.getElementById(
+			'doc2-officephone-2'
+		) as HTMLInputElement;
+		const fax2 = document.getElementById('doc2-fax') as HTMLInputElement;
+
+		if (phoneInput.value.length !== 10) {
+			valid = false;
+			phoneInput.nextElementSibling!.classList.add('active');
+		} else {
+			phoneInput.nextElementSibling!.classList.remove('active');
+		}
+		if (fax.value.length !== 10) {
+			valid = false;
+			fax.nextElementSibling!.classList.add('active');
+		} else {
+			fax.nextElementSibling!.classList.remove('active');
+		}
+		if (phoneInput2.value !== '') {
+			if (phoneInput2.value.length !== 10) {
+				valid = false;
+				phoneInput2.nextElementSibling!.classList.add('active');
+			} else {
+				phoneInput2.nextElementSibling!.classList.remove('active');
+			}
+		}
+		if (fax2.value !== '') {
+			if (fax2.value.length !== 10) {
+				valid = false;
+				fax2.nextElementSibling!.classList.add('active');
+			} else {
+				fax2.nextElementSibling!.classList.remove('active');
+			}
+		}
+	}
+
+	return valid;
+}
+
+// phone fax
+const phoneInput = document.querySelectorAll('.phone-field');
+const zipInput = document.querySelectorAll('input[placeholder="Zip code"]');
+
+phoneInput.forEach((input) => {
+	input.addEventListener('input', function (this: HTMLInputElement) {
+		// Remove non-numeric characters from the input
+		this.value = this.value.replace(/\D/g, '');
+
+		// Limit the input to 10 characters
+		if (this.value.length > 10) {
+			this.value = this.value.slice(0, 10);
+		}
+	});
+});
+
+zipInput.forEach((input) => {
+	input.addEventListener('input', function (this: HTMLInputElement) {
+		// Remove non-numeric characters from the input
+		this.value = this.value.replace(/\D/g, '');
+		// Limit the input to 5 characters
+		if (this.value.length > 5) {
+			this.value = this.value.slice(0, 5);
+		}
+	});
+});
+//ssn
+function formatSSN(input: string) {
+	// Remove all non-numeric characters
+	const cleanedInput = input.replace(/\D/g, '');
+	// Add dashes after the first 3 digits and after the next 2 digits
+	const formattedSSN = cleanedInput.replace(
+		/^(\d{3})(\d{2})(\d{0,4})$/,
+		(_, p1, p2, p3) => {
+			if (p3) {
+				return `${p1}-${p2}-${p3}`;
+			} else if (p2) {
+				return `${p1}-${p2}`;
+			} else {
+				return p1;
+			}
+		}
+	);
+	return formattedSSN;
+}
+
+const ssnInput = document.getElementById('ssn');
+ssnInput!.addEventListener('input', function (this: HTMLInputElement) {
+	this.value = formatSSN(this.value);
+});
+
+//income-fields
+const incomeFields = document.querySelectorAll('.money-field');
+incomeFields.forEach((input) => {
+	input.addEventListener('input', function (this: HTMLInputElement) {
+		// remove all non-numric characters
+		this.value = this.value.replace(/\D/g, '');
+		if (this.value === '') return;
+		// add $ at the beginning
+		this.value = '$' + this.value;
+	});
+});
+
 //form step indicator
-const stepIndicators = document.querySelectorAll(
-	'.step-text-c'
-) as NodeListOf<HTMLElement>;
 const bar = document.querySelector('.progress-bar') as HTMLElement;
 const options = {
 	attributes: true,
@@ -399,16 +596,16 @@ const options = {
 function callback(mutationList: MutationRecord[]) {
 	mutationList.forEach(function (mutation) {
 		if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-			let index = Array.from(stepIndicators).findIndex((element) =>
+			let index = Array.from(indicators).findIndex((element) =>
 				element.classList.contains('current')
 			);
-			bar!.style.width = `${((index + 1) / stepIndicators.length) * 100}%`;
+			bar!.style.width = `${((index + 1) / indicators.length) * 100}%`;
 		}
 	});
 }
 
 let observer = new MutationObserver(callback);
-stepIndicators.forEach((indicator) => {
+indicators.forEach((indicator) => {
 	observer.observe(indicator as Node, options);
 });
 
@@ -444,138 +641,88 @@ tabs.forEach((tab) => {
 	});
 });
 
-//doc tabs
-// const accSettings = {
-// 	speed: 300,
-// 	oneOpen: true,
-// 	offsetAnchor: true,
-// 	offsetFromTop: 180,
-// 	scrollTopDelay: 400,
-// 	classes: {
-// 		accordion: 'doc-tabs-w',
-// 		header: 'doc-link',
-// 		item: 'doc-content-c-tab',
-// 		body: 'doc-content-w',
-// 		icon: 'tab-plus-icon',
-// 		iconOpen: 'tab-minus-icon',
-// 		active: 'active',
-// 	},
-// };
+//meds
 
-// const prefix = accSettings.classes;
+const medicationWrapper = document.getElementById('medicationStep');
+const medicationRow = medicationWrapper?.querySelector('.form-row-wrapper');
+const addMedication = document.getElementById('addMed');
+addMedication!.addEventListener('click', () => {
+	const newMedication = medicationRow!.cloneNode(true);
+	medicationWrapper!.insertBefore(newMedication, addMedication!.parentElement);
+});
 
-// const accordion = (function () {
-// 	const accordionElem = $(`.${prefix.accordion}`);
-// 	const accordionHeader = accordionElem.find(`.${prefix.header}`);
-// 	const accordionItem = $(`.${prefix.item}`);
-// 	const accordionBody = $(`.${prefix.body}`);
-// 	const accordionIcon = $(`.${prefix.icon}`);
-// 	const accordionIconOpen = $(`.${prefix.iconOpen}`);
-// 	const activeClass = prefix.active;
+//med step
 
-// 	return {
-// 		// pass configurable object literal
+for (let i = 1; i < 4; i++) {
+	const selectElement = document.getElementById(
+		`med-name-${i}`
+	) as HTMLSelectElement;
+	const strengthSelect = document.getElementById(
+		`med-strength-${i}`
+	) as HTMLSelectElement;
+	selectElement.addEventListener('change', (event) => {
+		strengthSelect.innerHTML = '';
 
-// 		//@ts-ignore
-// 		init: function (settings) {
-// 			accordionHeader.on('click', function () {
-// 				accordion.toggle($(this));
-// 				if (accSettings.offsetAnchor) {
-// 					setTimeout(() => {
-// 						$('html').animate(
-// 							//@ts-ignore
-// 							{ scrollTop: $(this).offset().top - accSettings.offsetFromTop },
-// 							accSettings.speed
-// 						);
-// 					}, accSettings.scrollTopDelay);
-// 				}
-// 			});
+		const value = (event.target as HTMLSelectElement).value
+			.toLocaleLowerCase()
+			.split(' ')
+			.join('-');
 
-// 			$.extend(accSettings, settings);
-// 			// ensure only one accordion is active if oneOpen is true
-// 			if (settings.oneOpen && $(`.${prefix.item}.${activeClass}`).length > 1) {
-// 				$(`.${prefix.item}.${activeClass}:not(:first)`)
-// 					.removeClass(activeClass)
-// 					.find(`.${prefix.header} > .${prefix.icon}`)
-// 					.removeClass(activeClass);
-// 			}
-// 			// reveal the active accordion bodies
-// 			$(`.${prefix.item}.${activeClass}`).find(`> .${prefix.body}`).show();
-// 		},
-// 		//@ts-ignore
-// 		toggle: function ($this) {
-// 			if (
-// 				accSettings.oneOpen &&
-// 				$this[0] !=
-// 					$this
-// 						.closest(accordionElem)
-// 						.find(`> .${prefix.item}.${activeClass} > .${prefix.header}`)[0]
-// 			) {
-// 				$this
-// 					.closest(accordionElem)
-// 					.find(`> .${prefix.item}`)
-// 					.removeClass(activeClass)
-// 					.find(accordionBody)
-// 					.slideUp(accSettings.speed);
-// 				$this
-// 					.closest(accordionElem)
-// 					.find(`> .${prefix.item}`)
-// 					.find(`> .${prefix.header} > .${prefix.icon}`)
-// 					.removeClass(activeClass);
+		const drug = document.querySelector(`[cd-name=${value}]`)?.parentElement;
 
-// 				$this.find(accordionIconOpen).toggleClass(activeClass);
-// 				$this.find(accordionIcon).toggleClass(activeClass);
-// 			}
-// 			let icons = $this
-// 				.closest(accordionItem)
-// 				.siblings()
-// 				.find(accordionIconOpen);
+		const strength = drug?.querySelectorAll('[cd=strength]');
+		const drugStrength: string[] = [];
+		strength?.forEach((strength) => {
+			const strengthText = strength.textContent;
+			if (strengthText !== null) {
+				drugStrength.push(strengthText);
+			}
+		});
+		addOptionsToSelect(strengthSelect, drugStrength);
+	});
+}
 
-// 			for (let i = 0; i < icons.length; i++) {
-// 				if (icons[i].classList.contains(activeClass)) {
-// 					icons[i].classList.toggle(activeClass);
-// 					icons[i].nextElementSibling.classList.toggle(activeClass);
-// 				}
-// 			}
-// 			if (
-// 				$this
-// 					.closest(accordionItem)
-// 					.siblings()
-// 					.find(accordionIconOpen)
-// 					.hasClass(activeClass)
-// 			) {
-// 				$this
-// 					.closest(accordionItem)
-// 					.siblings()
-// 					.find(accordionIconOpen)
-// 					.toggleClass(activeClass);
-// 				$this
-// 					.closest(accordionItem)
-// 					.siblings()
-// 					.find(accordionIcon)
-// 					.toggleClass(activeClass);
-// 			}
-// 			// show/hide the clicked accordion item
-// 			$this
-// 				.closest(accordionItem)
-// 				.toggleClass(`${activeClass}`)
-// 				.find(`> .${prefix.header} > .${prefix.icon}`)
-// 				.toggleClass(activeClass);
-// 			$this.next().stop().slideToggle(accSettings.speed);
-// 			if (!$this.closest(accordionItem).hasClass(activeClass)) {
-// 				$this
-// 					.closest(accordionItem)
-// 					.find(accordionIconOpen)
-// 					.toggleClass(activeClass);
-// 				$this
-// 					.closest(accordionItem)
-// 					.find(accordionIcon)
-// 					.toggleClass(activeClass);
-// 			}
-// 		},
-// 	};
-// })();
+function setMedicationNames(selectElement: HTMLSelectElement) {
+	const medNames = document.querySelectorAll('[cd=drug]');
+	medNames.forEach((medName) => {
+		const nameOption = document.createElement('option');
+		const medNameText = medName.textContent;
+		if (medNameText !== null) {
+			nameOption.text = medNameText;
+			nameOption.value = medNameText;
+			nameOption.setAttribute('cd', medNameText);
+			selectElement.add(nameOption);
+		}
+	});
+}
 
-// $(document).ready(function () {
-// 	accordion.init(accSettings);
-// });
+function addOptionsToSelect(
+	selectElement: HTMLSelectElement,
+	options: string[]
+) {
+	if (options.length > 9) {
+		selectElement.innerHTML = '';
+		const defaultOption = document.createElement('option');
+		defaultOption.text = 'Select Medication First';
+		defaultOption.value = '';
+		selectElement.add(defaultOption);
+		return;
+	}
+	// Remove any previous options
+	selectElement.innerHTML = '';
+	const defaultOption = document.createElement('option');
+	defaultOption.text = 'Select Medication First';
+	defaultOption.value = '';
+	selectElement.add(defaultOption);
+	// Add new options
+
+	options.forEach((optionText) => {
+		if (optionText === '') {
+			return;
+		}
+		const option = document.createElement('option');
+		option.text = optionText;
+		option.value = optionText;
+		selectElement.add(option);
+	});
+}

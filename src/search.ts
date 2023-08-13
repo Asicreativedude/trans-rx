@@ -22,3 +22,11 @@ search.addEventListener('input', () => {
 		searchResultsList.classList.add('active');
 	}
 });
+
+const closeBtn = document.querySelector(
+	'.drug-list-close-c'
+) as HTMLButtonElement;
+closeBtn.addEventListener('click', () => {
+	searchResultsList.classList.remove('active');
+	search.value = '';
+});

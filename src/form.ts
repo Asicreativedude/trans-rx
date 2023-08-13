@@ -467,7 +467,7 @@ function validateForm(
 	if (currentStep === 2) {
 		const emailInput = document.getElementById('doc-email') as HTMLInputElement;
 		const emailInput2 = document.getElementById(
-			'doc2-email'
+			'doc2-email-2'
 		) as HTMLInputElement;
 
 		if (!emailInput.required) {

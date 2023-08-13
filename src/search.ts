@@ -1,31 +1,24 @@
 //Search Inside Navbar
 const search = document.querySelector('#search') as HTMLInputElement;
-search.addEventListener('input', () => {
-	const q = search.value;
-	$.ajax({
-		url: '/search?query=' + q,
-		type: 'GET',
-		success: function (data: Document) {
-			const searchResultsList = $('#searchresults-list');
-			const searchResultWrapper = $(data).find('.search-result-wrapper');
-			searchResultsList.html(searchResultWrapper.html());
-			searchResultsList.addClass('active');
-		},
-	});
-	return false;
-});
-//close search results
-const searchResultsList = $('#searchresults-list');
-const searchField = $('#search');
-
-$(window).on('click', () => {
+const searchResultsList = document.querySelector(
+	'.drug-list-c'
+) as HTMLDivElement;
+document.addEventListener('click', (e) => {
 	//Hide the menus if visible
-	if (searchResultsList.hasClass('active')) {
-		searchResultsList.removeClass('active');
-		searchField.val('');
+	if (e.target === search) {
+		return;
+	}
+	if (searchResultsList.contains(e.target as Node)) {
+		return;
+	}
+	if (searchResultsList.classList.contains('active')) {
+		searchResultsList.classList.remove('active');
+		search.value = '';
 	}
 });
 
-$('.search-input-c').on('click', (event) => {
-	event.stopPropagation();
+search.addEventListener('input', () => {
+	if (!searchResultsList.classList.contains('active')) {
+		searchResultsList.classList.add('active');
+	}
 });

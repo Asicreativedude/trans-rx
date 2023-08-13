@@ -673,8 +673,41 @@ const medicationWrapper = document.getElementById('medicationStep');
 const medicationRow = medicationWrapper?.querySelector('.form-row-wrapper');
 const addMedication = document.getElementById('addMed');
 addMedication!.addEventListener('click', () => {
-	const newMedication = medicationRow!.cloneNode(true);
+	const newMedication = medicationRow!.cloneNode(true) as Element;
 	medicationWrapper!.insertBefore(newMedication, addMedication!.parentElement);
+	newMedication.querySelector(
+		'.flex-grow:nth-child(2) > select'
+	)!.id = `med-name-${medicationWrapper!.childElementCount - 1}`;
+	newMedication.querySelector(
+		'.flex-grow:nth-child(3) > select'
+	)!.id = `med-strength-${medicationWrapper!.childElementCount - 1}`;
+	newMedication
+		.querySelector('.flex-grow:nth-child(2) > select')!
+		.addEventListener('change', (event) => {
+			newMedication.querySelector(
+				'.flex-grow:nth-child(3) > select'
+			)!.innerHTML = '';
+
+			const value = (event.target as HTMLSelectElement).value
+				.toLocaleLowerCase()
+				.split(' ')
+				.join('-');
+
+			const drug = document.querySelector(`[cd-name=${value}]`)?.parentElement;
+
+			const strength = drug?.querySelectorAll('[cd=strength]');
+			const drugStrength: string[] = [];
+			strength?.forEach((strength) => {
+				const strengthText = strength.textContent;
+				if (strengthText !== null) {
+					drugStrength.push(strengthText);
+				}
+			});
+			addOptionsToSelect(
+				newMedication.querySelector('.flex-grow:nth-child(3) > select')!,
+				drugStrength
+			);
+		});
 });
 
 //med step

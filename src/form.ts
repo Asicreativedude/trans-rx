@@ -497,7 +497,7 @@ function validateForm(
 		const phoneInput2 = document.getElementById(
 			'doc2-officephone-2'
 		) as HTMLInputElement;
-		const fax2 = document.getElementById('doc2-fax') as HTMLInputElement;
+		const fax2 = document.getElementById('doc2-fax-2') as HTMLInputElement;
 
 		if (phoneInput.value.length !== 10) {
 			valid = false;

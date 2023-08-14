@@ -546,6 +546,20 @@ function validateForm(
 			}
 		}
 	}
+	//money fields
+	if (currentStep === 4) {
+		const moneyFields = document.querySelectorAll(
+			'.money-field'
+		) as NodeListOf<HTMLInputElement>;
+		moneyFields.forEach((field) => {
+			if (field.value !== '') {
+				document.getElementById('income-error')!.classList.remove('active');
+			} else {
+				valid = false;
+				document.getElementById('income-error')!.classList.add('active');
+			}
+		});
+	}
 
 	return valid;
 }
@@ -675,9 +689,23 @@ const addMedication = document.getElementById('addMed');
 addMedication!.addEventListener('click', () => {
 	const newMedication = medicationRow!.cloneNode(true) as Element;
 	medicationWrapper!.insertBefore(newMedication, addMedication!.parentElement);
+	newMedication
+		.querySelector('.flex-grow:nth-child(1) > select')
+		?.removeAttribute('required');
+	newMedication
+		.querySelector('.flex-grow:nth-child(4) > input')
+		?.removeAttribute('required');
+	(
+		newMedication.querySelector(
+			'.flex-grow:nth-child(4) > input'
+		) as HTMLInputElement
+	).value = '';
 	newMedication.querySelector(
 		'.flex-grow:nth-child(2) > select'
 	)!.id = `med-name-${medicationWrapper!.childElementCount - 1}`;
+	(newMedication.querySelector(
+		'.flex-grow:nth-child(2) > select'
+	) as HTMLInputElement)!.value = '';
 	newMedication.querySelector(
 		'.flex-grow:nth-child(3) > select'
 	)!.id = `med-strength-${medicationWrapper!.childElementCount - 1}`;
@@ -711,7 +739,6 @@ addMedication!.addEventListener('click', () => {
 });
 
 //med step
-
 for (let i = 1; i < 4; i++) {
 	const selectElement = document.getElementById(
 		`med-name-${i}`
@@ -724,11 +751,11 @@ for (let i = 1; i < 4; i++) {
 
 		const value = (event.target as HTMLSelectElement).value
 			.toLocaleLowerCase()
+			.replace(/[\(\)\/]/g, '')
 			.split(' ')
 			.join('-');
 
 		const drug = document.querySelector(`[cd-name=${value}]`)?.parentElement;
-
 		const strength = drug?.querySelectorAll('[cd=strength]');
 		const drugStrength: string[] = [];
 		strength?.forEach((strength) => {
@@ -767,6 +794,8 @@ function addOptionsToSelect(
 		selectElement.add(defaultOption);
 		return;
 	}
+	selectElement.removeAttribute('disabled');
+	selectElement.classList.remove('disabled');
 	// Remove any previous options
 	selectElement.innerHTML = '';
 	const defaultOption = document.createElement('option');
@@ -774,14 +803,20 @@ function addOptionsToSelect(
 	defaultOption.value = '';
 	selectElement.add(defaultOption);
 	// Add new options
-
+	let zeroOptions = true;
 	options.forEach((optionText) => {
 		if (optionText === '') {
 			return;
 		}
+		zeroOptions = false;
 		const option = document.createElement('option');
 		option.text = optionText;
 		option.value = optionText;
 		selectElement.add(option);
 	});
+
+	if (zeroOptions) {
+		selectElement.setAttribute('disabled', 'true');
+		selectElement.classList.add('disabled');
+	}
 }

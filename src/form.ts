@@ -185,14 +185,33 @@ submitBtn.addEventListener('click', () => {
 			}
 		});
 	}
+	const allFields: any = [];
+	(
+		document.querySelectorAll('.input-field') as NodeListOf<HTMLInputElement>
+	).forEach((field) => {
+		let fieldId = field.id;
+		let value = field.value;
+		allFields.push({ field: fieldId, value: value });
+	});
+	(
+		document.querySelectorAll(
+			'input[type=radio]:checked'
+		) as NodeListOf<HTMLInputElement>
+	).forEach((field) => {
+		let fieldId = field.name;
+		let value = field.id;
+		allFields.push({ field: fieldId, value: value });
+	});
+	console.log(allFields);
 	//@ts-ignore
-	all_data.forEach((data: { field: string; value: string }) => {
+	allFields.forEach((data: { field: string; value: string }) => {
+		console.log(data);
 		if (
 			data.field === 'patwages' ||
 			data.field === 'patdisab' ||
 			data.field === 'patunemploy'
 		) {
-			patientIncomeData[data.field] = data.value;
+			patientIncomeData[data.field] = data.value.slice(1);
 			return;
 		}
 		if (data.field.includes('doc-')) {

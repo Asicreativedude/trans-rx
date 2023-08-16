@@ -6,6 +6,7 @@ const config: UserConfig = {
 			input: {
 				form: 'src/form.ts',
 				search: 'src/search.ts',
+
 				// Add more entry points as needed
 			},
 			output: {

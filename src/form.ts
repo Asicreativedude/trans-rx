@@ -202,10 +202,8 @@ submitBtn.addEventListener('click', () => {
 		let value = field.id;
 		allFields.push({ field: fieldId, value: value });
 	});
-	console.log(allFields);
 	//@ts-ignore
 	allFields.forEach((data: { field: string; value: string }) => {
-		console.log(data);
 		if (
 			data.field === 'patwages' ||
 			data.field === 'patdisab' ||
@@ -331,6 +329,11 @@ function createMultiStepForm(
 	});
 
 	nextButton.addEventListener('click', () => {
+		if (currentStep === 4) {
+			(document.querySelector('.payment-trigger') as HTMLElement).click();
+			document.getElementById('btnOpenAuthorizeNetIFrame')!.click();
+			return;
+		}
 		const inputs = elements[currentStep].querySelectorAll(
 			'input'
 		) as NodeListOf<HTMLInputElement>;
@@ -357,6 +360,9 @@ function createMultiStepForm(
 				prevButton.style.display = 'none';
 			} else {
 				prevButton.style.display = 'block';
+			}
+			if (currentStep === 4) {
+				nextButton.innerHTML = 'Continue To Payment';
 			}
 		}
 	});
@@ -839,3 +845,128 @@ function addOptionsToSelect(
 		selectElement.classList.add('disabled');
 	}
 }
+
+//Payment
+(function () {
+	//@ts-ignore
+	if (!window.AuthorizeNetIFrame) window.AuthorizeNetIFrame = {};
+	//@ts-ignore
+	AuthorizeNetIFrame.onReceiveCommunication = function (querystr) {
+		var params = parseQueryString(querystr);
+		//@ts-ignore
+		switch (params['action']) {
+			case 'resizeWindow':
+				break;
+			case 'successfulSave':
+				break;
+			case 'cancel':
+				break;
+			case 'transactResponse':
+				//@ts-ignore
+				var transResponse = JSON.parse(params['response']);
+				if (transResponse.responseCode === '1') {
+					document.querySelector('.thank-you-trigger')!.classList.add('active');
+					submitBtn.click();
+					(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
+				}
+		}
+	};
+
+	function parseQueryString(str: any) {
+		var vars = [];
+		var arr = str.split('&');
+		var pair;
+		for (var i = 0; i < arr.length; i++) {
+			pair = arr[i].split('=');
+			vars.push(pair[0]);
+			vars[pair[0]] = unescape(pair[1]);
+		}
+		return vars;
+	}
+})();
+
+let token = '';
+async function getpay(url: string, data: any) {
+	try {
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+		let res = await response.json();
+		token = res.token;
+		//@ts-ignore
+		document.querySelector('input[name=token]').value = token;
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+const data = {
+	getHostedPaymentPageRequest: {
+		merchantAuthentication: {
+			name: '8u9J8v5rD2',
+			transactionKey: '95Yc8LkdU56cg47z',
+		},
+		transactionRequest: {
+			transactionType: 'authCaptureTransaction',
+			amount: '200.00',
+		},
+		hostedPaymentSettings: {
+			setting: [
+				{
+					settingName: 'hostedPaymentReturnOptions',
+					settingValue:
+						'{"showReceipt": false, "url": "https://transparentrx.webflow.io/", "urlText": "Continue", "cancelUrl": "https://mysite.com/cancel", "cancelUrlText": "Cancel"}',
+				},
+				{
+					settingName: 'hostedPaymentButtonOptions',
+					settingValue: '{"text": "Pay"}',
+				},
+				{
+					settingName: 'hostedPaymentStyleOptions',
+					settingValue: '{"bgColor": "blue"}',
+				},
+				{
+					settingName: 'hostedPaymentPaymentOptions',
+					settingValue:
+						'{"cardCodeRequired": false, "showCreditCard": true, "showBankAccount": false}',
+				},
+				{
+					settingName: 'hostedPaymentSecurityOptions',
+					settingValue: '{"captcha": false}',
+				},
+				{
+					settingName: 'hostedPaymentShippingAddressOptions',
+					settingValue: '{"show": false, "required": false}',
+				},
+				{
+					settingName: 'hostedPaymentBillingAddressOptions',
+					settingValue: '{"show": true, "required": false}',
+				},
+				{
+					settingName: 'hostedPaymentCustomerOptions',
+					settingValue:
+						'{"showEmail": true, "requiredEmail": false, "addPaymentProfile": false}',
+				},
+				{
+					settingName: 'hostedPaymentOrderOptions',
+					settingValue:
+						'{"show": true, "merchantName": "G and S Questions Inc."}',
+				},
+				{
+					settingName: 'hostedPaymentIFrameCommunicatorUrl',
+					settingValue:
+						'{"url": "https://www.transparentpricerx.com/communicator"}',
+				},
+			],
+		},
+	},
+};
+
+getpay('https://apitest.authorize.net/xml/v1/request.api', data);

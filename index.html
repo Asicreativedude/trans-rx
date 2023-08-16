@@ -5,9 +5,176 @@
 		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Vite + TS</title>
+		<script type="text/javascript">
+			window.addEventListener('DOMContentLoaded', function () {
+				var btnOpenAuthorizeNetIFrame = document.querySelector(
+					'#btnOpenAuthorizeNetIFrame'
+				);
+				var addPayment = document.querySelector('#add_payment');
+				var sendToken = document.querySelector('#send_token');
+
+				btnOpenAuthorizeNetIFrame.addEventListener('click', function () {
+					addPayment.style.display = 'block';
+					sendToken.setAttribute(
+						'action',
+						'https://test.authorize.net/payment/payment'
+					);
+					sendToken.setAttribute('target', 'add_payment');
+					sendToken.submit();
+					window.scrollTo(0, addPayment.offsetTop - 50);
+				});
+			});
+		</script>
 	</head>
 	<body>
-		<div id="app"></div>
-		<script type="module" src="/src/form.ts"></script>
+		<div>
+			<button id="btnOpenAuthorizeNetIFrame" onclick="">
+				Show Payment Form
+			</button>
+		</div>
+		<div
+			id="iframe_holder"
+			class="center-block"
+			style="width: 90%; max-width: 1000px; height: 100vh"
+		>
+			<iframe
+				id="add_payment"
+				class="embed-responsive-item panel"
+				name="add_payment"
+				width="100%"
+				height="100%"
+				frameborder="0"
+				scrolling="no"
+				hidden="true"
+			>
+			</iframe>
+		</div>
+		<form id="send_token" action="" method="post" target="add_payment">
+			<input type="hidden" name="token" value="" />
+		</form>
+
+		<script type="text/javascript">
+			(function () {
+				if (!window.AuthorizeNetIFrame) window.AuthorizeNetIFrame = {};
+				AuthorizeNetIFrame.onReceiveCommunication = function (querystr) {
+					var params = parseQueryString(querystr);
+					switch (params['action']) {
+						case 'successfulSave':
+							break;
+						case 'cancel':
+							break;
+						case 'resizeWindow':
+							var w = parseInt(params['width']);
+							var h = parseInt(params['height']);
+							var ifrm = document.getElementById('add_payment');
+							ifrm.style.width = w.toString() + 'px';
+							ifrm.style.height = h.toString() + 'px';
+							break;
+						case 'transactResponse':
+							var ifrm = document.getElementById('add_payment');
+							ifrm.style.display = 'none';
+					}
+				};
+
+				function parseQueryString(str) {
+					var vars = [];
+					var arr = str.split('&');
+					var pair;
+					for (var i = 0; i < arr.length; i++) {
+						pair = arr[i].split('=');
+						vars.push(pair[0]);
+						vars[pair[0]] = unescape(pair[1]);
+					}
+					return vars;
+				}
+			})();
+			let token = '';
+			async function getpay(url, data) {
+				try {
+					const response = await fetch(url, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify(data),
+					});
+					if (!response.ok) {
+						throw new Error('Network response was not ok');
+					}
+					let res = await response.json();
+
+					token = res.token;
+
+					document.getElementById('send_token').token.value = token;
+				} catch (err) {
+					console.log(err);
+				}
+			}
+
+			const data = {
+				getHostedPaymentPageRequest: {
+					merchantAuthentication: {
+						name: '8u9J8v5rD2',
+						transactionKey: '95Yc8LkdU56cg47z',
+					},
+					transactionRequest: {
+						transactionType: 'authCaptureTransaction',
+						amount: '200.00',
+					},
+					hostedPaymentSettings: {
+						setting: [
+							{
+								settingName: 'hostedPaymentReturnOptions',
+								settingValue:
+									'{"showReceipt": true, "url": "https://mysite.com/receipt", "urlText": "Continue", "cancelUrl": "https://mysite.com/cancel", "cancelUrlText": "Cancel"}',
+							},
+							{
+								settingName: 'hostedPaymentButtonOptions',
+								settingValue: '{"text": "Pay"}',
+							},
+							{
+								settingName: 'hostedPaymentStyleOptions',
+								settingValue: '{"bgColor": "blue"}',
+							},
+							{
+								settingName: 'hostedPaymentPaymentOptions',
+								settingValue:
+									'{"cardCodeRequired": true, "showCreditCard": true, "showBankAccount": false}',
+							},
+							{
+								settingName: 'hostedPaymentSecurityOptions',
+								settingValue: '{"captcha": false}',
+							},
+							{
+								settingName: 'hostedPaymentShippingAddressOptions',
+								settingValue: '{"show": false, "required": false}',
+							},
+							{
+								settingName: 'hostedPaymentBillingAddressOptions',
+								settingValue: '{"show": true, "required": false}',
+							},
+							{
+								settingName: 'hostedPaymentCustomerOptions',
+								settingValue:
+									'{"showEmail": true, "requiredEmail": true, "addPaymentProfile": false}',
+							},
+							{
+								settingName: 'hostedPaymentOrderOptions',
+								settingValue:
+									'{"show": true, "merchantName": "G and S Questions Inc."}',
+							},
+							{
+								settingName: 'hostedPaymentIFrameCommunicatorUrl',
+								settingValue:
+									'{"url": "https://transparentrx.webflow.io/communicator"}',
+							},
+						],
+					},
+				},
+			};
+
+			getpay('https://apitest.authorize.net/xml/v1/request.api', data);
+		</script>
+		<!-- <script type="module" src="/src/payment.ts"></script> -->
 	</body>
 </html>

@@ -331,7 +331,6 @@ function createMultiStepForm(
 	nextButton.addEventListener('click', () => {
 		if (currentStep === 4) {
 			(document.querySelector('.payment-trigger') as HTMLElement).click();
-			document.getElementById('btnOpenAuthorizeNetIFrame')!.click();
 			return;
 		}
 		const inputs = elements[currentStep].querySelectorAll(
@@ -853,6 +852,7 @@ function addOptionsToSelect(
 	//@ts-ignore
 	AuthorizeNetIFrame.onReceiveCommunication = function (querystr) {
 		var params = parseQueryString(querystr);
+		console.log(params);
 		//@ts-ignore
 		switch (params['action']) {
 			case 'resizeWindow':
@@ -864,8 +864,11 @@ function addOptionsToSelect(
 			case 'transactResponse':
 				//@ts-ignore
 				var transResponse = JSON.parse(params['response']);
+				console.log(transResponse);
 				if (transResponse.responseCode === '1') {
-					document.querySelector('.thank-you-trigger')!.classList.add('active');
+					(document.querySelector(
+						'.thank-you-trigger'
+					) as HTMLButtonElement)!.click();
 					submitBtn.click();
 					(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
 				}
@@ -910,8 +913,8 @@ async function getpay(url: string, data: any) {
 const data = {
 	getHostedPaymentPageRequest: {
 		merchantAuthentication: {
-			name: '8u9J8v5rD2',
-			transactionKey: '95Yc8LkdU56cg47z',
+			name: '9QRrX47T4DkY',
+			transactionKey: '5GN3E8m559X9pdSf',
 		},
 		transactionRequest: {
 			transactionType: 'authCaptureTransaction',
@@ -922,7 +925,7 @@ const data = {
 				{
 					settingName: 'hostedPaymentReturnOptions',
 					settingValue:
-						'{"showReceipt": false, "url": "https://transparentrx.webflow.io/", "urlText": "Continue", "cancelUrl": "https://mysite.com/cancel", "cancelUrlText": "Cancel"}',
+						'{"showReceipt": false, "url": "https://www.transparentpricerx.com", "urlText": "Continue", "cancelUrl": "https://mysite.com/cancel", "cancelUrlText": "Cancel"}',
 				},
 				{
 					settingName: 'hostedPaymentButtonOptions',
@@ -935,7 +938,7 @@ const data = {
 				{
 					settingName: 'hostedPaymentPaymentOptions',
 					settingValue:
-						'{"cardCodeRequired": false, "showCreditCard": true, "showBankAccount": false}',
+						'{"cardCodeRequired": false, "showCreditCard": true, "showBankAccount": true}',
 				},
 				{
 					settingName: 'hostedPaymentSecurityOptions',
@@ -947,12 +950,12 @@ const data = {
 				},
 				{
 					settingName: 'hostedPaymentBillingAddressOptions',
-					settingValue: '{"show": true, "required": false}',
+					settingValue: '{"show": true, "required": true}',
 				},
 				{
 					settingName: 'hostedPaymentCustomerOptions',
 					settingValue:
-						'{"showEmail": true, "requiredEmail": false, "addPaymentProfile": false}',
+						'{"showEmail": true, "requiredEmail": true, "addPaymentProfile": true}',
 				},
 				{
 					settingName: 'hostedPaymentOrderOptions',
@@ -969,4 +972,11 @@ const data = {
 	},
 };
 
-getpay('https://apitest.authorize.net/xml/v1/request.api', data);
+getpay('https://api.authorize.net/xml/v1/request.api', data);
+
+//show payment
+document.addEventListener('DOMContentLoaded', () => {
+	setTimeout(() => {
+		document.getElementById('btnOpenAuthorizeNetIFrame')!.click();
+	}, 1000);
+});

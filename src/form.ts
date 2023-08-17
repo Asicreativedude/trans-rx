@@ -927,7 +927,7 @@ const data = {
 				{
 					settingName: 'hostedPaymentReturnOptions',
 					settingValue:
-						'{"showReceipt": false, "url": "https://www.transparentpricerx.com", "urlText": "Continue", "cancelUrl": "https://mysite.com/cancel", "cancelUrlText": "Cancel"}',
+						'{"showReceipt": false, "url": "https://www.transparentpricerx.com", "urlText": "Continue", "cancelUrl": "https://www.transparentpricerx.com", "cancelUrlText": "Cancel"}',
 				},
 				{
 					settingName: 'hostedPaymentButtonOptions',
@@ -962,7 +962,7 @@ const data = {
 				{
 					settingName: 'hostedPaymentOrderOptions',
 					settingValue:
-						'{"show": true, "merchantName": "G and S Questions Inc."}',
+						'{"show": false, "merchantName": "G and S Questions Inc."}',
 				},
 				{
 					settingName: 'hostedPaymentIFrameCommunicatorUrl',
@@ -976,9 +976,9 @@ const data = {
 
 getpay('https://api.authorize.net/xml/v1/request.api', data);
 
-//show payment
-document.addEventListener('DOMContentLoaded', () => {
-	setTimeout(() => {
-		document.getElementById('btnOpenAuthorizeNetIFrame')!.click();
-	}, 1000);
-});
+// //show payment
+// document.addEventListener('DOMContentLoaded', () => {
+// 	setTimeout(() => {
+// 		document.getElementById('btnOpenAuthorizeNetIFrame')!.click();
+// 	}, 2000);
+// });

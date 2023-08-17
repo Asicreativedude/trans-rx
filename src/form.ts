@@ -331,6 +331,7 @@ function createMultiStepForm(
 	nextButton.addEventListener('click', () => {
 		if (currentStep === 4) {
 			(document.querySelector('.payment-trigger') as HTMLElement).click();
+			(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
 			return;
 		}
 		const inputs = elements[currentStep].querySelectorAll(
@@ -362,6 +363,9 @@ function createMultiStepForm(
 			}
 			if (currentStep === 4) {
 				nextButton.innerHTML = 'Continue To Payment';
+			}
+			if (currentStep === 3) {
+				nextButton.innerHTML = 'Continue';
 			}
 		}
 	});
@@ -864,13 +868,11 @@ function addOptionsToSelect(
 			case 'transactResponse':
 				//@ts-ignore
 				var transResponse = JSON.parse(params['response']);
-				console.log(transResponse);
 				if (transResponse.responseCode === '1') {
 					(document.querySelector(
 						'.thank-you-trigger'
 					) as HTMLButtonElement)!.click();
 					submitBtn.click();
-					(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
 				}
 		}
 	};

@@ -5,176 +5,243 @@
 		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Vite + TS</title>
-		<script type="text/javascript">
-			window.addEventListener('DOMContentLoaded', function () {
-				var btnOpenAuthorizeNetIFrame = document.querySelector(
-					'#btnOpenAuthorizeNetIFrame'
-				);
-				var addPayment = document.querySelector('#add_payment');
-				var sendToken = document.querySelector('#send_token');
-
-				btnOpenAuthorizeNetIFrame.addEventListener('click', function () {
-					addPayment.style.display = 'block';
-					sendToken.setAttribute(
-						'action',
-						'https://test.authorize.net/payment/payment'
-					);
-					sendToken.setAttribute('target', 'add_payment');
-					sendToken.submit();
-					window.scrollTo(0, addPayment.offsetTop - 50);
-				});
-			});
-		</script>
 	</head>
 	<body>
-		<div>
-			<button id="btnOpenAuthorizeNetIFrame" onclick="">
-				Show Payment Form
-			</button>
-		</div>
-		<div
-			id="iframe_holder"
-			class="center-block"
-			style="width: 90%; max-width: 1000px; height: 100vh"
-		>
-			<iframe
-				id="add_payment"
-				class="embed-responsive-item panel"
-				name="add_payment"
-				width="100%"
-				height="100%"
-				frameborder="0"
-				scrolling="no"
-				hidden="true"
-			>
-			</iframe>
-		</div>
-		<form id="send_token" action="" method="post" target="add_payment">
-			<input type="hidden" name="token" value="" />
-		</form>
-
-		<script type="text/javascript">
-			(function () {
-				if (!window.AuthorizeNetIFrame) window.AuthorizeNetIFrame = {};
-				AuthorizeNetIFrame.onReceiveCommunication = function (querystr) {
-					var params = parseQueryString(querystr);
-					switch (params['action']) {
-						case 'successfulSave':
-							break;
-						case 'cancel':
-							break;
-						case 'resizeWindow':
-							var w = parseInt(params['width']);
-							var h = parseInt(params['height']);
-							var ifrm = document.getElementById('add_payment');
-							ifrm.style.width = w.toString() + 'px';
-							ifrm.style.height = h.toString() + 'px';
-							break;
-						case 'transactResponse':
-							var ifrm = document.getElementById('add_payment');
-							ifrm.style.display = 'none';
-					}
-				};
-
-				function parseQueryString(str) {
-					var vars = [];
-					var arr = str.split('&');
-					var pair;
-					for (var i = 0; i < arr.length; i++) {
-						pair = arr[i].split('=');
-						vars.push(pair[0]);
-						vars[pair[0]] = unescape(pair[1]);
-					}
-					return vars;
-				}
-			})();
-			let token = '';
-			async function getpay(url, data) {
-				try {
-					const response = await fetch(url, {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify(data),
-					});
-					if (!response.ok) {
-						throw new Error('Network response was not ok');
-					}
-					let res = await response.json();
-
-					token = res.token;
-
-					document.getElementById('send_token').token.value = token;
-				} catch (err) {
-					console.log(err);
-				}
-			}
-
-			const data = {
-				getHostedPaymentPageRequest: {
-					merchantAuthentication: {
-						name: '8u9J8v5rD2',
-						transactionKey: '95Yc8LkdU56cg47z',
-					},
-					transactionRequest: {
-						transactionType: 'authCaptureTransaction',
-						amount: '200.00',
-					},
-					hostedPaymentSettings: {
-						setting: [
-							{
-								settingName: 'hostedPaymentReturnOptions',
-								settingValue:
-									'{"showReceipt": true, "url": "https://mysite.com/receipt", "urlText": "Continue", "cancelUrl": "https://mysite.com/cancel", "cancelUrlText": "Cancel"}',
-							},
-							{
-								settingName: 'hostedPaymentButtonOptions',
-								settingValue: '{"text": "Pay"}',
-							},
-							{
-								settingName: 'hostedPaymentStyleOptions',
-								settingValue: '{"bgColor": "blue"}',
-							},
-							{
-								settingName: 'hostedPaymentPaymentOptions',
-								settingValue:
-									'{"cardCodeRequired": true, "showCreditCard": true, "showBankAccount": false}',
-							},
-							{
-								settingName: 'hostedPaymentSecurityOptions',
-								settingValue: '{"captcha": false}',
-							},
-							{
-								settingName: 'hostedPaymentShippingAddressOptions',
-								settingValue: '{"show": false, "required": false}',
-							},
-							{
-								settingName: 'hostedPaymentBillingAddressOptions',
-								settingValue: '{"show": true, "required": false}',
-							},
-							{
-								settingName: 'hostedPaymentCustomerOptions',
-								settingValue:
-									'{"showEmail": true, "requiredEmail": true, "addPaymentProfile": false}',
-							},
-							{
-								settingName: 'hostedPaymentOrderOptions',
-								settingValue:
-									'{"show": true, "merchantName": "G and S Questions Inc."}',
-							},
-							{
-								settingName: 'hostedPaymentIFrameCommunicatorUrl',
-								settingValue:
-									'{"url": "https://transparentrx.webflow.io/communicator"}',
-							},
-						],
-					},
-				},
-			};
-
-			getpay('https://apitest.authorize.net/xml/v1/request.api', data);
-		</script>
-		<!-- <script type="module" src="/src/payment.ts"></script> -->
+		<script type="module" src="/src/formTest.ts"></script>
 	</body>
 </html>
+
+<!-- convert array into jsson-->
+[
+{{"DrugName":"Abilify","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"079538"},{"DrugName":"Abilify","Strength":"30","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"079541"},{"DrugName":"Abilify","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"099773"},{"DrugName":"Abilify","Strength":"15","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"079539"},{"DrugName":"Abilify","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"079540"},{"DrugName":"Abilify","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"083036"},{"DrugName":"Abilify
+Maintena","Strength":"300","UOM":"MG","ROA":"IM","Dosage":"SRER","DrugId":"199660"},{"DrugName":"Abilify
+Maintena","Strength":"400","UOM":"MG","ROA":"IM","Dosage":"SRER","DrugId":"199662"},{"DrugName":"Abilify
+Discmelt","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"120713"},{"DrugName":"Abilify
+Discmelt","Strength":"15","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"120712"},{"DrugName":"Abilify
+MyCite","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"204823"},{"DrugName":"Abilify
+MyCite","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"204824"},{"DrugName":"Abilify
+MyCite","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"204825"},{"DrugName":"Abilify
+MyCite","Strength":"15","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"204826"},{"DrugName":"Abilify
+MyCite","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"204827"},{"DrugName":"Abilify
+MyCite","Strength":"30","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"204828"},{"DrugName":"Abilify
+MyCite Starter
+Kit","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"214238"},{"DrugName":"Abilify
+MyCite Maintenance
+Kit","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"214239"},{"DrugName":"Abilify
+MyCite Starter
+Kit","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"214240"},{"DrugName":"Abilify
+MyCite Maintenance
+Kit","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"214241"},{"DrugName":"Abilify
+MyCite Starter
+Kit","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"214245"},{"DrugName":"Abilify
+MyCite Starter
+Kit","Strength":"15","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"214247"},{"DrugName":"Abilify
+MyCite Starter
+Kit","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"214249"},{"DrugName":"Abilify
+MyCite Maintenance
+Kit","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"214250"},{"DrugName":"Abilify
+MyCite Starter
+Kit","Strength":"30","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"214251"},{"DrugName":"Abilify
+MyCite Maintenance
+Kit","Strength":"30","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"214252"},{"DrugName":"Abilify
+Maintena","Strength":"300","UOM":"MG","ROA":"IM","Dosage":"PRSY","DrugId":"199661"},{"DrugName":"Abilify
+Maintena","Strength":"400","UOM":"MG","ROA":"IM","Dosage":"PRSY","DrugId":"199663"},{"DrugName":"Abilify
+Asimtufii","Strength":"720","UOM":"MG/2.4ML","ROA":"IM","Dosage":"PRSY","DrugId":"222664"},{"DrugName":"Abilify
+Asimtufii","Strength":"960","UOM":"MG/3.2ML","ROA":"IM","Dosage":"PRSY","DrugId":"222665"}],[{"DrugName":"Actonel","Strength":"30","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"056985"},{"DrugName":"Actonel","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"065361"},{"DrugName":"Actonel","Strength":"35","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"076882"},{"DrugName":"Actonel","Strength":"150","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"134693"},{"DrugName":"Actonel
+with
+Calcium","Strength":"35-1250","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"096796"},{"DrugName":"Actonel","Strength":"75","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"127434"}],[{"DrugName":"Actos","Strength":"15","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"060691"},{"DrugName":"Actos","Strength":"30","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"060699"},{"DrugName":"Actos","Strength":"45","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"060700"}],[{"DrugName":"Adderall
+XR","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"074042"},{"DrugName":"Adderall
+XR","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"074043"},{"DrugName":"Adderall
+XR","Strength":"30","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"074044"},{"DrugName":"Adderall
+XR","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"077127"},{"DrugName":"Adderall
+XR","Strength":"15","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"077128"},{"DrugName":"Adderall
+XR","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"077129"}],[{"DrugName":"Advair
+Diskus","Strength":"100-50","UOM":"MCG/DOSE","ROA":"IN","Dosage":"AEPB","DrugId":"150990"},{"DrugName":"Advair
+Diskus","Strength":"250-50","UOM":"MCG/DOSE","ROA":"IN","Dosage":"AEPB","DrugId":"150993"},{"DrugName":"Advair
+Diskus","Strength":"500-50","UOM":"MCG/DOSE","ROA":"IN","Dosage":"AEPB","DrugId":"150994"},{"DrugName":"Advair
+Diskus","Strength":"500-50","UOM":"MCG/ACT","ROA":"IN","Dosage":"AEPB","DrugId":"218237"},{"DrugName":"Advair
+Diskus","Strength":"250-50","UOM":"MCG/ACT","ROA":"IN","Dosage":"AEPB","DrugId":"218236"},{"DrugName":"Advair
+Diskus","Strength":"100-50","UOM":"MCG/ACT","ROA":"IN","Dosage":"AEPB","DrugId":"218234"}],[{"DrugName":"Aldactone","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"000715"},{"DrugName":"Aldactone","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"000716"},{"DrugName":"Aldactone","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"000714"}],[{"DrugName":"Aleve","Strength":"220","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"035290"}],[{"DrugName":"Altace","Strength":"1.25","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"000918"},{"DrugName":"Altace","Strength":"2.5","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"000920"},{"DrugName":"Altace","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"000921"},{"DrugName":"Altace","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"000919"},{"DrugName":"Altace","Strength":"1.25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"114861"}],[{"DrugName":"Amaryl","Strength":"1","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"043070"},{"DrugName":"Amaryl","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"043071"},{"DrugName":"Amaryl","Strength":"4","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"043072"}],[{"DrugName":"Ambien
+CR","Strength":"6.25","UOM":"MG","ROA":"OR","Dosage":"TBCR","DrugId":"097361"},{"DrugName":"Ambien
+CR","Strength":"12.5","UOM":"MG","ROA":"OR","Dosage":"TBCR","DrugId":"097362"}],[],[{"DrugName":"Ativan","Strength":"0.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"002028"},{"DrugName":"Ativan","Strength":"1","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"002029"},{"DrugName":"Ativan","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"002030"},{"DrugName":"Ativan","Strength":"2","UOM":"MG/ML","ROA":"IJ","Dosage":"SOLN","DrugId":"002026"},{"DrugName":"Ativan","Strength":"4","UOM":"MG/ML","ROA":"IJ","Dosage":"SOLN","DrugId":"002027"}],[{"DrugName":"Atripla","Strength":"600-200-300","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"120780"}],[{"DrugName":"Bactrim","Strength":"400-80","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"002410"},{"DrugName":"Bactrim
+DS","Strength":"800-160","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"002411"}],[{"DrugName":"Benicar
+HCT","Strength":"20-12.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"082758"},{"DrugName":"Benicar
+HCT","Strength":"40-12.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"082759"},{"DrugName":"Benicar
+HCT","Strength":"40-25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"082760"}],[{"DrugName":"Breo
+Ellipta","Strength":"100-25","UOM":"MCG/INH","ROA":"IN","Dosage":"AEPB","DrugId":"180031"},{"DrugName":"Breo
+Ellipta","Strength":"200-25","UOM":"MCG/INH","ROA":"IN","Dosage":"AEPB","DrugId":"188878"},{"DrugName":"Breo
+Ellipta","Strength":"200-25","UOM":"MCG/ACT","ROA":"IN","Dosage":"AEPB","DrugId":"220099"},{"DrugName":"Breo
+Ellipta","Strength":"100-25","UOM":"MCG/ACT","ROA":"IN","Dosage":"AEPB","DrugId":"220095"}],[],[{"DrugName":"Cardura","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"003938"},{"DrugName":"Cardura","Strength":"1","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"003937"},{"DrugName":"Cardura
+XL","Strength":"4","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"101197"},{"DrugName":"Cardura
+XL","Strength":"8","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"101198"},{"DrugName":"Cardura","Strength":"4","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"003939"},{"DrugName":"Cardura","Strength":"8","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"003940"}],[{"DrugName":"Catapres","Strength":"0.1","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"003989"},{"DrugName":"Catapres-TTS-3","Strength":"0.3","UOM":"MG/24HR","ROA":"TD","Dosage":"PTWK","DrugId":"003994"},{"DrugName":"Catapres","Strength":"0.3","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"003991"},{"DrugName":"Catapres","Strength":"0.2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"003990"},{"DrugName":"Catapres-TTS-1","Strength":"0.1","UOM":"MG/24HR","ROA":"TD","Dosage":"PTWK","DrugId":"036380"},{"DrugName":"Catapres-TTS-2","Strength":"0.2","UOM":"MG/24HR","ROA":"TD","Dosage":"PTWK","DrugId":"037718"}],[{"DrugName":"Catapres","Strength":"0.1","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"003989"},{"DrugName":"Catapres-TTS-3","Strength":"0.3","UOM":"MG/24HR","ROA":"TD","Dosage":"PTWK","DrugId":"003994"},{"DrugName":"Catapres","Strength":"0.3","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"003991"},{"DrugName":"Catapres","Strength":"0.2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"003990"},{"DrugName":"Catapres-TTS-1","Strength":"0.1","UOM":"MG/24HR","ROA":"TD","Dosage":"PTWK","DrugId":"036380"},{"DrugName":"Catapres-TTS-2","Strength":"0.2","UOM":"MG/24HR","ROA":"TD","Dosage":"PTWK","DrugId":"037718"}],[{"DrugName":"CeleBREX","Strength":"400","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"079522"},{"DrugName":"CeleBREX","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"058747"},{"DrugName":"CeleBREX","Strength":"200","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"058748"},{"DrugName":"CeleBREX","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"124273"}],[{"DrugName":"CeleXA","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"056872"},{"DrugName":"CeleXA","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"056873"},{"DrugName":"CeleXA","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"071175"},{"DrugName":"CeleXA","Strength":"10","UOM":"MG/5ML","ROA":"OR","Dosage":"SOLN","DrugId":"065537"}],[{"DrugName":"Combigan","Strength":"0.2-0.5","UOM":"%","ROA":"OP","Dosage":"SOLN","DrugId":"114967"}],[{"DrugName":"Combivir","Strength":"150-300","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"053101"}],[{"DrugName":"Coreg","Strength":"3.125","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"050763"},{"DrugName":"Coreg","Strength":"6.25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"050764"},{"DrugName":"Coreg","Strength":"12.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"050765"},{"DrugName":"Coreg
+CR","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"125193"},{"DrugName":"Coreg
+CR","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"125194"},{"DrugName":"Coreg
+CR","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"125195"},{"DrugName":"Coreg
+CR","Strength":"80","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"125196"},{"DrugName":"Coreg","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"050766"}],[{"DrugName":"Coumadin","Strength":"4","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"031804"},{"DrugName":"Coumadin","Strength":"3","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"048186"},{"DrugName":"Coumadin","Strength":"6","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"048187"},{"DrugName":"Coumadin","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"032619"},{"DrugName":"Coumadin","Strength":"2.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"005415"},{"DrugName":"Coumadin","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"005416"},{"DrugName":"Coumadin","Strength":"7.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"005417"},{"DrugName":"Coumadin","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"005414"},{"DrugName":"Coumadin","Strength":"1","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"005413"}],[{"DrugName":"Cozaar","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"039791"},{"DrugName":"Cozaar","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"039794"},{"DrugName":"Cozaar","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"058802"}],[{"DrugName":"Crestor","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"083317"},{"DrugName":"Crestor","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"083314"},{"DrugName":"Crestor","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"083315"},{"DrugName":"Crestor","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"083316"}],[{"DrugName":"Cymbalta","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"CPEP","DrugId":"088908"},{"DrugName":"Cymbalta","Strength":"30","UOM":"MG","ROA":"OR","Dosage":"CPEP","DrugId":"088910"},{"DrugName":"Cymbalta","Strength":"60","UOM":"MG","ROA":"OR","Dosage":"CPEP","DrugId":"088909"}],[{"DrugName":"Daliresp","Strength":"500","UOM":"MCG","ROA":"OR","Dosage":"TABS","DrugId":"165755"},{"DrugName":"Daliresp","Strength":"250","UOM":"MCG","ROA":"OR","Dosage":"TABS","DrugId":"201999"}],[{"DrugName":"Deltasone","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"006027"}],[{"DrugName":"Depakote","Strength":"125","UOM":"MG","ROA":"OR","Dosage":"TBEC","DrugId":"006104"},{"DrugName":"Depakote","Strength":"250","UOM":"MG","ROA":"OR","Dosage":"TBEC","DrugId":"006105"},{"DrugName":"Depakote","Strength":"500","UOM":"MG","ROA":"OR","Dosage":"TBEC","DrugId":"006106"},{"DrugName":"Depakote
+ER","Strength":"500","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"067354"},{"DrugName":"Depakote
+ER","Strength":"250","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"079630"},{"DrugName":"Depakote
+Sprinkles","Strength":"125","UOM":"MG","ROA":"OR","Dosage":"CSDR","DrugId":"192365"},{"DrugName":"Depakote
+Sprinkles","Strength":"125","UOM":"MG","ROA":"OR","Dosage":"CPSP","DrugId":"006107"}],[{"DrugName":"Depakote
+ER","Strength":"500","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"067354"},{"DrugName":"Depakote
+ER","Strength":"250","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"079630"}],[{"DrugName":"Depo-Estradiol","Strength":"5","UOM":"MG/ML","ROA":"IM","Dosage":"OIL","DrugId":"006125"},{"DrugName":"DEPO-Medrol","Strength":"20","UOM":"MG/ML","ROA":"IJ","Dosage":"SUSP","DrugId":"006126"},{"DrugName":"DEPO-Medrol","Strength":"40","UOM":"MG/ML","ROA":"IJ","Dosage":"SUSP","DrugId":"006127"},{"DrugName":"DEPO-Medrol","Strength":"80","UOM":"MG/ML","ROA":"IJ","Dosage":"SUSP","DrugId":"006128"},{"DrugName":"Depo-Provera","Strength":"400","UOM":"MG/ML","ROA":"IM","Dosage":"SUSP","DrugId":"099725"},{"DrugName":"DepoCyt","Strength":"50","UOM":"MG/5ML","ROA":"IT","Dosage":"SUSP","DrugId":"060539"},{"DrugName":"Depo-Provera","Strength":"150","UOM":"MG/ML","ROA":"IM","Dosage":"SUSP","DrugId":"006131"},{"DrugName":"Depo-SubQ
+Provera
+104","Strength":"104","UOM":"MG/0.65ML","ROA":"SC","Dosage":"SUSP","DrugId":"093752"},{"DrugName":"Depo-Testosterone","Strength":"100","UOM":"MG/ML","ROA":"IM","Dosage":"OIL","DrugId":"006133"},{"DrugName":"Depo-Testosterone","Strength":"200","UOM":"MG/ML","ROA":"IM","Dosage":"OIL","DrugId":"006134"},{"DrugName":"Depo-Testosterone","Strength":"100","UOM":"MG/ML","ROA":"IM","Dosage":"SOLN","DrugId":"185600"},{"DrugName":"Depo-Testosterone","Strength":"200","UOM":"MG/ML","ROA":"IM","Dosage":"SOLN","DrugId":"185601"},{"DrugName":"Depo-SubQ
+Provera
+104","Strength":"104","UOM":"MG/0.65ML","ROA":"SC","Dosage":"SUSY","DrugId":"194935"}],[],[{"DrugName":"Diflucan","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"006592"},{"DrugName":"Diflucan
+in
+Dextrose","Strength":"200","UOM":"MG/100ML","ROA":"IV","Dosage":"SOLN","DrugId":"040200"},{"DrugName":"Diflucan","Strength":"150","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"036388"},{"DrugName":"Diflucan","Strength":"10","UOM":"MG/ML","ROA":"OR","Dosage":"SUSR","DrugId":"038297"},{"DrugName":"Diflucan","Strength":"40","UOM":"MG/ML","ROA":"OR","Dosage":"SUSR","DrugId":"038298"},{"DrugName":"Diflucan","Strength":"200","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"006593"},{"DrugName":"Diflucan","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"006594"}],[{"DrugName":"Dilantin","Strength":"30","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"006637"},{"DrugName":"Dilantin","Strength":"125","UOM":"MG/5ML","ROA":"OR","Dosage":"SUSP","DrugId":"006638"},{"DrugName":"Dilantin
+Infatabs","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"CHEW","DrugId":"006640"},{"DrugName":"Dilantin","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"006636"}],[{"DrugName":"Effexor
+XR","Strength":"37.5","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"053617"},{"DrugName":"Effexor
+XR","Strength":"75","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"053618"},{"DrugName":"Effexor
+XR","Strength":"150","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"053619"},{"DrugName":"Effexor","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"037508"},{"DrugName":"Effexor","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"037507"},{"DrugName":"Effexor","Strength":"37.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"037511"},{"DrugName":"Effexor","Strength":"75","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"037510"},{"DrugName":"Effexor","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"037509"}],[{"DrugName":"Eliquis","Strength":"2.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"171646"},{"DrugName":"Eliquis","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"177191"}],[{"DrugName":"Enbrel","Strength":"25","UOM":"MG","ROA":"SC","Dosage":"KIT","DrugId":"058242"},{"DrugName":"Enbrel","Strength":"50","UOM":"MG/ML","ROA":"SC","Dosage":"SOLN","DrugId":"090483"},{"DrugName":"Enbrel
+SureClick","Strength":"50","UOM":"MG/ML","ROA":"SC","Dosage":"SOLN","DrugId":"120867"},{"DrugName":"Enbrel","Strength":"25","UOM":"MG/0.5ML","ROA":"SC","Dosage":"SOLN","DrugId":"126248"},{"DrugName":"Enbrel
+SureClick","Strength":"50","UOM":"MG/ML","ROA":"SC","Dosage":"SOAJ","DrugId":"185612"},{"DrugName":"Enbrel","Strength":"25","UOM":"MG/0.5ML","ROA":"SC","Dosage":"SOSY","DrugId":"185602"},{"DrugName":"Enbrel","Strength":"50","UOM":"MG/ML","ROA":"SC","Dosage":"SOSY","DrugId":"185603"},{"DrugName":"Enbrel
+Mini","Strength":"50","UOM":"MG/ML","ROA":"SC","Dosage":"SOCT","DrugId":"199970"},{"DrugName":"Enbrel","Strength":"25","UOM":"MG/0.5ML","ROA":"SC","Dosage":"SOLN","DrugId":"211618"},{"DrugName":"Enbrel","Strength":"25","UOM":"MG","ROA":"SC","Dosage":"SOLR","DrugId":"192372"}],[],[{"DrugName":"Evista","Strength":"60","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"054133"}],[{"DrugName":"Flexeril","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"008510"},{"DrugName":"Flexeril","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"080801"}],[{"DrugName":"Flonase","Strength":"50","UOM":"MCG/ACT","ROA":"NA","Dosage":"SUSP","DrugId":"073664"},{"DrugName":"Flonase
+Allergy
+Relief","Strength":"50","UOM":"MCG/ACT","ROA":"NA","Dosage":"SUSP","DrugId":"186173"},{"DrugName":"Flonase
+Sensimist","Strength":"27.5","UOM":"MCG/SPRAY","ROA":"NA","Dosage":"SUSP","DrugId":"196615"}],[{"DrugName":"Fosamax","Strength":"70","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"068246"},{"DrugName":"Fosamax","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"041556"},{"DrugName":"Fosamax","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"041555"},{"DrugName":"Fosamax","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"050377"},{"DrugName":"Fosamax","Strength":"35","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"069333"},{"DrugName":"Fosamax
+Plus
+D","Strength":"70-5600","UOM":"MG-UNIT","ROA":"OR","Dosage":"TABS","DrugId":"127854"},{"DrugName":"Fosamax
+Plus
+D","Strength":"70-2800","UOM":"MG-UNIT","ROA":"OR","Dosage":"TABS","DrugId":"093756"}],[{"DrugName":"Geodon","Strength":"80","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"070127"},{"DrugName":"Geodon","Strength":"20","UOM":"MG","ROA":"IM","Dosage":"SOLR","DrugId":"078002"},{"DrugName":"Geodon","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"070125"},{"DrugName":"Geodon","Strength":"60","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"070126"},{"DrugName":"Geodon","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"070128"}],[{"DrugName":"Glucotrol
+XL","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"086645"},{"DrugName":"Glucotrol
+XL","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"086646"},{"DrugName":"Glucotrol
+XL","Strength":"2.5","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"086669"},{"DrugName":"Glucotrol","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"009350"},{"DrugName":"Glucotrol","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"009349"}],[{"DrugName":"Humira","Strength":"40","UOM":"MG/0.8ML","ROA":"SC","Dosage":"KIT","DrugId":"079985"},{"DrugName":"Humira","Strength":"20","UOM":"MG/0.4ML","ROA":"SC","Dosage":"KIT","DrugId":"133516"},{"DrugName":"Humira
+Pen","Strength":"40","UOM":"MG/0.8ML","ROA":"SC","Dosage":"KIT","DrugId":"120864"},{"DrugName":"Humira
+Pen-Crohns
+Starter","Strength":"40","UOM":"MG/0.8ML","ROA":"SC","Dosage":"KIT","DrugId":"126625"},{"DrugName":"Humira
+Pen-Psoriasis
+Starter","Strength":"40","UOM":"MG/0.8ML","ROA":"SC","Dosage":"KIT","DrugId":"141766"},{"DrugName":"Humira","Strength":"20","UOM":"MG/0.4ML","ROA":"SC","Dosage":"PSKT","DrugId":"187774"},{"DrugName":"Humira","Strength":"40","UOM":"MG/0.8ML","ROA":"SC","Dosage":"PSKT","DrugId":"187775"},{"DrugName":"Humira","Strength":"10","UOM":"MG/0.2ML","ROA":"SC","Dosage":"PSKT","DrugId":"186083"},{"DrugName":"Humira
+Pen-CD/UC/HS
+Starter","Strength":"40","UOM":"MG/0.8ML","ROA":"SC","Dosage":"PNKT","DrugId":"187790"},{"DrugName":"Humira
+Pen-Ps/UV/Adol HS
+Start","Strength":"40","UOM":"MG/0.8ML","ROA":"SC","Dosage":"PNKT","DrugId":"187793"},{"DrugName":"Humira
+Pen","Strength":"40","UOM":"MG/0.8ML","ROA":"SC","Dosage":"PNKT","DrugId":"187789"},{"DrugName":"Humira","Strength":"10","UOM":"MG/0.1ML","ROA":"SC","Dosage":"PSKT","DrugId":"202550"},{"DrugName":"Humira
+Pen","Strength":"40","UOM":"MG/0.4ML","ROA":"SC","Dosage":"PNKT","DrugId":"202545"},{"DrugName":"Humira
+Pen-CD/UC/HS
+Starter","Strength":"80","UOM":"MG/0.8ML","ROA":"SC","Dosage":"PNKT","DrugId":"203547"},{"DrugName":"Humira
+Pen-Psor/Uveit Starter","Strength":"80 MG/0.8ML
+&","UOM":"40MG/0.4ML","ROA":"SC","Dosage":"PNKT","DrugId":"212858"},{"DrugName":"Humira
+Pen","Strength":"80","UOM":"MG/0.8ML","ROA":"SC","Dosage":"PNKT","DrugId":"213269"},{"DrugName":"Humira
+Pediatric Crohns
+Start","Strength":"80","UOM":"MG/0.8ML","ROA":"SC","Dosage":"PSKT","DrugId":"202551"},{"DrugName":"Humira
+Pediatric Crohns Start","Strength":"80 MG/0.8ML
+&","UOM":"40MG/0.4ML","ROA":"SC","Dosage":"PSKT","DrugId":"202537"},{"DrugName":"Humira","Strength":"40","UOM":"MG/0.4ML","ROA":"SC","Dosage":"PSKT","DrugId":"202548"},{"DrugName":"Humira","Strength":"20","UOM":"MG/0.2ML","ROA":"SC","Dosage":"PSKT","DrugId":"202549"}],[],[{"DrugName":"Imdur","Strength":"60","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"010579"},{"DrugName":"Imdur","Strength":"30","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"042447"},{"DrugName":"Imdur","Strength":"120","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"040238"}],[{"DrugName":"Imitrex","Strength":"6","UOM":"MG/0.5ML","ROA":"SC","Dosage":"SOLN","DrugId":"141849"},{"DrugName":"Imitrex","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"040965"},{"DrugName":"Imitrex","Strength":"20","UOM":"MG/ACT","ROA":"NA","Dosage":"SOLN","DrugId":"052823"},{"DrugName":"Imitrex","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"040964"},{"DrugName":"Imitrex","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"068073"},{"DrugName":"Imitrex","Strength":"5","UOM":"MG/ACT","ROA":"NA","Dosage":"SOLN","DrugId":"052822"},{"DrugName":"Imitrex
+STATdose
+Refill","Strength":"6","UOM":"MG/0.5ML","ROA":"SC","Dosage":"SOCT","DrugId":"183123"},{"DrugName":"Imitrex
+STATdose
+System","Strength":"6","UOM":"MG/0.5ML","ROA":"SC","Dosage":"SOAJ","DrugId":"183110"},{"DrugName":"Imitrex
+STATdose
+System","Strength":"4","UOM":"MG/0.5ML","ROA":"SC","Dosage":"SOAJ","DrugId":"183109"},{"DrugName":"Imitrex
+STATdose
+Refill","Strength":"4","UOM":"MG/0.5ML","ROA":"SC","Dosage":"SOCT","DrugId":"183122"},{"DrugName":"Imitrex
+STATdose
+System","Strength":"6","UOM":"MG/0.5ML","ROA":"SC","Dosage":"SOLN","DrugId":"168363"}],[{"DrugName":"Inderal
+LA","Strength":"120","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"086618"},{"DrugName":"Inderal
+LA","Strength":"160","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"086619"},{"DrugName":"Inderal
+LA","Strength":"60","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"086620"},{"DrugName":"Inderal
+LA","Strength":"80","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"086621"},{"DrugName":"Inderal","Strength":"60","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"010625"},{"DrugName":"Inderal
+XL","Strength":"80","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"182722"},{"DrugName":"Inderal
+XL","Strength":"120","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"182721"}],[{"DrugName":"Inderal
+LA","Strength":"120","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"086618"},{"DrugName":"Inderal
+LA","Strength":"160","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"086619"},{"DrugName":"Inderal
+LA","Strength":"60","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"086620"},{"DrugName":"Inderal
+LA","Strength":"80","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"086621"},{"DrugName":"Inderal","Strength":"60","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"010625"},{"DrugName":"Inderal
+XL","Strength":"80","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"182722"},{"DrugName":"Inderal
+XL","Strength":"120","UOM":"MG","ROA":"OR","Dosage":"CP24","DrugId":"182721"}],[{"DrugName":"Keppra","Strength":"100","UOM":"MG/ML","ROA":"OR","Dosage":"SOLN","DrugId":"083789"},{"DrugName":"Keppra","Strength":"1000","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"119021"},{"DrugName":"Keppra
+XR","Strength":"750","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"141946"},{"DrugName":"Keppra","Strength":"500","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"063778"},{"DrugName":"Keppra","Strength":"500","UOM":"MG/5ML","ROA":"IV","Dosage":"SOLN","DrugId":"121563"},{"DrugName":"Keppra
+XR","Strength":"500","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"137885"},{"DrugName":"Keppra","Strength":"750","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"066535"},{"DrugName":"Keppra","Strength":"250","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"063777"}],[{"DrugName":"KlonoPIN
+Wafer","Strength":"0.125","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"081565"},{"DrugName":"KlonoPIN
+Wafer","Strength":"0.25","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"081566"},{"DrugName":"KlonoPIN
+Wafer","Strength":"0.5","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"081567"},{"DrugName":"KlonoPIN
+Wafer","Strength":"1","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"081568"},{"DrugName":"KlonoPIN
+Wafer","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"081569"},{"DrugName":"KlonoPIN","Strength":"0.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"011520"},{"DrugName":"KlonoPIN","Strength":"1","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"011521"},{"DrugName":"KlonoPIN","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"011522"}],[{"DrugName":"LaMICtal
+XR","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"143657"},{"DrugName":"LaMICtal
+XR","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"143658"},{"DrugName":"LaMICtal
+XR","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"143659"},{"DrugName":"LaMICtal
+XR","Strength":"200","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"143660"},{"DrugName":"LaMICtal
+XR","Strength":"21 x 25 MG &","UOM":"7 x 50
+MG","ROA":"OR","Dosage":"KIT","DrugId":"143661"},{"DrugName":"LaMICtal
+XR","Strength":"50 & 100 &
+200","UOM":"MG","ROA":"OR","Dosage":"KIT","DrugId":"143662"},{"DrugName":"LaMICtal
+XR","Strength":"25 & 50 &
+100","UOM":"MG","ROA":"OR","Dosage":"KIT","DrugId":"143663"},{"DrugName":"LaMICtal
+XR","Strength":"300","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"165056"},{"DrugName":"LaMICtal
+XR","Strength":"250","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"170055"}],[{"DrugName":"Lantus","Strength":"100","UOM":"UNIT/ML","ROA":"SC","Dosage":"SOLN","DrugId":"070789"},{"DrugName":"Lantus
+SoloStar","Strength":"100","UOM":"UNIT/ML","ROA":"SC","Dosage":"SOLN","DrugId":"129091"},{"DrugName":"Lantus
+for
+OptiClik","Strength":"100","UOM":"UNIT/ML","ROA":"SC","Dosage":"SOLN","DrugId":"120080"},{"DrugName":"Lantus
+SoloStar","Strength":"100","UOM":"UNIT/ML","ROA":"SC","Dosage":"SOPN","DrugId":"183153"}],[{"DrugName":"Lasix","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"011843"},{"DrugName":"Lasix","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"011844"},{"DrugName":"Lasix","Strength":"80","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"011845"}],[{"DrugName":"Levoxyl","Strength":"25","UOM":"MCG","ROA":"OR","Dosage":"TABS","DrugId":"037612"},{"DrugName":"Levoxyl","Strength":"50","UOM":"MCG","ROA":"OR","Dosage":"TABS","DrugId":"037613"},{"DrugName":"Levoxyl","Strength":"75","UOM":"MCG","ROA":"OR","Dosage":"TABS","DrugId":"037614"},{"DrugName":"Levoxyl","Strength":"88","UOM":"MCG","ROA":"OR","Dosage":"TABS","DrugId":"037619"},{"DrugName":"Levoxyl","Strength":"100","UOM":"MCG","ROA":"OR","Dosage":"TABS","DrugId":"037608"},{"DrugName":"Levoxyl","Strength":"112","UOM":"MCG","ROA":"OR","Dosage":"TABS","DrugId":"037618"},{"DrugName":"Levoxyl","Strength":"125","UOM":"MCG","ROA":"OR","Dosage":"TABS","DrugId":"037615"},{"DrugName":"Levoxyl","Strength":"137","UOM":"MCG","ROA":"OR","Dosage":"TABS","DrugId":"037620"},{"DrugName":"Levoxyl","Strength":"150","UOM":"MCG","ROA":"OR","Dosage":"TABS","DrugId":"037609"},{"DrugName":"Levoxyl","Strength":"175","UOM":"MCG","ROA":"OR","Dosage":"TABS","DrugId":"037617"},{"DrugName":"Levoxyl","Strength":"200","UOM":"MCG","ROA":"OR","Dosage":"TABS","DrugId":"037611"}],[{"DrugName":"Lexapro","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"078008"},{"DrugName":"Lexapro","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"078010"},{"DrugName":"Lexapro","Strength":"5","UOM":"MG/5ML","ROA":"OR","Dosage":"SOLN","DrugId":"080379"},{"DrugName":"Lexapro","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"085552"}],[{"DrugName":"Lidoderm","Strength":"5","UOM":"%","ROA":"EX","Dosage":"PTCH","DrugId":"061413"}],[{"DrugName":"Lioresal","Strength":"10","UOM":"MG/5ML","ROA":"IT","Dosage":"SOLN","DrugId":"164835"},{"DrugName":"Lioresal","Strength":"40","UOM":"MG/20ML","ROA":"IT","Dosage":"SOLN","DrugId":"164836"},{"DrugName":"Lioresal","Strength":"10","UOM":"MG/20ML","ROA":"IT","Dosage":"SOLN","DrugId":"164837"},{"DrugName":"Lioresal","Strength":"0.05","UOM":"MG/ML","ROA":"IT","Dosage":"SOLN","DrugId":"053358"}],[{"DrugName":"Lipitor","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"047942"},{"DrugName":"Lipitor","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"047943"},{"DrugName":"Lipitor","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"051054"},{"DrugName":"Lipitor","Strength":"80","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"066713"}],[{"DrugName":"Lopid","Strength":"600","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"012378"}],[{"DrugName":"Lopressor","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"012381"},{"DrugName":"Lopressor","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"012380"},{"DrugName":"Lopressor","Strength":"5","UOM":"MG/5ML","ROA":"IV","Dosage":"SOLN","DrugId":"197390"},{"DrugName":"Lopressor
+HCT","Strength":"50-25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"039925"},{"DrugName":"Lopressor
+HCT","Strength":"100-25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"039927"},{"DrugName":"Lopressor
+HCT","Strength":"100-50","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"039926"}],[{"DrugName":"Lovaza","Strength":"1","UOM":"GM","ROA":"OR","Dosage":"CAPS","DrugId":"128834"}],[{"DrugName":"Lovenox","Strength":"30","UOM":"MG/0.3ML","ROA":"SC","Dosage":"SOLN","DrugId":"012445"},{"DrugName":"Lovenox","Strength":"40","UOM":"MG/0.4ML","ROA":"SC","Dosage":"SOLN","DrugId":"051026"},{"DrugName":"Lovenox","Strength":"60","UOM":"MG/0.6ML","ROA":"SC","Dosage":"SOLN","DrugId":"056035"},{"DrugName":"Lovenox","Strength":"80","UOM":"MG/0.8ML","ROA":"SC","Dosage":"SOLN","DrugId":"056036"},{"DrugName":"Lovenox","Strength":"100","UOM":"MG/ML","ROA":"SC","Dosage":"SOLN","DrugId":"056048"},{"DrugName":"Lovenox","Strength":"120","UOM":"MG/0.8ML","ROA":"SC","Dosage":"SOLN","DrugId":"074816"},{"DrugName":"Lovenox","Strength":"150","UOM":"MG/ML","ROA":"SC","Dosage":"SOLN","DrugId":"074817"},{"DrugName":"Lovenox","Strength":"300","UOM":"MG/3ML","ROA":"IJ","Dosage":"SOLN","DrugId":"160066"}],[{"DrugName":"Lunesta","Strength":"1","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"091635"},{"DrugName":"Lunesta","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"091636"},{"DrugName":"Lunesta","Strength":"3","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"091637"}],[{"DrugName":"Lyrica","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"096179"},{"DrugName":"Lyrica","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"096180"},{"DrugName":"Lyrica","Strength":"75","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"096181"},{"DrugName":"Lyrica","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"096182"},{"DrugName":"Lyrica","Strength":"150","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"096183"},{"DrugName":"Lyrica","Strength":"200","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"096184"},{"DrugName":"Lyrica","Strength":"225","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"096185"},{"DrugName":"Lyrica","Strength":"300","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"096186"},{"DrugName":"Lyrica","Strength":"20","UOM":"MG/ML","ROA":"OR","Dosage":"SOLN","DrugId":"174978"},{"DrugName":"Lyrica
+CR","Strength":"82.5","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"199895"},{"DrugName":"Lyrica
+CR","Strength":"165","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"199896"},{"DrugName":"Lyrica
+CR","Strength":"330","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"199897"}],[],[{"DrugName":"Microzide","Strength":"12.5","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"047945"}],[{"DrugName":"Minipress","Strength":"1","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"013633"},{"DrugName":"Minipress","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"013634"},{"DrugName":"Minipress","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"013635"}],[{"DrugName":"Mobic","Strength":"7.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"065536"},{"DrugName":"Mobic","Strength":"15","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"068633"}],[],[{"DrugName":"Neurontin","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"032814"},{"DrugName":"Neurontin","Strength":"300","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"032815"},{"DrugName":"Neurontin","Strength":"400","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"032816"},{"DrugName":"Neurontin","Strength":"600","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"061182"},{"DrugName":"Neurontin","Strength":"800","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"061183"},{"DrugName":"Neurontin","Strength":"250","UOM":"MG/5ML","ROA":"OR","Dosage":"SOLN","DrugId":"071489"}],[{"DrugName":"Neurontin","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"032814"},{"DrugName":"Neurontin","Strength":"300","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"032815"},{"DrugName":"Neurontin","Strength":"400","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"032816"},{"DrugName":"Neurontin","Strength":"600","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"061182"},{"DrugName":"Neurontin","Strength":"800","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"061183"},{"DrugName":"Neurontin","Strength":"250","UOM":"MG/5ML","ROA":"OR","Dosage":"SOLN","DrugId":"071489"}],[],[{"DrugName":"Norvasc","Strength":"2.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"015190"},{"DrugName":"Norvasc","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"015189"},{"DrugName":"Norvasc","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"015191"}],[{"DrugName":"Paxil
+CR","Strength":"37.5","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"076279"},{"DrugName":"Paxil
+CR","Strength":"12.5","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"076277"},{"DrugName":"Paxil
+CR","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"076278"}],[{"DrugName":"Plaquenil","Strength":"200","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"017096"}],[{"DrugName":"Plavix","Strength":"75","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"054720"},{"DrugName":"Plavix","Strength":"300","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"132658"}],[{"DrugName":"Pravachol","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"017461"},{"DrugName":"Pravachol","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"017462"},{"DrugName":"Pravachol","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"017463"},{"DrugName":"Pravachol","Strength":"80","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"075272"}],[{"DrugName":"PriLOSEC","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"CPDR","DrugId":"055785"},{"DrugName":"PriLOSEC","Strength":"2.5","UOM":"MG","ROA":"OR","Dosage":"PACK","DrugId":"140808"},{"DrugName":"PriLOSEC","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"CPDR","DrugId":"041653"},{"DrugName":"PriLOSEC","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"CPDR","DrugId":"017675"},{"DrugName":"PriLOSEC
+OTC","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TBEC","DrugId":"083566"},{"DrugName":"PriLOSEC","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"PACK","DrugId":"140809"}],[{"DrugName":"Prinzide","Strength":"20-12.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"038898"},{"DrugName":"Prinzide","Strength":"20-25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"038899"},{"DrugName":"Prinzide","Strength":"10-12.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"038897"}],[{"DrugName":"ProAir
+HFA","Strength":"108 (90
+Base)","UOM":"MCG/ACT","ROA":"IN","Dosage":"AERS","DrugId":"120696"},{"DrugName":"ProAir
+RespiClick","Strength":"108 (90
+Base)","UOM":"MCG/ACT","ROA":"IN","Dosage":"AEPB","DrugId":"188012"},{"DrugName":"ProAir
+Digihaler","Strength":"108 (90
+Base)","UOM":"MCG/ACT","ROA":"IN","Dosage":"AEPB","DrugId":"215310"}],[],[{"DrugName":"Prodigy
+Control
+Solution","Strength":"Low","UOM":"","ROA":"VI","Dosage":"SOLN","DrugId":"120314"}],[],[],[],[],[{"DrugName":"Prodigy
+Twist Top Lancets
+28G","Strength":"","UOM":"","ROA":"XX","Dosage":"MISC","DrugId":"140982"}],[],[{"DrugName":"Provera","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"018051"},{"DrugName":"Provera","Strength":"2.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"018052"},{"DrugName":"Provera","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"018053"}],[{"DrugName":"PROzac","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"059799"},{"DrugName":"PROzac","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"061224"},{"DrugName":"PROzac
+Weekly","Strength":"90","UOM":"MG","ROA":"OR","Dosage":"CPDR","DrugId":"070129"},{"DrugName":"PROzac","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"018059"},{"DrugName":"PROzac","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"018058"},{"DrugName":"PROzac","Strength":"20","UOM":"MG/5ML","ROA":"OR","Dosage":"SOLN","DrugId":"089952"}],[{"DrugName":"Remeron","Strength":"15","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"044773"},{"DrugName":"Remeron","Strength":"30","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"044774"},{"DrugName":"Remeron","Strength":"45","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"059586"},{"DrugName":"Remeron
+SolTab","Strength":"15","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"069557"},{"DrugName":"Remeron
+SolTab","Strength":"45","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"070507"},{"DrugName":"Remeron
+SolTab","Strength":"30","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"069558"}],[{"DrugName":"Requip","Strength":"0.25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"053039"},{"DrugName":"Requip","Strength":"0.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"053042"},{"DrugName":"Requip","Strength":"1","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"053040"},{"DrugName":"Requip","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"053041"},{"DrugName":"Requip","Strength":"4","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"061891"},{"DrugName":"Requip","Strength":"3","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"072140"},{"DrugName":"Requip","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"053043"},{"DrugName":"Requip
+XL","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"135796"},{"DrugName":"Requip
+XL","Strength":"4","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"135799"},{"DrugName":"Requip
+XL","Strength":"8","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"135800"},{"DrugName":"Requip
+XL","Strength":"12","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"139165"},{"DrugName":"Requip
+XL","Strength":"6","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"142758"}],[{"DrugName":"Restasis","Strength":"0.05","UOM":"%","ROA":"OP","Dosage":"EMUL","DrugId":"080852"},{"DrugName":"Restasis
+MultiDose","Strength":"0.05","UOM":"%","ROA":"OP","Dosage":"EMUL","DrugId":"206731"}],[{"DrugName":"RisperDAL","Strength":"0.25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"060659"},{"DrugName":"RisperDAL","Strength":"0.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"060660"},{"DrugName":"RisperDAL","Strength":"1","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"032818"},{"DrugName":"RisperDAL","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"032819"},{"DrugName":"RisperDAL","Strength":"3","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"032820"},{"DrugName":"RisperDAL","Strength":"4","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"032821"},{"DrugName":"RisperDAL
+Consta","Strength":"25","UOM":"MG","ROA":"IM","Dosage":"SUSR","DrugId":"093453"},{"DrugName":"RisperDAL
+Consta","Strength":"37.5","UOM":"MG","ROA":"IM","Dosage":"SUSR","DrugId":"093427"},{"DrugName":"RisperDAL
+Consta","Strength":"50","UOM":"MG","ROA":"IM","Dosage":"SUSR","DrugId":"093452"},{"DrugName":"RisperDAL
+M-TAB","Strength":"3","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"100876"},{"DrugName":"RisperDAL
+M-TAB","Strength":"4","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"100877"},{"DrugName":"RisperDAL
+Consta","Strength":"12.5","UOM":"MG","ROA":"IM","Dosage":"SUSR","DrugId":"127655"},{"DrugName":"RisperDAL
+M-TAB","Strength":"0.5","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"081644"},{"DrugName":"RisperDAL
+M-TAB","Strength":"1","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"081642"},{"DrugName":"RisperDAL
+M-TAB","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"081643"},{"DrugName":"RisperDAL
+Consta","Strength":"12.5","UOM":"MG","ROA":"IM","Dosage":"SRER","DrugId":"208063"},{"DrugName":"RisperDAL
+Consta","Strength":"25","UOM":"MG","ROA":"IM","Dosage":"SRER","DrugId":"208062"},{"DrugName":"RisperDAL
+Consta","Strength":"37.5","UOM":"MG","ROA":"IM","Dosage":"SRER","DrugId":"208057"},{"DrugName":"RisperDAL
+Consta","Strength":"50","UOM":"MG","ROA":"IM","Dosage":"SRER","DrugId":"208061"},{"DrugName":"RisperDAL","Strength":"1","UOM":"MG/ML","ROA":"OR","Dosage":"SOLN","DrugId":"044567"}],[{"DrugName":"Robaxin","Strength":"1000","UOM":"MG/10ML","ROA":"IJ","Dosage":"SOLN","DrugId":"187773"},{"DrugName":"Robaxin","Strength":"500","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"018667"},{"DrugName":"Robaxin-750","Strength":"750","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"018668"},{"DrugName":"Robaxin","Strength":"100","UOM":"MG/ML","ROA":"IJ","Dosage":"SOLN","DrugId":"018666"}],[{"DrugName":"SEROquel
+XR","Strength":"200","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"128924"},{"DrugName":"SEROquel
+XR","Strength":"300","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"128926"},{"DrugName":"SEROquel
+XR","Strength":"400","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"128927"},{"DrugName":"SEROquel
+XR","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"130962"},{"DrugName":"SEROquel
+XR","Strength":"150","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"140558"}],[],[{"DrugName":"Singulair","Strength":"4","UOM":"MG","ROA":"OR","Dosage":"CHEW","DrugId":"063914"},{"DrugName":"Singulair","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"CHEW","DrugId":"054833"},{"DrugName":"Singulair","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"054836"},{"DrugName":"Singulair","Strength":"4","UOM":"MG","ROA":"OR","Dosage":"PACK","DrugId":"082280"}],[{"DrugName":"Sonata","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"061370"},{"DrugName":"Sonata","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"061371"}],[{"DrugName":"Strattera","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"079754"},{"DrugName":"Strattera","Strength":"18","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"079757"},{"DrugName":"Strattera","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"079755"},{"DrugName":"Strattera","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"079756"},{"DrugName":"Strattera","Strength":"60","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"079758"},{"DrugName":"Strattera","Strength":"80","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"100375"},{"DrugName":"Strattera","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"100376"}],[],[{"DrugName":"Tazorac","Strength":"0.05","UOM":"%","ROA":"EX","Dosage":"GEL","DrugId":"051053"},{"DrugName":"Tazorac","Strength":"0.05","UOM":"%","ROA":"EX","Dosage":"CREA","DrugId":"068422"},{"DrugName":"Tazorac","Strength":"0.1","UOM":"%","ROA":"EX","Dosage":"GEL","DrugId":"051055"},{"DrugName":"Tazorac","Strength":"0.1","UOM":"%","ROA":"EX","Dosage":"CREA","DrugId":"068423"}],[{"DrugName":"Tenormin","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"021121"},{"DrugName":"Tenormin","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"021122"},{"DrugName":"Tenormin","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"021120"},{"DrugName":"Tenormin","Strength":"5","UOM":"MG/10ML","ROA":"IV","Dosage":"SOLN","DrugId":"021119"}],[{"DrugName":"Topamax","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"047394"},{"DrugName":"Topamax","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"086289"},{"DrugName":"Topamax","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"047395"},{"DrugName":"Topamax","Strength":"200","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"047396"},{"DrugName":"Topamax
+Sprinkle","Strength":"15","UOM":"MG","ROA":"OR","Dosage":"CPSP","DrugId":"111631"},{"DrugName":"Topamax
+Sprinkle","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"CPSP","DrugId":"111632"}],[],[{"DrugName":"Triamterene-HCTZ","Strength":"75-50","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"022117"},{"DrugName":"Triamterene-HCTZ","Strength":"37.5-25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"022115"},{"DrugName":"Triamterene-HCTZ","Strength":"37.5-25","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"034366"},{"DrugName":"Triamterene-HCTZ","Strength":"50-25","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"022116"}],[{"DrugName":"Tricor","Strength":"145","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"090920"},{"DrugName":"Tricor","Strength":"48","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"090919"}],[{"DrugName":"Truvada","Strength":"200-300","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"088902"},{"DrugName":"Truvada","Strength":"100-150","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"193091"},{"DrugName":"Truvada","Strength":"133-200","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"193092"},{"DrugName":"Truvada","Strength":"167-250","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"193093"}],[{"DrugName":"Ultracet","Strength":"37.5-325","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"074529"}],[{"DrugName":"Ultram
+ER","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"099955"},{"DrugName":"Ultram
+ER","Strength":"200","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"099956"},{"DrugName":"Ultram
+ER","Strength":"300","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"099957"}],[{"DrugName":"Valtrex","Strength":"500","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"041415"},{"DrugName":"Valtrex","Strength":"1","UOM":"GM","ROA":"OR","Dosage":"TABS","DrugId":"049000"}],[{"DrugName":"Viibryd","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"165902"},{"DrugName":"Viibryd","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"165903"},{"DrugName":"Viibryd","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"165904"},{"DrugName":"Viibryd","Strength":"10
+& 20 &
+40","UOM":"MG","ROA":"OR","Dosage":"KIT","DrugId":"173250"},{"DrugName":"Viibryd
+Starter Pack","Strength":"10 &
+20","UOM":"MG","ROA":"OR","Dosage":"KIT","DrugId":"189598"}],[{"DrugName":"Vimpat","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"141573"},{"DrugName":"Vimpat","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"141574"},{"DrugName":"Vimpat","Strength":"150","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"141576"},{"DrugName":"Vimpat","Strength":"200","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"141577"},{"DrugName":"Vimpat","Strength":"10","UOM":"MG/ML","ROA":"OR","Dosage":"SOLN","DrugId":"154348"},{"DrugName":"Vimpat","Strength":"200","UOM":"MG/20ML","ROA":"IV","Dosage":"SOLN","DrugId":"142616"}],[{"DrugName":"Vistaril","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"023488"},{"DrugName":"Vistaril","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"023489"}],[{"DrugName":"Vistaril","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"023488"},{"DrugName":"Vistaril","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"023489"}],[{"DrugName":"Vyvanse","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"187025"},{"DrugName":"Vyvanse","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"CHEW","DrugId":"197096"},{"DrugName":"Vyvanse","Strength":"60","UOM":"MG","ROA":"OR","Dosage":"CHEW","DrugId":"197108"},{"DrugName":"Vyvanse","Strength":"30","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"127954"},{"DrugName":"Vyvanse","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"127955"},{"DrugName":"Vyvanse","Strength":"70","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"127956"},{"DrugName":"Vyvanse","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"133472"},{"DrugName":"Vyvanse","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"133471"},{"DrugName":"Vyvanse","Strength":"60","UOM":"MG","ROA":"OR","Dosage":"CAPS","DrugId":"133474"},{"DrugName":"Vyvanse","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"CHEW","DrugId":"197095"},{"DrugName":"Vyvanse","Strength":"30","UOM":"MG","ROA":"OR","Dosage":"CHEW","DrugId":"197097"},{"DrugName":"Vyvanse","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"CHEW","DrugId":"197098"},{"DrugName":"Vyvanse","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"CHEW","DrugId":"197099"}],[{"DrugName":"Wellbutrin
+SR","Strength":"150","UOM":"MG","ROA":"OR","Dosage":"TB12","DrugId":"084235"},{"DrugName":"Wellbutrin
+SR","Strength":"200","UOM":"MG","ROA":"OR","Dosage":"TB12","DrugId":"084236"},{"DrugName":"Wellbutrin
+SR","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"TB12","DrugId":"084234"}],[{"DrugName":"Xanax","Strength":"0.25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"024002"},{"DrugName":"Xanax","Strength":"1","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"024004"},{"DrugName":"Xanax
+XR","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"081997"},{"DrugName":"Xanax
+XR","Strength":"1","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"081996"},{"DrugName":"Xanax
+XR","Strength":"3","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"081998"},{"DrugName":"Xanax
+XR","Strength":"0.5","UOM":"MG","ROA":"OR","Dosage":"TB24","DrugId":"081995"},{"DrugName":"Xanax","Strength":"0.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"024003"},{"DrugName":"Xanax","Strength":"2","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"024005"}],[{"DrugName":"Zocor","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"024227"},{"DrugName":"Zocor","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"024224"},{"DrugName":"Zocor","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"024225"},{"DrugName":"Zocor","Strength":"40","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"024226"},{"DrugName":"Zocor","Strength":"80","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"056711"}],[{"DrugName":"Zofran","Strength":"4","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"024230"},{"DrugName":"Zofran","Strength":"8","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"024231"},{"DrugName":"Zofran","Strength":"4","UOM":"MG/2ML","ROA":"IJ","Dosage":"SOLN","DrugId":"160717"},{"DrugName":"Zofran
+ODT","Strength":"4","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"059011"},{"DrugName":"Zofran
+ODT","Strength":"8","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"059012"},{"DrugName":"Zofran","Strength":"40","UOM":"MG/20ML","ROA":"IJ","Dosage":"SOLN","DrugId":"160718"},{"DrugName":"Zofran","Strength":"4","UOM":"MG/5ML","ROA":"OR","Dosage":"SOLN","DrugId":"049166"},{"DrugName":"Zofran","Strength":"2","UOM":"MG/ML","ROA":"IJ","Dosage":"SOLN","DrugId":"160735"},{"DrugName":"Zofran","Strength":"32","UOM":"MG/50ML","ROA":"IV","Dosage":"SOLN","DrugId":"039634"}],[{"DrugName":"Zoloft","Strength":"50","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"024234"},{"DrugName":"Zoloft","Strength":"100","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"024233"},{"DrugName":"Zoloft","Strength":"25","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"049174"},{"DrugName":"Zoloft","Strength":"20","UOM":"MG/ML","ROA":"OR","Dosage":"CONC","DrugId":"065180"}],[{"DrugName":"ZyPREXA","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"045683"},{"DrugName":"ZyPREXA","Strength":"7.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"045684"},{"DrugName":"ZyPREXA","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"045686"},{"DrugName":"ZyPREXA","Strength":"2.5","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"050838"},{"DrugName":"ZyPREXA","Strength":"15","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"062905"},{"DrugName":"ZyPREXA","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TABS","DrugId":"068877"},{"DrugName":"ZyPREXA
+Zydis","Strength":"5","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"067326"},{"DrugName":"ZyPREXA
+Zydis","Strength":"10","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"067327"},{"DrugName":"ZyPREXA
+Zydis","Strength":"15","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"073657"},{"DrugName":"ZyPREXA
+Zydis","Strength":"20","UOM":"MG","ROA":"OR","Dosage":"TBDP","DrugId":"073658"},{"DrugName":"ZyPREXA
+Relprevv","Strength":"210","UOM":"MG","ROA":"IM","Dosage":"SUSR","DrugId":"148822"},{"DrugName":"ZyPREXA
+Relprevv","Strength":"300","UOM":"MG","ROA":"IM","Dosage":"SUSR","DrugId":"148825"},{"DrugName":"ZyPREXA
+Relprevv","Strength":"405","UOM":"MG","ROA":"IM","Dosage":"SUSR","DrugId":"148826"}}]

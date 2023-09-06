@@ -1,8 +1,16 @@
 interface webPapData {
 	[key: string]: string;
 }
+interface OrderItem {
+	ddi: string;
+	name: string;
+	program: string;
+	physicianid: string;
+	qty: string;
+	sig: string;
+	diagnosis: string;
+}
 
-//webpap api
 const patientData: webPapData = {
 	fname: '',
 	lname: '',
@@ -39,6 +47,20 @@ const doctorData: webPapData = {
 	city: '',
 	state: '',
 	zip: '',
+	id: '',
+};
+const doctor2Data: webPapData = {
+	fname: '',
+	mname: '',
+	lname: '',
+	email: '',
+	phone: '',
+	fax: '',
+	address: '',
+	city: '',
+	state: '',
+	zip: '',
+	id: '',
 };
 
 const submitBtn = document.querySelector(
@@ -66,7 +88,6 @@ async function getAuth(
 	const response = await fetch(url, {
 		method: 'POST',
 		headers: {
-			// 'Content-Type': 'application/json',
 			'Content-Type': 'application/x-www-form-urlencoded',
 		},
 		body: new URLSearchParams(data).toString(),
@@ -91,7 +112,9 @@ async function postDoctorData(url: string, data: webPapData) {
 		if (!response.ok) {
 			throw new Error('Network response was not ok');
 		}
-		await response.json();
+		const docData = await response.json();
+		data.id = docData.Id;
+		console.log(data);
 	} catch (err) {
 		console.log(err);
 	}
@@ -134,6 +157,118 @@ async function postIncomeData(url: string, data: webPapData) {
 	}
 }
 
+async function searchMed(url: string): Promise<any> {
+	try {
+		const response = await fetch(url, {
+			method: 'get',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+
+		let res = await response.json();
+		console.log(res);
+		return res;
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+async function addDrugs(url: string, data: any) {
+	try {
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${authToken}`,
+			},
+			body: JSON.stringify(data),
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+
+		let res = await response.json();
+		console.log(res);
+		return res;
+	} catch (err) {
+		console.log(err);
+	}
+}
+const addDrugURL =
+	'https://staging.medserviceswebpap.com/api/paporders/additem';
+
+let addDrugData = {
+	CustomerId: '',
+	OrderItems: [] as OrderItem[],
+};
+async function getDrugData() {
+	let strength = '';
+	async function setOrder(row: HTMLElement): Promise<OrderItem> {
+		let orderItem = {
+			ddi: '',
+			name: '',
+			program: '',
+			physicianid: '',
+			qty: '90',
+			sig: '',
+			diagnosis: '',
+		};
+
+		let fields = row.querySelectorAll(
+			'.input-field'
+		) as NodeListOf<HTMLInputElement>;
+		fields.forEach((field) => {
+			// console.log(field.name);
+			if (field.name.includes('med-name')) {
+				orderItem.name = field.value;
+			} else if (field.name.includes('med-strength')) {
+				strength = field.value;
+			} else if (field.name.includes('Frequency')) {
+				orderItem.sig = field.value;
+			}
+		});
+		// console.log(orderItem);
+		return orderItem;
+	}
+	(document.querySelectorAll('[cd=med]') as NodeListOf<HTMLElement>).forEach(
+		(row) => {
+			setOrder(row).then((orderItem) => {
+				if (orderItem.name === '') return;
+				let searchMedUrl = `https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=${orderItem.name.replace(
+					/\s/g,
+					'%20'
+				)}&strength=${strength}`;
+				console.log(searchMedUrl);
+				searchMed(searchMedUrl)
+					.then((data) => {
+						// console.log(data);
+						if (Array.isArray(data)) {
+							orderItem.ddi = data[0].DrugId as string;
+							orderItem.name = data[0].DrugName;
+							orderItem.program = document
+								.querySelector(`[cd-drug-box="${orderItem.name}"]`)
+								?.querySelector('[cd-program]')
+								?.getAttribute('cd-program') as string;
+							orderItem.diagnosis = document
+								.querySelector(`[cd-drug-box="${orderItem.name}"]`)
+								?.querySelector('[cd-diagnosis]')
+								?.getAttribute('cd-diagnosis') as string;
+						}
+					})
+					.then(() => {
+						// console.log(orderItem);
+						addDrugData.OrderItems.push(orderItem);
+						// console.log(addDrugData);
+					});
+			});
+		}
+	);
+}
 submitBtn.addEventListener('click', () => {
 	// //patient address
 	//@ts-ignore
@@ -185,12 +320,40 @@ submitBtn.addEventListener('click', () => {
 			}
 		});
 	}
+	//@ts-ignore
+	if (doctor2Address) {
+		//@ts-ignore
+		doctor2Address.forEach((component) => {
+			let componentType = component.types[0];
+			switch (componentType) {
+				case 'street_number': {
+					doctor2Data['address'] = `${component.long_name} `;
+					break;
+				}
+				case 'route': {
+					doctor2Data['address'] += component.short_name;
+					break;
+				}
+				case 'locality':
+					doctor2Data['city'] = component.long_name;
+					break;
+				case 'administrative_area_level_1': {
+					doctor2Data['state'] = component.short_name;
+					break;
+				}
+			}
+		});
+	}
 	const allFields: any = [];
 	(
 		document.querySelectorAll('.input-field') as NodeListOf<HTMLInputElement>
 	).forEach((field) => {
 		let fieldId = field.id;
 		let value = field.value;
+		if (fieldId.includes('phone')) {
+			// remove all non-numric characters
+			value = value.replace(/\D/g, '');
+		}
 		allFields.push({ field: fieldId, value: value });
 	});
 	(
@@ -204,17 +367,18 @@ submitBtn.addEventListener('click', () => {
 	});
 	//@ts-ignore
 	allFields.forEach((data: { field: string; value: string }) => {
-		if (
-			data.field === 'patwages' ||
-			data.field === 'patdisab' ||
-			data.field === 'patunemploy'
-		) {
+		if (data.field === 'patwages') {
 			patientIncomeData[data.field] = data.value.slice(1);
 			return;
 		}
 		if (data.field.includes('doc-')) {
 			let field = data.field.split('-')[1];
 			doctorData[field] = data.value;
+			return;
+		}
+		if (data.field.includes('doc2-')) {
+			let field = data.field.split('-')[1];
+			doctor2Data[field] = data.value;
 			return;
 		}
 		if (data.field === 'month') {
@@ -238,27 +402,47 @@ submitBtn.addEventListener('click', () => {
 
 	getAuth(generalURL, authData).then((data) => {
 		authToken = data.access_token;
-		postData(createURL, patientData).then(() => {
-			let incomeUrl = `https://www.medserviceswebpap.com/api/patient/updatepatientincome?patientId=${patientId}`;
-			postIncomeData(incomeUrl, patientIncomeData);
-		});
-		postDoctorData(createDoctorURL, doctorData);
+		// let drugsData: Promise<any>[] = [];
+		// const drugs = document.querySelectorAll('[cd=drug]');
+		// drugs.forEach((med) => {
+		// 	let searchMedUrl = `https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=${med.innerHTML.replace(
+		// 		/\s/g,
+		// 		'%20'
+		// 	)}`;
+		// 	drugsData.push(searchMed(searchMedUrl));
+		// });
+		// Promise.all(drugsData).then((data) => {
+		// 	console.log(JSON.stringify(data));
+		// });
+		// searchMed(
+		// 	'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Levothyroxine'
+		// );
+		postData(createURL, patientData)
+			.then(() => {
+				let incomeUrl = `https://www.medserviceswebpap.com/api/patient/updatepatientincome?patientId=${patientId}`;
+				postIncomeData(incomeUrl, patientIncomeData);
+				// addDrugData.CustomerId = `${patientId}`;
+			})
+			.then(() => {
+				postDoctorData(createDoctorURL, doctorData);
+				if (
+					(document.getElementById('doc2-fname') as HTMLInputElement)!.value !==
+					''
+				) {
+					postDoctorData(createDoctorURL, doctor2Data);
+				}
+			});
+		// .then(() => {
+		// 	console.log(patientData);
+		// 	console.log(doctorData);
+		// 	console.log(doctor2Data);
+		// 	getDrugData().then(() => {
+		// 		console.log(addDrugData);
+		// 		addDrugs(addDrugURL, addDrugData);
+		// 	});
+		// });
 	});
 });
-
-// async function deletePatient(url: string) {
-// 	await fetch(url, {
-// 		method: 'POST',
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 			Authorization:
-// 				'Bearer Bd7_aG9B_YHizPMt9zNOm9joC1etgQHoxR4hNVWAgcyX3NwzBth7JK6dyzbQdFQ8xVC_wtcVa-KqysCvkWefb9Hh-j0Numd81VdKZva_kYF3q3cwklRQunnKxQIQTt6XArEU4Qh3mAABIDoruv9kSR7PsTriOYD1qtNBwrojSu3kro38dNnF5zuJURZx2fZ4P5j3I-SzFxkofTC_7ZkF5Ko-n6zSqIwnmK1qE1wujTHwiVOEsMSG3lcu4CQc1dNFFMtWAxcpDadYo-736KbMzKtugxOjPGAEhrAQCeJY2q9qq0Lub_000xHT8gdRQAsjwJBNaQaoX43ujr-OjCGpfMQfvn0ntP8fOlQW5chRvfHswuFsinBkAcX-nlrjv5vS8xdQB4CHvmDZaTaSTwgu3LjanYkjGkvO_4r2LGC95CxwI9NM',
-// 		},
-// 	});
-// }
-// deletePatient(
-// 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=10'
-// );
 
 //@ts-ignore
 window.fsAttributes = window.fsAttributes || [];
@@ -329,7 +513,7 @@ function createMultiStepForm(
 	});
 
 	nextButton.addEventListener('click', () => {
-		if (currentStep === 4) {
+		if (currentStep === numSteps) {
 			(document.querySelector('.payment-trigger') as HTMLElement).click();
 			(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
 			return;
@@ -361,11 +545,8 @@ function createMultiStepForm(
 			} else {
 				prevButton.style.display = 'block';
 			}
-			if (currentStep === 4) {
+			if (currentStep === numSteps) {
 				nextButton.innerHTML = 'Continue To Payment';
-			}
-			if (currentStep === 3) {
-				nextButton.innerHTML = 'Continue';
 			}
 		}
 	});
@@ -574,20 +755,6 @@ function validateForm(
 			}
 		}
 	}
-	//money fields
-	if (currentStep === 4) {
-		const moneyFields = document.querySelectorAll(
-			'.money-field'
-		) as NodeListOf<HTMLInputElement>;
-		moneyFields.forEach((field) => {
-			if (field.value !== '') {
-				document.getElementById('income-error')!.classList.remove('active');
-			} else {
-				valid = false;
-				document.getElementById('income-error')!.classList.add('active');
-			}
-		});
-	}
 
 	return valid;
 }
@@ -596,16 +763,24 @@ function validateForm(
 const phoneInput = document.querySelectorAll('.phone-field');
 const zipInput = document.querySelectorAll('input[placeholder="Zip code"]');
 
-phoneInput.forEach((input) => {
+function formatPhoneNumber(input: HTMLInputElement): void {
 	input.addEventListener('input', function (this: HTMLInputElement) {
-		// Remove non-numeric characters from the input
-		this.value = this.value.replace(/\D/g, '');
+		const input = this.value.replace(/\D/g, '').substring(0, 10); // First ten digits of input only
+		const areaCode = input.substring(0, 3);
+		const middle = input.substring(3, 6);
+		const last = input.substring(6, 10);
 
-		// Limit the input to 10 characters
-		if (this.value.length > 10) {
-			this.value = this.value.slice(0, 10);
+		if (input.length > 6) {
+			this.value = `(${areaCode}) ${middle} - ${last}`;
+		} else if (input.length > 3) {
+			this.value = `(${areaCode}) ${middle}`;
+		} else if (input.length > 0) {
+			this.value = `(${areaCode}`;
 		}
 	});
+}
+phoneInput.forEach((input) => {
+	formatPhoneNumber(input as HTMLInputElement);
 });
 
 zipInput.forEach((input) => {
@@ -644,15 +819,13 @@ ssnInput!.addEventListener('input', function (this: HTMLInputElement) {
 });
 
 //income-fields
-const incomeFields = document.querySelectorAll('.money-field');
-incomeFields.forEach((input) => {
-	input.addEventListener('input', function (this: HTMLInputElement) {
-		// remove all non-numric characters
-		this.value = this.value.replace(/\D/g, '');
-		if (this.value === '') return;
-		// add $ at the beginning
-		this.value = '$' + this.value;
-	});
+const incomeField = document.querySelector('.money-field') as HTMLInputElement;
+incomeField.addEventListener('input', function (this: HTMLInputElement) {
+	// remove all non-numric characters
+	this.value = this.value.replace(/\D/g, '');
+	if (this.value === '') return;
+	// add $ at the beginning
+	this.value = '$' + this.value;
 });
 
 //form step indicator
@@ -846,6 +1019,7 @@ function addOptionsToSelect(
 	if (zeroOptions) {
 		selectElement.setAttribute('disabled', 'true');
 		selectElement.classList.add('disabled');
+		selectElement.removeAttribute('required');
 	}
 }
 
@@ -856,7 +1030,7 @@ function addOptionsToSelect(
 	//@ts-ignore
 	AuthorizeNetIFrame.onReceiveCommunication = function (querystr) {
 		var params = parseQueryString(querystr);
-		console.log(params);
+		// console.log(params);
 		//@ts-ignore
 		switch (params['action']) {
 			case 'resizeWindow':
@@ -891,6 +1065,7 @@ function addOptionsToSelect(
 })();
 
 let token = '';
+let communicatorUrl = '';
 async function getpay(url: string, data: any) {
 	try {
 		const response = await fetch(url, {
@@ -962,7 +1137,7 @@ const data = {
 				{
 					settingName: 'hostedPaymentOrderOptions',
 					settingValue:
-						'{"show": false, "merchantName": "G and S Questions Inc."}',
+						'{"show": false, "merchantName": "TrasnaparentPrice RX"}',
 				},
 				{
 					settingName: 'hostedPaymentIFrameCommunicatorUrl',
@@ -976,9 +1151,42 @@ const data = {
 
 getpay('https://api.authorize.net/xml/v1/request.api', data);
 
-// //show payment
-// document.addEventListener('DOMContentLoaded', () => {
-// 	setTimeout(() => {
-// 		document.getElementById('btnOpenAuthorizeNetIFrame')!.click();
-// 	}, 2000);
-// });
+async function deletePatient(url: string) {
+	await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken}`,
+		},
+	});
+}
+async function deleteDoc(url: string) {
+	await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken}`,
+		},
+	});
+}
+
+async function getDoc(url: string) {
+	try {
+		const response = await fetch(url, {
+			method: 'get',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+
+		let res = await response.json();
+		console.log(res);
+		return res;
+	} catch (err) {
+		console.log(err);
+	}
+}

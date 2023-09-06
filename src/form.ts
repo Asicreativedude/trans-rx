@@ -651,13 +651,13 @@ function validateForm(
 			'EmerContactPhone'
 		) as HTMLInputElement;
 
-		if (phoneInput.value.length !== 10) {
+		if (phoneInput.value.length !== 16) {
 			valid = false;
 			phoneInput.nextElementSibling!.classList.add('active');
 		} else {
 			phoneInput.nextElementSibling!.classList.remove('active');
 		}
-		if (phoneInput2.value.length !== 10) {
+		if (phoneInput2.value.length !== 16) {
 			valid = false;
 			phoneInput2.nextElementSibling!.classList.add('active');
 		} else {
@@ -765,6 +765,8 @@ const zipInput = document.querySelectorAll('input[placeholder="Zip code"]');
 
 function formatPhoneNumber(input: HTMLInputElement): void {
 	input.addEventListener('input', function (this: HTMLInputElement) {
+		this.value = this.value.replace(/\D/g, '');
+
 		const input = this.value.replace(/\D/g, '').substring(0, 10); // First ten digits of input only
 		const areaCode = input.substring(0, 3);
 		const middle = input.substring(3, 6);

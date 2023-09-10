@@ -1,6 +1,7 @@
 interface webPapData {
 	[key: string]: string;
 }
+//@ts-ignore
 interface OrderItem {
 	ddi: string;
 	name: string;
@@ -77,10 +78,9 @@ const createDoctorURL =
 const generalURL = 'https://www.medserviceswebpap.com/auth/token?hcpid=89';
 const authData = {
 	grant_type: 'password',
-	username: 'apiuser',
-	password: '123456',
+	username: import.meta.env.VITE_USERNAME,
+	password: import.meta.env.VITE_PASSWORD,
 };
-
 async function getAuth(
 	url: string,
 	data: { grant_type: string; username: string; password: string }
@@ -157,118 +157,118 @@ async function postIncomeData(url: string, data: webPapData) {
 	}
 }
 
-async function searchMed(url: string): Promise<any> {
-	try {
-		const response = await fetch(url, {
-			method: 'get',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${authToken}`,
-			},
-		});
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
+// async function searchMed(url: string): Promise<any> {
+// 	try {
+// 		const response = await fetch(url, {
+// 			method: 'get',
+// 			headers: {
+// 				'Content-Type': 'application/json',
+// 				Authorization: `Bearer ${authToken}`,
+// 			},
+// 		});
+// 		if (!response.ok) {
+// 			throw new Error('Network response was not ok');
+// 		}
 
-		let res = await response.json();
-		console.log(res);
-		return res;
-	} catch (err) {
-		console.log(err);
-	}
-}
+// 		let res = await response.json();
+// 		console.log(res);
+// 		return res;
+// 	} catch (err) {
+// 		console.log(err);
+// 	}
+// }
 
-async function addDrugs(url: string, data: any) {
-	try {
-		const response = await fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${authToken}`,
-			},
-			body: JSON.stringify(data),
-		});
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
+// async function addDrugs(url: string, data: any) {
+// 	try {
+// 		const response = await fetch(url, {
+// 			method: 'POST',
+// 			headers: {
+// 				'Content-Type': 'application/json',
+// 				Authorization: `Bearer ${authToken}`,
+// 			},
+// 			body: JSON.stringify(data),
+// 		});
+// 		if (!response.ok) {
+// 			throw new Error('Network response was not ok');
+// 		}
 
-		let res = await response.json();
-		console.log(res);
-		return res;
-	} catch (err) {
-		console.log(err);
-	}
-}
-const addDrugURL =
-	'https://staging.medserviceswebpap.com/api/paporders/additem';
+// 		let res = await response.json();
+// 		console.log(res);
+// 		return res;
+// 	} catch (err) {
+// 		console.log(err);
+// 	}
+// }
+// const addDrugURL =
+// 	'https://staging.medserviceswebpap.com/api/paporders/additem';
 
-let addDrugData = {
-	CustomerId: '',
-	OrderItems: [] as OrderItem[],
-};
-async function getDrugData() {
-	let strength = '';
-	async function setOrder(row: HTMLElement): Promise<OrderItem> {
-		let orderItem = {
-			ddi: '',
-			name: '',
-			program: '',
-			physicianid: '',
-			qty: '90',
-			sig: '',
-			diagnosis: '',
-		};
+// let addDrugData = {
+// 	CustomerId: '',
+// 	OrderItems: [] as OrderItem[],
+// };
+// async function getDrugData() {
+// 	let strength = '';
+// 	async function setOrder(row: HTMLElement): Promise<OrderItem> {
+// 		let orderItem = {
+// 			ddi: '',
+// 			name: '',
+// 			program: '',
+// 			physicianid: '',
+// 			qty: '90',
+// 			sig: '',
+// 			diagnosis: '',
+// 		};
 
-		let fields = row.querySelectorAll(
-			'.input-field'
-		) as NodeListOf<HTMLInputElement>;
-		fields.forEach((field) => {
-			// console.log(field.name);
-			if (field.name.includes('med-name')) {
-				orderItem.name = field.value;
-			} else if (field.name.includes('med-strength')) {
-				strength = field.value;
-			} else if (field.name.includes('Frequency')) {
-				orderItem.sig = field.value;
-			}
-		});
-		// console.log(orderItem);
-		return orderItem;
-	}
-	(document.querySelectorAll('[cd=med]') as NodeListOf<HTMLElement>).forEach(
-		(row) => {
-			setOrder(row).then((orderItem) => {
-				if (orderItem.name === '') return;
-				let searchMedUrl = `https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=${orderItem.name.replace(
-					/\s/g,
-					'%20'
-				)}&strength=${strength}`;
-				console.log(searchMedUrl);
-				searchMed(searchMedUrl)
-					.then((data) => {
-						// console.log(data);
-						if (Array.isArray(data)) {
-							orderItem.ddi = data[0].DrugId as string;
-							orderItem.name = data[0].DrugName;
-							orderItem.program = document
-								.querySelector(`[cd-drug-box="${orderItem.name}"]`)
-								?.querySelector('[cd-program]')
-								?.getAttribute('cd-program') as string;
-							orderItem.diagnosis = document
-								.querySelector(`[cd-drug-box="${orderItem.name}"]`)
-								?.querySelector('[cd-diagnosis]')
-								?.getAttribute('cd-diagnosis') as string;
-						}
-					})
-					.then(() => {
-						// console.log(orderItem);
-						addDrugData.OrderItems.push(orderItem);
-						// console.log(addDrugData);
-					});
-			});
-		}
-	);
-}
+// 		let fields = row.querySelectorAll(
+// 			'.input-field'
+// 		) as NodeListOf<HTMLInputElement>;
+// 		fields.forEach((field) => {
+// 			// console.log(field.name);
+// 			if (field.name.includes('med-name')) {
+// 				orderItem.name = field.value;
+// 			} else if (field.name.includes('med-strength')) {
+// 				strength = field.value;
+// 			} else if (field.name.includes('Frequency')) {
+// 				orderItem.sig = field.value;
+// 			}
+// 		});
+// 		// console.log(orderItem);
+// 		return orderItem;
+// 	}
+// 	(document.querySelectorAll('[cd=med]') as NodeListOf<HTMLElement>).forEach(
+// 		(row) => {
+// 			setOrder(row).then((orderItem) => {
+// 				if (orderItem.name === '') return;
+// 				let searchMedUrl = `https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=${orderItem.name.replace(
+// 					/\s/g,
+// 					'%20'
+// 				)}&strength=${strength}`;
+// 				console.log(searchMedUrl);
+// 				searchMed(searchMedUrl)
+// 					.then((data) => {
+// 						// console.log(data);
+// 						if (Array.isArray(data)) {
+// 							orderItem.ddi = data[0].DrugId as string;
+// 							orderItem.name = data[0].DrugName;
+// 							orderItem.program = document
+// 								.querySelector(`[cd-drug-box="${orderItem.name}"]`)
+// 								?.querySelector('[cd-program]')
+// 								?.getAttribute('cd-program') as string;
+// 							orderItem.diagnosis = document
+// 								.querySelector(`[cd-drug-box="${orderItem.name}"]`)
+// 								?.querySelector('[cd-diagnosis]')
+// 								?.getAttribute('cd-diagnosis') as string;
+// 						}
+// 					})
+// 					.then(() => {
+// 						// console.log(orderItem);
+// 						addDrugData.OrderItems.push(orderItem);
+// 						// console.log(addDrugData);
+// 					});
+// 			});
+// 		}
+// 	);
+// }
 submitBtn.addEventListener('click', () => {
 	// //patient address
 	//@ts-ignore
@@ -350,7 +350,7 @@ submitBtn.addEventListener('click', () => {
 	).forEach((field) => {
 		let fieldId = field.id;
 		let value = field.value;
-		if (fieldId.includes('phone')) {
+		if (fieldId.includes('phone') || fieldId.includes('fax')) {
 			// remove all non-numric characters
 			value = value.replace(/\D/g, '');
 		}
@@ -513,7 +513,7 @@ function createMultiStepForm(
 	});
 
 	nextButton.addEventListener('click', () => {
-		if (currentStep === numSteps) {
+		if (currentStep === 3) {
 			(document.querySelector('.payment-trigger') as HTMLElement).click();
 			(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
 			return;
@@ -545,7 +545,7 @@ function createMultiStepForm(
 			} else {
 				prevButton.style.display = 'block';
 			}
-			if (currentStep === numSteps) {
+			if (currentStep === 3) {
 				nextButton.innerHTML = 'Continue To Payment';
 			}
 		}
@@ -708,20 +708,20 @@ function validateForm(
 		) as HTMLInputElement;
 		const fax2 = document.getElementById('doc2-fax-2') as HTMLInputElement;
 
-		if (phoneInput.value.length !== 10) {
+		if (phoneInput.value.length !== 16) {
 			valid = false;
 			phoneInput.nextElementSibling!.classList.add('active');
 		} else {
 			phoneInput.nextElementSibling!.classList.remove('active');
 		}
-		if (fax.value.length !== 10) {
+		if (fax.value.length !== 16) {
 			valid = false;
 			fax.nextElementSibling!.classList.add('active');
 		} else {
 			fax.nextElementSibling!.classList.remove('active');
 		}
 		if (phoneInput2.value !== '') {
-			if (phoneInput2.value.length !== 10) {
+			if (phoneInput2.value.length !== 16) {
 				valid = false;
 				phoneInput2.nextElementSibling!.classList.add('active');
 			} else {
@@ -729,7 +729,7 @@ function validateForm(
 			}
 		}
 		if (fax2.value !== '') {
-			if (fax2.value.length !== 10) {
+			if (fax2.value.length !== 16) {
 				valid = false;
 				fax2.nextElementSibling!.classList.add('active');
 			} else {
@@ -755,13 +755,12 @@ function validateForm(
 			}
 		}
 	}
-
+	console.log(valid);
 	return valid;
 }
 
 // phone fax
 const phoneInput = document.querySelectorAll('.phone-field');
-const zipInput = document.querySelectorAll('input[placeholder="Zip code"]');
 
 function formatPhoneNumber(input: HTMLInputElement): void {
 	input.addEventListener('input', function (this: HTMLInputElement) {
@@ -785,6 +784,7 @@ phoneInput.forEach((input) => {
 	formatPhoneNumber(input as HTMLInputElement);
 });
 
+const zipInput = document.querySelectorAll('input[placeholder="Zip code"]');
 zipInput.forEach((input) => {
 	input.addEventListener('input', function (this: HTMLInputElement) {
 		// Remove non-numeric characters from the input
@@ -1067,6 +1067,7 @@ function addOptionsToSelect(
 })();
 
 let token = '';
+//@ts-ignore
 let communicatorUrl = '';
 async function getpay(url: string, data: any) {
 	try {
@@ -1153,42 +1154,42 @@ const data = {
 
 getpay('https://api.authorize.net/xml/v1/request.api', data);
 
-async function deletePatient(url: string) {
-	await fetch(url, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${authToken}`,
-		},
-	});
-}
-async function deleteDoc(url: string) {
-	await fetch(url, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${authToken}`,
-		},
-	});
-}
+// async function deletePatient(url: string) {
+// 	await fetch(url, {
+// 		method: 'POST',
+// 		headers: {
+// 			'Content-Type': 'application/json',
+// 			Authorization: `Bearer ${authToken}`,
+// 		},
+// 	});
+// }
+// async function deleteDoc(url: string) {
+// 	await fetch(url, {
+// 		method: 'POST',
+// 		headers: {
+// 			'Content-Type': 'application/json',
+// 			Authorization: `Bearer ${authToken}`,
+// 		},
+// 	});
+// }
 
-async function getDoc(url: string) {
-	try {
-		const response = await fetch(url, {
-			method: 'get',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${authToken}`,
-			},
-		});
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
+// async function getDoc(url: string) {
+// 	try {
+// 		const response = await fetch(url, {
+// 			method: 'get',
+// 			headers: {
+// 				'Content-Type': 'application/json',
+// 				Authorization: `Bearer ${authToken}`,
+// 			},
+// 		});
+// 		if (!response.ok) {
+// 			throw new Error('Network response was not ok');
+// 		}
 
-		let res = await response.json();
-		console.log(res);
-		return res;
-	} catch (err) {
-		console.log(err);
-	}
-}
+// 		let res = await response.json();
+// 		console.log(res);
+// 		return res;
+// 	} catch (err) {
+// 		console.log(err);
+// 	}
+// }

@@ -26,18 +26,18 @@ async function getAuth2(
 	return response.json();
 }
 
-getAuth2(generalURL2, authData2).then((data) => {
-	authToken2 = data.access_token;
-	// getDoc(
-	// 	'https://www.medserviceswebpap.com/api/physician/getphysician?lname=test'
-	// );
-	deletePatient(
-		'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=34'
-	);
-	deleteDoc(
-		'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=29'
-	);
-});
+// getAuth2(generalURL2, authData2).then((data) => {
+// 	authToken2 = data.access_token;
+// 	// getDoc(
+// 	// 	'https://www.medserviceswebpap.com/api/physician/getphysician?lname=test'
+// 	// );
+// 	deletePatient(
+// 		'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=48'
+// 	);
+// 	deleteDoc(
+// 		'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=42'
+// 	);
+// });
 
 // async function deletePatient(url: string) {
 // 	await fetch(url, {

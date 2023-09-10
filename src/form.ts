@@ -831,6 +831,7 @@ incomeField.addEventListener('input', function (this: HTMLInputElement) {
 });
 
 //form step indicator
+const barContainer = document.querySelector('.progress-bar-c') as HTMLElement;
 const bar = document.querySelector('.progress-bar') as HTMLElement;
 const options = {
 	attributes: true,
@@ -843,6 +844,16 @@ function callback(mutationList: MutationRecord[]) {
 				element.classList.contains('current')
 			);
 			bar!.style.width = `${((index + 1) / indicators.length) * 100}%`;
+
+			if (window.innerWidth < 768) {
+				if (index === 2)
+					barContainer!.style.transform = `translateX(-${
+						516 - window.innerWidth
+					}px)`;
+				else if (index < 2) {
+					barContainer!.style.transform = `translateX(0px)`;
+				}
+			}
 		}
 	});
 }

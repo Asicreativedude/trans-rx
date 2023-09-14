@@ -26,75 +26,133 @@ async function getAuth2(
 	return response.json();
 }
 
-// getAuth2(generalURL2, authData2).then((data) => {
-// 	authToken2 = data.access_token;
-// 	// getDoc(
-// 	// 	'https://www.medserviceswebpap.com/api/physician/getphysician?lname=test'
-// 	// );
-// 	deletePatient(
-// 		'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=48'
-// 	);
-// 	deleteDoc(
-// 		'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=42'
-// 	);
-// });
+getAuth2(generalURL2, authData2).then((data) => {
+	authToken2 = data.access_token;
+	// getDoc2(
+	// 	`https://www.medserviceswebpap.com/api/physician/getphysician?lname=Holly Donaldson`
+	// );
+	deletePatient(
+		'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=90'
+	);
+	deleteDoc(
+		'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=93'
+	);
+	// getProgram(
+	// 	'https://www.medserviceswebpap.com/api/search/availableprograms?drugId=127956'
+	// );
+	// searchMed2(
+	// 	'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Breo%20Ellipta'
+	// );
 
-// async function deletePatient(url: string) {
-// 	await fetch(url, {
-// 		method: 'POST',
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 			Authorization: `Bearer ${authToken2}`,
-// 		},
-// 	});
-// }
-// async function deleteDoc(url: string) {
-// 	await fetch(url, {
-// 		method: 'POST',
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 			Authorization: `Bearer ${authToken2}`,
-// 		},
-// 	});
-// }
-// async function getDoc(url: string) {
-// 	try {
-// 		const response = await fetch(url, {
-// 			method: 'get',
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				Authorization: `Bearer ${authToken2}`,
-// 			},
-// 		});
-// 		if (!response.ok) {
-// 			throw new Error('Network response was not ok');
-// 		}
+	// postDoctorData2(
+	// 	'https://www.medserviceswebpap.com/api/physician/createphysician',
+	// 	{
+	// 		fname: 'test',
+	// 		lname: 'test',
+	// 	}
+	// ).then((docdata) => {
+	// 	console.log(docdata);
+	// });
+});
 
-// 		let res = await response.json();
-// 		console.log(res);
-// 		return res;
-// 	} catch (err) {
-// 		console.log(err);
-// 	}
-// }
+async function searchMed2(url: string): Promise<any> {
+	try {
+		const response = await fetch(url, {
+			method: 'get',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${authToken2}`,
+			},
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
 
-// async function getPatients(url: string) {
-// 	try {
-// 		const response = await fetch(url, {
-// 			method: 'get',
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				Authorization: `Bearer ${authToken2}`,
-// 			},
-// 		});
-// 		if (!response.ok) {
-// 			throw new Error('Network response was not ok');
-// 		}
+		let res = await response.json();
+		console.log(res);
+		return res;
+	} catch (err) {
+		console.log(err);
+	}
+}
 
-// 		let res = await response.json();
-// 		console.log(res);
-// 		return res;
-// 	} catch (err) {
-// 		console.log(err);
-// 	}
-// }
+async function deletePatient(url: string) {
+	await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken2}`,
+		},
+	});
+}
+async function deleteDoc(url: string) {
+	await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${authToken2}`,
+		},
+	});
+}
+async function getDoc2(url: string) {
+	try {
+		const response = await fetch(url, {
+			method: 'get',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${authToken2}`,
+			},
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+
+		let res = await response.json();
+		console.log(res);
+		return res;
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+async function getPatients(url: string) {
+	try {
+		const response = await fetch(url, {
+			method: 'get',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${authToken2}`,
+			},
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+
+		let res = await response.json();
+		console.log(res);
+		return res;
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+async function getProgram(url: string) {
+	try {
+		const response = await fetch(url, {
+			method: 'get',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${authToken2}`,
+			},
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+
+		let res = await response.json();
+		console.log(res);
+		return res;
+	} catch (err) {
+		console.log(err);
+	}
+}

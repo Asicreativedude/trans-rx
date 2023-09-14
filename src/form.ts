@@ -6,6 +6,8 @@ interface OrderItem {
 	ddi: string;
 	name: string;
 	program: string;
+	pharmco: string;
+	pharmcoid: string;
 	physicianid: string;
 	qty: string;
 	sig: string;
@@ -113,6 +115,7 @@ async function postDoctorData(url: string, data: webPapData) {
 			throw new Error('Network response was not ok');
 		}
 		const docData = await response.json();
+
 		data.id = docData.Id;
 		console.log(data);
 	} catch (err) {
@@ -156,121 +159,141 @@ async function postIncomeData(url: string, data: webPapData) {
 		console.log(err);
 	}
 }
+async function getDoc(url: string) {
+	try {
+		const response = await fetch(url, {
+			method: 'get',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
 
-// async function searchMed(url: string): Promise<any> {
-// 	try {
-// 		const response = await fetch(url, {
-// 			method: 'get',
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				Authorization: `Bearer ${authToken}`,
-// 			},
-// 		});
-// 		if (!response.ok) {
-// 			throw new Error('Network response was not ok');
-// 		}
+		let res = await response.json();
+		console.log(res);
+		return res;
+	} catch (err) {
+		console.log(err);
+	}
+}
+async function addDrugs(data: any) {
+	try {
+		const response = await fetch(
+			'https://www.medserviceswebpap.com/api/paporders/additem',
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${authToken}`,
+				},
+				body: JSON.stringify(data),
+			}
+		);
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
 
-// 		let res = await response.json();
-// 		console.log(res);
-// 		return res;
-// 	} catch (err) {
-// 		console.log(err);
-// 	}
-// }
+		let res = await response.json();
+		console.log(res);
+		return res;
+	} catch (err) {
+		console.log(err);
+	}
+}
 
-// async function addDrugs(url: string, data: any) {
-// 	try {
-// 		const response = await fetch(url, {
-// 			method: 'POST',
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				Authorization: `Bearer ${authToken}`,
-// 			},
-// 			body: JSON.stringify(data),
-// 		});
-// 		if (!response.ok) {
-// 			throw new Error('Network response was not ok');
-// 		}
+let addDrugData = {
+	CustomerId: '',
+	OrderItems: [] as OrderItem[],
+};
+async function getDrugData() {
+	function setOrder(row: HTMLElement) {
+		let orderItem = {
+			ddi: '',
+			name: '',
+			program: '',
+			pharmcoid: '6825',
+			pharmco: 'Rx Outreach',
+			physicianid: '',
+			qty: '90',
+			sig: '',
+			diagnosis: '',
+		};
 
-// 		let res = await response.json();
-// 		console.log(res);
-// 		return res;
-// 	} catch (err) {
-// 		console.log(err);
-// 	}
-// }
-// const addDrugURL =
-// 	'https://staging.medserviceswebpap.com/api/paporders/additem';
+		let fields = row.querySelectorAll(
+			'.input-field'
+		) as NodeListOf<HTMLInputElement>;
+		fields.forEach((field) => {
+			if (field.name.includes('med-name')) {
+				let fieldOption = '';
+				field.querySelectorAll('option').forEach((option) => {
+					if (option.value === field.value) {
+						fieldOption = option.getAttribute('cd-webpap-name')!;
+						orderItem.program = option.getAttribute('cd-program')!;
+						if (
+							option.getAttribute('cd-program')! ===
+							'GSK Patient Assistance Program'
+						) {
+							orderItem.pharmco = 'GlaxoSmithKline';
+							orderItem.pharmcoid = '5331';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'myAbbvie Assist for Humira'
+						) {
+							orderItem.pharmco = 'AbbVie Inc.';
+							orderItem.pharmcoid = '203';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Bristol-Myers Squibb Patient Assistance Foundation (BMSPAF)'
+						) {
+							orderItem.pharmco = 'Bristol-Myers Squibb Company';
+							orderItem.pharmcoid = '37';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Help at Hand Patient Assistance Program'
+						) {
+							orderItem.pharmco = 'Takeda Pharmaceuticals';
+							orderItem.pharmcoid = '221';
+						} else if (
+							option.getAttribute('cd-program')! === 'Sanofi Patient Connection'
+						) {
+							orderItem.pharmco = 'Sanofi';
+							orderItem.pharmcoid = '90';
+						}
+						orderItem.diagnosis = option.getAttribute('cd-diagnosis')!;
+						if (orderItem.ddi === '') {
+							orderItem.ddi = option.getAttribute('cd-webpap-id')!;
+						}
+					}
+				});
+				orderItem.name = fieldOption;
+			} else if (field.name.includes('med-strength')) {
+				let fieldOption = '';
+				field.querySelectorAll('option').forEach((option) => {
+					if (option.innerHTML === field.value) {
+						fieldOption = option.getAttribute('cd-webpap-id')!;
+					}
+				});
+				if (fieldOption !== '') orderItem.ddi = fieldOption;
+			} else if (field.name.includes('Frequency')) {
+				orderItem.sig = field.value;
+			} else if (field.name.includes('Doctor')) {
+				orderItem.physicianid = field.value;
+			}
+		});
+		addDrugData.OrderItems.push(orderItem);
+	}
+	const rows = document.querySelectorAll('[cd="med"]');
+	rows.forEach((row) => {
+		setOrder(row as HTMLElement);
+	});
+}
 
-// let addDrugData = {
-// 	CustomerId: '',
-// 	OrderItems: [] as OrderItem[],
-// };
-// async function getDrugData() {
-// 	let strength = '';
-// 	async function setOrder(row: HTMLElement): Promise<OrderItem> {
-// 		let orderItem = {
-// 			ddi: '',
-// 			name: '',
-// 			program: '',
-// 			physicianid: '',
-// 			qty: '90',
-// 			sig: '',
-// 			diagnosis: '',
-// 		};
-
-// 		let fields = row.querySelectorAll(
-// 			'.input-field'
-// 		) as NodeListOf<HTMLInputElement>;
-// 		fields.forEach((field) => {
-// 			// console.log(field.name);
-// 			if (field.name.includes('med-name')) {
-// 				orderItem.name = field.value;
-// 			} else if (field.name.includes('med-strength')) {
-// 				strength = field.value;
-// 			} else if (field.name.includes('Frequency')) {
-// 				orderItem.sig = field.value;
-// 			}
-// 		});
-// 		// console.log(orderItem);
-// 		return orderItem;
-// 	}
-// 	(document.querySelectorAll('[cd=med]') as NodeListOf<HTMLElement>).forEach(
-// 		(row) => {
-// 			setOrder(row).then((orderItem) => {
-// 				if (orderItem.name === '') return;
-// 				let searchMedUrl = `https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=${orderItem.name.replace(
-// 					/\s/g,
-// 					'%20'
-// 				)}&strength=${strength}`;
-// 				console.log(searchMedUrl);
-// 				searchMed(searchMedUrl)
-// 					.then((data) => {
-// 						// console.log(data);
-// 						if (Array.isArray(data)) {
-// 							orderItem.ddi = data[0].DrugId as string;
-// 							orderItem.name = data[0].DrugName;
-// 							orderItem.program = document
-// 								.querySelector(`[cd-drug-box="${orderItem.name}"]`)
-// 								?.querySelector('[cd-program]')
-// 								?.getAttribute('cd-program') as string;
-// 							orderItem.diagnosis = document
-// 								.querySelector(`[cd-drug-box="${orderItem.name}"]`)
-// 								?.querySelector('[cd-diagnosis]')
-// 								?.getAttribute('cd-diagnosis') as string;
-// 						}
-// 					})
-// 					.then(() => {
-// 						// console.log(orderItem);
-// 						addDrugData.OrderItems.push(orderItem);
-// 						// console.log(addDrugData);
-// 					});
-// 			});
-// 		}
-// 	);
-// }
 submitBtn.addEventListener('click', () => {
 	// //patient address
+
 	//@ts-ignore
 	if (patientAddress) {
 		//@ts-ignore
@@ -400,69 +423,48 @@ submitBtn.addEventListener('click', () => {
 		patientData[data.field] = data.value;
 	});
 
-	getAuth(generalURL, authData).then((data) => {
-		authToken = data.access_token;
-		// let drugsData: Promise<any>[] = [];
-		// const drugs = document.querySelectorAll('[cd=drug]');
-		// drugs.forEach((med) => {
-		// 	let searchMedUrl = `https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=${med.innerHTML.replace(
-		// 		/\s/g,
-		// 		'%20'
-		// 	)}`;
-		// 	drugsData.push(searchMed(searchMedUrl));
-		// });
-		// Promise.all(drugsData).then((data) => {
-		// 	console.log(JSON.stringify(data));
-		// });
-		// searchMed(
-		// 	'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Levothyroxine'
-		// );
-		postData(createURL, patientData)
-			.then(() => {
-				let incomeUrl = `https://www.medserviceswebpap.com/api/patient/updatepatientincome?patientId=${patientId}`;
-				postIncomeData(incomeUrl, patientIncomeData);
-				// addDrugData.CustomerId = `${patientId}`;
-			})
-			.then(() => {
-				postDoctorData(createDoctorURL, doctorData);
-				if (
-					(document.getElementById('doc2-fname') as HTMLInputElement)!.value !==
-					''
-				) {
-					postDoctorData(createDoctorURL, doctor2Data);
-				}
-			});
-		// .then(() => {
-		// 	console.log(patientData);
-		// 	console.log(doctorData);
-		// 	console.log(doctor2Data);
-		// 	getDrugData().then(() => {
-		// 		console.log(addDrugData);
-		// 		addDrugs(addDrugURL, addDrugData);
-		// 	});
-		// });
-	});
+	sendData();
 });
 
-//@ts-ignore
-window.fsAttributes = window.fsAttributes || [];
-//@ts-ignore
-window.fsAttributes.push([
-	'cmsload',
-	(listInstances: any) => {
-		// The callback passes a `listInstances` array with all the `CMSList` instances on the page.
-		const [listInstance] = listInstances;
-		for (let i = 1; i < 4; i++) {
-			setMedicationNames(
-				document.getElementById(`med-name-${i}`) as HTMLSelectElement
-			);
-		}
-		// The `renderitems` event runs whenever the list renders items after switching pages.
-		listInstance.on('renderitems', (renderedItems: any) => {
-			console.log(renderedItems);
+async function sendData() {
+	getAuth(generalURL, authData)
+		.then((data) => {
+			authToken = data.access_token;
+		})
+		.then(async () => {
+			await postData(createURL, patientData);
+			let incomeUrl = `https://www.medserviceswebpap.com/api/patient/updatepatientincome?patientId=${patientId}`;
+			await postIncomeData(incomeUrl, patientIncomeData);
+			addDrugData.CustomerId = `${patientId}`;
+
+			await postDoctorData(createDoctorURL, doctorData);
+
+			if (
+				(document.getElementById('doc2-fname') as HTMLInputElement)!.value !==
+				''
+			) {
+				await postDoctorData(createDoctorURL, doctor2Data);
+			}
+			await getDrugData();
+			await Promise.all(
+				addDrugData.OrderItems.map(async (item) => {
+					console.log(item.pharmco);
+					await getDoc(
+						`https://www.medserviceswebpap.com/api/physician/getphysician?fname=${doctorData.fname}&lname=${doctorData.lname}`
+					);
+					if (
+						item.physicianid.includes(doctorData.fname) &&
+						item.physicianid.includes(doctorData.lname)
+					) {
+						item.physicianid = doctorData.id;
+					}
+				})
+			).then(() => {
+				console.log(addDrugData);
+			});
+			await addDrugs(addDrugData);
 		});
-	},
-]);
+}
 
 //populate year select field
 const yearSelect = document.getElementById('year') as HTMLSelectElement;
@@ -671,6 +673,16 @@ function validateForm(
 		} else {
 			zipCode.nextElementSibling!.classList.remove('active');
 		}
+
+		const address = document.getElementById(
+			'patientAddress'
+		) as HTMLInputElement;
+		if (validateAddress(address.value) === false) {
+			valid = false;
+			address.nextElementSibling!.classList.add('active');
+		} else {
+			address.nextElementSibling!.classList.remove('active');
+		}
 	}
 
 	if (currentStep === 2) {
@@ -737,6 +749,28 @@ function validateForm(
 			}
 		}
 
+		const doctorAddress = document.getElementById(
+			'doctorAddress'
+		) as HTMLInputElement;
+		if (validateAddress(doctorAddress.value) === false) {
+			valid = false;
+			doctorAddress.nextElementSibling!.classList.add('active');
+		} else {
+			doctorAddress.nextElementSibling!.classList.remove('active');
+		}
+
+		const doctor2Address = document.getElementById(
+			'doctor2Address'
+		) as HTMLInputElement;
+		if (doctor2Address.value !== '') {
+			if (validateAddress(doctor2Address.value) === false) {
+				valid = false;
+				doctor2Address.nextElementSibling!.classList.add('active');
+			} else {
+				doctor2Address.nextElementSibling!.classList.remove('active');
+			}
+		}
+
 		const zipCode = document.getElementById('doc-zip-2') as HTMLInputElement;
 		const zipCode2 = document.getElementById('doc2-zip-2') as HTMLInputElement;
 
@@ -755,7 +789,6 @@ function validateForm(
 			}
 		}
 	}
-	console.log(valid);
 	return valid;
 }
 
@@ -819,6 +852,11 @@ const ssnInput = document.getElementById('ssn');
 ssnInput!.addEventListener('input', function (this: HTMLInputElement) {
 	this.value = formatSSN(this.value);
 });
+//gpa address validation
+function validateAddress(address: string) {
+	const regex = /^[^,]+,\s*[^,]+,\s*[A-Z]{2},\s*USA$/;
+	return regex.test(address);
+}
 
 //income-fields
 const incomeField = document.querySelector('.money-field') as HTMLInputElement;
@@ -938,11 +976,15 @@ addMedication!.addEventListener('click', () => {
 			const drug = document.querySelector(`[cd-name=${value}]`)?.parentElement;
 
 			const strength = drug?.querySelectorAll('[cd=strength]');
-			const drugStrength: string[] = [];
+			const drugStrength: { strength: string; webpapId: string }[] = [];
 			strength?.forEach((strength) => {
-				const strengthText = strength.textContent;
-				if (strengthText !== null) {
-					drugStrength.push(strengthText);
+				const strengthOption = {
+					strength: strength.textContent!,
+					webpapId: strength.getAttribute('cd-webpap-id')!,
+				};
+
+				if (strengthOption.strength !== null) {
+					drugStrength.push(strengthOption);
 				}
 			});
 			addOptionsToSelect(
@@ -962,20 +1004,22 @@ for (let i = 1; i < 4; i++) {
 	) as HTMLSelectElement;
 	selectElement.addEventListener('change', (event) => {
 		strengthSelect.innerHTML = '';
-
 		const value = (event.target as HTMLSelectElement).value
 			.toLocaleLowerCase()
-			.replace(/[\(\)\/]/g, '')
+			.replace(/[\(\)\/.]/g, '')
 			.split(' ')
 			.join('-');
-
 		const drug = document.querySelector(`[cd-name=${value}]`)?.parentElement;
 		const strength = drug?.querySelectorAll('[cd=strength]');
-		const drugStrength: string[] = [];
+		const drugStrength: { strength: string; webpapId: string }[] = [];
 		strength?.forEach((strength) => {
-			const strengthText = strength.textContent;
-			if (strengthText !== null) {
-				drugStrength.push(strengthText);
+			const strengthOption = {
+				strength: strength.textContent!,
+				webpapId: strength.getAttribute('cd-webpap-id')!,
+			};
+
+			if (strengthOption.strength !== null) {
+				drugStrength.push(strengthOption);
 			}
 		});
 		addOptionsToSelect(strengthSelect, drugStrength);
@@ -987,10 +1031,17 @@ function setMedicationNames(selectElement: HTMLSelectElement) {
 	medNames.forEach((medName) => {
 		const nameOption = document.createElement('option');
 		const medNameText = medName.textContent;
+		const webpapName = medName.getAttribute('cd-webpap-name');
+		const webpapProgram = medName.getAttribute('cd-program');
+		const webpapDiagnosis = medName.getAttribute('cd-diagnosis');
+		const webpapId = medName.getAttribute('cd-webpap-id');
 		if (medNameText !== null) {
 			nameOption.text = medNameText;
 			nameOption.value = medNameText;
-			nameOption.setAttribute('cd', medNameText);
+			nameOption.setAttribute('cd-webpap-name', webpapName!);
+			nameOption.setAttribute('cd-program', webpapProgram!);
+			nameOption.setAttribute('cd-diagnosis', webpapDiagnosis!);
+			nameOption.setAttribute('cd-webpap-id', webpapId!);
 			selectElement.add(nameOption);
 		}
 	});
@@ -998,7 +1049,7 @@ function setMedicationNames(selectElement: HTMLSelectElement) {
 
 function addOptionsToSelect(
 	selectElement: HTMLSelectElement,
-	options: string[]
+	options: { strength: string; webpapId: string }[]
 ) {
 	if (options.length > 9) {
 		selectElement.innerHTML = '';
@@ -1018,14 +1069,15 @@ function addOptionsToSelect(
 	selectElement.add(defaultOption);
 	// Add new options
 	let zeroOptions = true;
-	options.forEach((optionText) => {
-		if (optionText === '') {
+	options.forEach((optons) => {
+		if (optons.strength === '') {
 			return;
 		}
 		zeroOptions = false;
 		const option = document.createElement('option');
-		option.text = optionText;
-		option.value = optionText;
+		option.text = optons.strength;
+		option.value = optons.strength;
+		option.setAttribute('cd-webpap-id', optons.webpapId);
 		selectElement.add(option);
 	});
 
@@ -1204,3 +1256,27 @@ getpay('https://api.authorize.net/xml/v1/request.api', data);
 // 		console.log(err);
 // 	}
 // }
+
+//@ts-ignore
+window.fsAttributes = window.fsAttributes || [];
+//@ts-ignore
+window.fsAttributes.push([
+	'cmsload',
+	(listInstances: any) => {
+		// The callback passes a `listInstances` array with all the `CMSList` instances on the page.
+		const [listInstance] = listInstances;
+		for (let i = 1; i < 4; i++) {
+			setMedicationNames(
+				document.getElementById(`med-name-${i}`) as HTMLSelectElement
+			);
+		}
+		// The `renderitems` event runs whenever the list renders items after switching pages.
+		listInstance.on('renderitems', (renderedItems: any) => {
+			console.log(renderedItems);
+		});
+	},
+]);
+
+document.querySelector('.navbar-container')!.addEventListener('click', () => {
+	getDrugData();
+});

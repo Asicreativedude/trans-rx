@@ -287,6 +287,9 @@ async function getDrugData() {
 	}
 	const rows = document.querySelectorAll('[cd="med"]');
 	rows.forEach((row) => {
+		if ((row.querySelector('.select-doc')! as HTMLInputElement).value === '') {
+			return;
+		}
 		setOrder(row as HTMLElement);
 	});
 }

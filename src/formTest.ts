@@ -32,10 +32,10 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// 	`https://www.medserviceswebpap.com/api/physician/getphysician?lname=Holly Donaldson`
 	// );
 	deletePatient(
-		'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=90'
+		'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=93'
 	);
 	deleteDoc(
-		'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=93'
+		'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=96'
 	);
 	// getProgram(
 	// 	'https://www.medserviceswebpap.com/api/search/availableprograms?drugId=127956'

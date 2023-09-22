@@ -515,6 +515,9 @@ function createMultiStepForm(
 		} else {
 			prevButton.style.display = 'block';
 		}
+		if (currentStep === 3) {
+			nextButton.innerHTML = 'Continue';
+		}
 	});
 
 	nextButton.addEventListener('click', () => {

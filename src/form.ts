@@ -95,6 +95,8 @@ async function getAuth(
 		body: new URLSearchParams(data).toString(),
 	});
 	if (!response.ok) {
+		//@ts-ignore
+		Sentry.captureException(response.statusText);
 		throw new Error(response.statusText);
 	}
 
@@ -119,6 +121,8 @@ async function postDoctorData(url: string, data: webPapData) {
 		data.id = docData.Id;
 		console.log(data);
 	} catch (err) {
+		//@ts-ignore
+		Sentry.captureException(err);
 		console.log(err);
 	}
 }
@@ -139,6 +143,8 @@ async function postData(url: string, data: webPapData) {
 		const responseJson = await response.json();
 		patientId = responseJson.Id;
 	} catch (err) {
+		//@ts-ignore
+		Sentry.captureException(err);
 		console.log(err);
 	}
 }
@@ -156,6 +162,8 @@ async function postIncomeData(url: string, data: webPapData) {
 			throw new Error('Network response was not ok');
 		}
 	} catch (err) {
+		//@ts-ignore
+		Sentry.captureException(err);
 		console.log(err);
 	}
 }
@@ -176,6 +184,8 @@ async function getDoc(url: string) {
 		console.log(res);
 		return res;
 	} catch (err) {
+		//@ts-ignore
+		Sentry.captureException(err);
 		console.log(err);
 	}
 }
@@ -200,6 +210,8 @@ async function addDrugs(data: any) {
 		console.log(res);
 		return res;
 	} catch (err) {
+		//@ts-ignore
+		Sentry.captureException(err);
 		console.log(err);
 	}
 }
@@ -1101,7 +1113,6 @@ function addOptionsToSelect(
 	//@ts-ignore
 	AuthorizeNetIFrame.onReceiveCommunication = function (querystr) {
 		var params = parseQueryString(querystr);
-		// console.log(params);
 		//@ts-ignore
 		switch (params['action']) {
 			case 'resizeWindow':
@@ -1114,10 +1125,10 @@ function addOptionsToSelect(
 				//@ts-ignore
 				var transResponse = JSON.parse(params['response']);
 				if (transResponse.responseCode === '1') {
-					(document.querySelector(
-						'.thank-you-trigger'
-					) as HTMLButtonElement)!.click();
 					submitBtn.click();
+					window.location.replace(
+						'https://www.transparentpricerx.com/thank-you'
+					);
 				}
 		}
 	};

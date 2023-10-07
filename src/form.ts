@@ -96,7 +96,7 @@ async function getAuth(
 	});
 	if (!response.ok) {
 		//@ts-ignore
-		Sentry.captureException(response.statusText);
+		// Sentry.captureException(response.statusText);
 		throw new Error(response.statusText);
 	}
 
@@ -307,6 +307,10 @@ async function getDrugData() {
 }
 
 submitBtn.addEventListener('click', () => {
+	sendToWebpap();
+});
+
+async function sendToWebpap() {
 	// //patient address
 
 	//@ts-ignore
@@ -438,47 +442,117 @@ submitBtn.addEventListener('click', () => {
 		patientData[data.field] = data.value;
 	});
 
-	sendData();
-});
+	await sendData().then(() => {
+		window.location.replace('https://www.transparentpricerx.com/thank-you');
+	});
+}
 
 async function sendData() {
-	getAuth(generalURL, authData)
-		.then((data) => {
-			authToken = data.access_token;
-		})
-		.then(async () => {
-			await postData(createURL, patientData);
-			let incomeUrl = `https://www.medserviceswebpap.com/api/patient/updatepatientincome?patientId=${patientId}`;
-			await postIncomeData(incomeUrl, patientIncomeData);
-			addDrugData.CustomerId = `${patientId}`;
-
-			await postDoctorData(createDoctorURL, doctorData);
-
-			if (
-				(document.getElementById('doc2-fname') as HTMLInputElement)!.value !==
-				''
-			) {
-				await postDoctorData(createDoctorURL, doctor2Data);
-			}
-			await getDrugData();
-			await Promise.all(
-				addDrugData.OrderItems.map(async (item) => {
-					console.log(item.pharmco);
-					await getDoc(
-						`https://www.medserviceswebpap.com/api/physician/getphysician?fname=${doctorData.fname}&lname=${doctorData.lname}`
-					);
-					if (
-						item.physicianid.includes(doctorData.fname) &&
-						item.physicianid.includes(doctorData.lname)
-					) {
-						item.physicianid = doctorData.id;
-					}
+	return new Promise<void>(async (resolve, reject) => {
+		try {
+			await getAuth(generalURL, authData)
+				.then((data) => {
+					authToken = data.access_token;
 				})
-			).then(() => {
-				console.log(addDrugData);
-			});
-			await addDrugs(addDrugData);
-		});
+				.then(async () => {
+					await postData(createURL, patientData);
+					let incomeUrl = `https://www.medserviceswebpap.com/api/patient/updatepatientincome?patientId=${patientId}`;
+					await postIncomeData(incomeUrl, patientIncomeData);
+					addDrugData.CustomerId = `${patientId}`;
+
+					await postDoctorData(createDoctorURL, doctorData);
+
+					if (
+						(document.getElementById('doc2-fname') as HTMLInputElement)!
+							.value !== ''
+					) {
+						await postDoctorData(createDoctorURL, doctor2Data);
+					}
+					await getDrugData();
+					await Promise.all(
+						addDrugData.OrderItems.map(async (item) => {
+							console.log(item.pharmco);
+							await getDoc(
+								`https://www.medserviceswebpap.com/api/physician/getphysician?fname=${doctorData.fname}&lname=${doctorData.lname}`
+							);
+							if (
+								item.physicianid.includes(doctorData.fname) &&
+								item.physicianid.includes(doctorData.lname)
+							) {
+								item.physicianid = doctorData.id;
+							}
+						})
+					).then(() => {
+						console.log(addDrugData);
+					});
+					await addDrugs(addDrugData);
+				});
+			resolve();
+		} catch (error) {
+			reject(error);
+		}
+	});
+}
+
+function fillSegmentFields() {
+	const segmentField = document.getElementById(
+		'segment-field'
+	) as HTMLInputElement;
+	const brandMeds = [
+		'Enbrel',
+		'Vyvanse',
+		'Humira',
+		'Breo Ellipta',
+		'Trelegy',
+		'Ellipta',
+		'Xarelto',
+		'Wegovy',
+		'Ozempic',
+		'Skyrizi',
+		'HumaLOG',
+		'Dexcom',
+		'Xeljanz',
+		'Rybelsus',
+		'OCREVUS',
+		'Botox for migraines',
+		'Cosentyx',
+		'Jardiance',
+		'Multaq',
+		'Januvia',
+		'Suboxone',
+		'Janumet',
+		'Fasenra',
+		'Emgality',
+		'Qulipta',
+		'Prolia',
+		'Ribavirin',
+		'Sofosbuvir/velpatasvir EPCLUSA',
+		'Tresiba',
+		'Trintellix',
+		'Eliquis',
+	];
+	for (let i = 1; i < 4; i++) {
+		const selectElement = document.getElementById(
+			`med-name-${i}`
+		) as HTMLSelectElement;
+		console.log(selectElement.value);
+		const value = selectElement.value;
+		if (value === '') return;
+		if (value !== brandMeds.find((med) => med === value)) {
+			if (segmentField.value === 'Brand') {
+				segmentField.value = 'Both';
+				return;
+			}
+			segmentField.value = 'Generic';
+			return;
+		} else {
+			if (segmentField.value === 'Generic') {
+				segmentField.value = 'Both';
+				return;
+			}
+			segmentField.value = 'Brand';
+		}
+	}
 }
 
 //populate year select field
@@ -534,8 +608,9 @@ function createMultiStepForm(
 
 	nextButton.addEventListener('click', () => {
 		if (currentStep === 3) {
-			(document.querySelector('.payment-trigger') as HTMLElement).click();
-			(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
+			fillSegmentFields();
+			// (document.querySelector('.payment-trigger') as HTMLElement).click();
+			// (document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
 			return;
 		}
 		const inputs = elements[currentStep].querySelectorAll(
@@ -1125,10 +1200,7 @@ function addOptionsToSelect(
 				//@ts-ignore
 				var transResponse = JSON.parse(params['response']);
 				if (transResponse.responseCode === '1') {
-					submitBtn.click();
-					window.location.replace(
-						'https://www.transparentpricerx.com/thank-you'
-					);
+					sendToWebpap();
 				}
 		}
 	};

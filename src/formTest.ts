@@ -28,14 +28,14 @@ async function getAuth2(
 
 getAuth2(generalURL2, authData2).then((data) => {
 	authToken2 = data.access_token;
-	// getDoc2(
-	// 	`https://www.medserviceswebpap.com/api/physician/getphysician?lname=Holly Donaldson`
-	// );
+	getDoc2(
+		`https://www.medserviceswebpap.com/api/physician/getphysician?lname=Cara `
+	);
 	deletePatient(
-		'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=93'
+		'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=104'
 	);
 	deleteDoc(
-		'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=96'
+		'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=108'
 	);
 	// getProgram(
 	// 	'https://www.medserviceswebpap.com/api/search/availableprograms?drugId=127956'

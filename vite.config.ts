@@ -8,7 +8,7 @@ export default defineConfig(({ command, mode }) => {
 				input: {
 					form: 'src/form.ts',
 					search: 'src/search.ts',
-
+					formTest: 'src/formTest.ts',
 					// Add more entry points as needed
 				},
 				output: {

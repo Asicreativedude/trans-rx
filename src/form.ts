@@ -609,8 +609,8 @@ function createMultiStepForm(
 	nextButton.addEventListener('click', () => {
 		if (currentStep === 3) {
 			fillSegmentFields();
-			// (document.querySelector('.payment-trigger') as HTMLElement).click();
-			// (document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
+			(document.querySelector('.payment-trigger') as HTMLElement).click();
+			(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
 			return;
 		}
 		const inputs = elements[currentStep].querySelectorAll(

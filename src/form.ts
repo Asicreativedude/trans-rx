@@ -13,7 +13,39 @@ interface OrderItem {
 	sig: string;
 	diagnosis: string;
 }
-
+const brandMeds = [
+	'Enbrel',
+	'Vyvanse',
+	'Humira',
+	'Breo Ellipta',
+	'Trelegy',
+	'Ellipta',
+	'Xarelto',
+	'Wegovy',
+	'Ozempic',
+	'Skyrizi',
+	'HumaLOG',
+	'Dexcom',
+	'Xeljanz',
+	'Rybelsus',
+	'OCREVUS',
+	'Botox for migraines',
+	'Cosentyx',
+	'Jardiance',
+	'Multaq',
+	'Januvia',
+	'Suboxone',
+	'Janumet',
+	'Fasenra',
+	'Emgality',
+	'Qulipta',
+	'Prolia',
+	'Ribavirin',
+	'Sofosbuvir/velpatasvir EPCLUSA',
+	'Tresiba',
+	'Trintellix',
+	'Eliquis',
+];
 const patientData: webPapData = {
 	fname: '',
 	lname: '',
@@ -39,6 +71,7 @@ const patientIncomeData: webPapData = {
 	patdisab: '',
 	patunemploy: '',
 };
+
 const doctorData: webPapData = {
 	fname: '',
 	mname: '',
@@ -72,7 +105,7 @@ const submitBtn = document.querySelector(
 
 let patientId: number = 0;
 let authToken: string = '';
-
+let insurance: string = '';
 // webPap get authtoken Api
 const createURL = 'https://www.medserviceswebpap.com/api/patient/createpatient';
 const createDoctorURL =
@@ -157,6 +190,34 @@ async function postIncomeData(url: string, data: webPapData) {
 				Authorization: `Bearer ${authToken}`,
 			},
 			body: JSON.stringify(data),
+		});
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+	} catch (err) {
+		//@ts-ignore
+		Sentry.captureException(err);
+		console.log(err);
+	}
+}
+async function postIsuranceData(url: string, data: string) {
+	let insuranceData;
+	data === 'private'
+		? (insuranceData = {
+				privateins: 'true',
+		  })
+		: (insuranceData = {
+				none: 'true',
+		  });
+
+	try {
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${authToken}`,
+			},
+			body: JSON.stringify(insuranceData),
 		});
 		if (!response.ok) {
 			throw new Error('Network response was not ok');
@@ -409,6 +470,10 @@ async function sendToWebpap() {
 	});
 	//@ts-ignore
 	allFields.forEach((data: { field: string; value: string }) => {
+		if (data.field === 'insurance-field') {
+			insurance = data.value;
+			return;
+		}
 		if (data.field === 'patwages') {
 			patientIncomeData[data.field] = data.value.slice(1);
 			return;
@@ -459,7 +524,8 @@ async function sendData() {
 					let incomeUrl = `https://www.medserviceswebpap.com/api/patient/updatepatientincome?patientId=${patientId}`;
 					await postIncomeData(incomeUrl, patientIncomeData);
 					addDrugData.CustomerId = `${patientId}`;
-
+					let insuranceUrl = `https://www.medserviceswebpap.com/api/patient/updatepatientinsurance?patientId=${patientId}`;
+					await postIsuranceData(insuranceUrl, insurance);
 					await postDoctorData(createDoctorURL, doctorData);
 
 					if (
@@ -498,44 +564,11 @@ function fillSegmentFields() {
 	const segmentField = document.getElementById(
 		'segment-field'
 	) as HTMLInputElement;
-	const brandMeds = [
-		'Enbrel',
-		'Vyvanse',
-		'Humira',
-		'Breo Ellipta',
-		'Trelegy',
-		'Ellipta',
-		'Xarelto',
-		'Wegovy',
-		'Ozempic',
-		'Skyrizi',
-		'HumaLOG',
-		'Dexcom',
-		'Xeljanz',
-		'Rybelsus',
-		'OCREVUS',
-		'Botox for migraines',
-		'Cosentyx',
-		'Jardiance',
-		'Multaq',
-		'Januvia',
-		'Suboxone',
-		'Janumet',
-		'Fasenra',
-		'Emgality',
-		'Qulipta',
-		'Prolia',
-		'Ribavirin',
-		'Sofosbuvir/velpatasvir EPCLUSA',
-		'Tresiba',
-		'Trintellix',
-		'Eliquis',
-	];
+
 	for (let i = 1; i < 4; i++) {
 		const selectElement = document.getElementById(
 			`med-name-${i}`
 		) as HTMLSelectElement;
-		console.log(selectElement.value);
 		const value = selectElement.value;
 		if (value === '') return;
 		if (value !== brandMeds.find((med) => med === value)) {
@@ -607,12 +640,6 @@ function createMultiStepForm(
 	});
 
 	nextButton.addEventListener('click', () => {
-		if (currentStep === 3) {
-			fillSegmentFields();
-			(document.querySelector('.payment-trigger') as HTMLElement).click();
-			(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
-			return;
-		}
 		const inputs = elements[currentStep].querySelectorAll(
 			'input'
 		) as NodeListOf<HTMLInputElement>;
@@ -621,6 +648,12 @@ function createMultiStepForm(
 		) as NodeListOf<HTMLSelectElement>;
 
 		if (!validateForm(inputs, selects, currentStep)) {
+			return;
+		}
+		if (currentStep === 3) {
+			fillSegmentFields();
+			(document.querySelector('.payment-trigger') as HTMLElement).click();
+			(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
 			return;
 		} else {
 			if (currentStep < numSteps - 1) {
@@ -1087,6 +1120,21 @@ addMedication!.addEventListener('click', () => {
 		});
 });
 
+function isBrandMed(value: string) {
+	if (value === '') return false;
+	if (value === brandMeds.find((med) => med === value)) {
+		document.getElementById('insurance-row')!.classList.remove('hidden');
+		(document.getElementById(
+			'insurance-field'
+		) as HTMLSelectElement)!.required = true;
+	} else {
+		document.getElementById('insurance-row')!.classList.add('hidden');
+		(document.getElementById(
+			'insurance-field'
+		) as HTMLSelectElement)!.required = false;
+	}
+}
+
 //med step
 for (let i = 1; i < 4; i++) {
 	const selectElement = document.getElementById(
@@ -1116,6 +1164,7 @@ for (let i = 1; i < 4; i++) {
 			}
 		});
 		addOptionsToSelect(strengthSelect, drugStrength);
+		isBrandMed((event.target as HTMLSelectElement).value);
 	});
 }
 

@@ -29,13 +29,13 @@ async function getAuth2(
 getAuth2(generalURL2, authData2).then((data) => {
 	authToken2 = data.access_token;
 	getDoc2(
-		`https://www.medserviceswebpap.com/api/physician/getphysician?lname=Cara `
+		`https://www.medserviceswebpap.com/api/physician/getphysician?lname=Bethany Jimenez`
 	);
 	deletePatient(
-		'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=104'
+		'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=111'
 	);
 	deleteDoc(
-		'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=108'
+		'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=115'
 	);
 	// getProgram(
 	// 	'https://www.medserviceswebpap.com/api/search/availableprograms?drugId=127956'

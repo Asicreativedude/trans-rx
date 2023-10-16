@@ -1127,11 +1127,13 @@ function isBrandMed(value: string) {
 		(document.getElementById(
 			'insurance-field'
 		) as HTMLSelectElement)!.required = true;
+		document.getElementById('brand-note')!.classList.remove('hidden');
 	} else {
 		document.getElementById('insurance-row')!.classList.add('hidden');
 		(document.getElementById(
 			'insurance-field'
 		) as HTMLSelectElement)!.required = false;
+		document.getElementById('brand-note')!.classList.add('hidden');
 	}
 }
 

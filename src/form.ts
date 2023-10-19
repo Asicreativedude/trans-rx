@@ -1146,6 +1146,23 @@ for (let i = 1; i < 4; i++) {
 		`med-strength-${i}`
 	) as HTMLSelectElement;
 	selectElement.addEventListener('change', (event) => {
+		if (i !== 1) {
+			if (selectElement.value !== '') {
+				(
+					document.getElementById(`med-strength-${i}`) as HTMLSelectElement
+				).required = true;
+				(
+					document.getElementById(`choose-doctor-${i}`) as HTMLSelectElement
+				).required = true;
+			} else {
+				(
+					document.getElementById(`med-strength-${i}`) as HTMLSelectElement
+				).required = false;
+				(
+					document.getElementById(`choose-doctor-${i}`) as HTMLSelectElement
+				).required = false;
+			}
+		}
 		strengthSelect.innerHTML = '';
 		const value = (event.target as HTMLSelectElement).value
 			.toLocaleLowerCase()

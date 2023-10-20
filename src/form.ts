@@ -334,6 +334,12 @@ async function getDrugData() {
 						) {
 							orderItem.pharmco = 'Sanofi';
 							orderItem.pharmcoid = '90';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Amgen Saftey Net Foundation'
+						) {
+							orderItem.pharmco = 'Amgen, Inc';
+							orderItem.pharmcoid = '7078';
 						}
 						orderItem.diagnosis = option.getAttribute('cd-diagnosis')!;
 						if (orderItem.ddi === '') {

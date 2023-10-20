@@ -38,10 +38,10 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=115'
 	// );
 	// getProgram(
-	// 	'https://www.medserviceswebpap.com/api/search/availableprograms?drugId=127956'
+	// 	'https://www.medserviceswebpap.com/api/search/availableprograms?drugId=192372'
 	// );
 	searchMed2(
-		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Biktarvy'
+		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Enbrel'
 	);
 
 	// postDoctorData2(

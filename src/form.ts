@@ -317,6 +317,9 @@ async function getDrugData() {
 						) {
 							orderItem.pharmco = 'AbbVie Inc.';
 							orderItem.pharmcoid = '203';
+						} else if (option.getAttribute('cd-program')! === 'Amgen Enbrel') {
+							orderItem.pharmco = 'Amgen, Inc.';
+							orderItem.pharmcoid = '7541';
 						} else if (
 							option.getAttribute('cd-program')! ===
 							'Bristol-Myers Squibb Patient Assistance Foundation (BMSPAF)'
@@ -336,11 +339,105 @@ async function getDrugData() {
 							orderItem.pharmcoid = '90';
 						} else if (
 							option.getAttribute('cd-program')! ===
-							'Amgen Saftey Net Foundation'
+							'BI Cares Patient Assistance Program'
+						) {
+							orderItem.pharmco = 'Boehringer Ingelheim CARES Foundation, Inc.';
+							orderItem.pharmcoid = '36';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Patient Assistance Program'
+						) {
+							orderItem.pharmco =
+								'Johnson & Johnson Patient Assistance Foundation, Inc.';
+							orderItem.pharmcoid = '5091';
+						} else if (
+							option.getAttribute('cd-program')! === 'Xelsource : Xeljanz'
+						) {
+							orderItem.pharmco = 'Pfizer, Inc.';
+							orderItem.pharmcoid = '7145';
+						} else if (
+							option.getAttribute('cd-program')! === 'MyAbbvie Assist for Botox'
+						) {
+							orderItem.pharmco = 'AbbVie Inc.';
+							orderItem.pharmcoid = '7538';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'myAbbVie Assist for Skyrizi'
+						) {
+							orderItem.pharmco = 'AbbVie Inc.';
+							orderItem.pharmcoid = '7122';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Novartis Patient Assistance Foundation, Inc. (NPAF)'
+						) {
+							orderItem.pharmco = 'Novartis Pharmaceuticals Corporation';
+							orderItem.pharmcoid = '56';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Novo Nordisk Patient Assistance Program'
+						) {
+							orderItem.pharmco = 'Novo Nordisk';
+							orderItem.pharmcoid = '6993';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Dexcom Patient Assistance Program'
+						) {
+							orderItem.pharmco = 'Dexcom, Inc.';
+							orderItem.pharmcoid = '7535';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Genentech Patient Foundation'
+						) {
+							orderItem.pharmco = 'Genentech USA, Inc.';
+							orderItem.pharmcoid = '7123';
+						} else if (
+							option.getAttribute('cd-program')! === 'Wegovy Savings Card'
+						) {
+							orderItem.pharmco = 'Novo Nordisk';
+							orderItem.pharmcoid = '7539';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Amgen Safety Net Foundation (ASNF)'
 						) {
 							orderItem.pharmco = 'Amgen, Inc';
 							orderItem.pharmcoid = '7078';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Support Path Patient Assistance Program'
+						) {
+							orderItem.pharmco = 'Gilead Sciences, Inc.';
+							orderItem.pharmcoid = '6969';
+						} else if (
+							option.getAttribute('cd-program')! === 'Advancing Access Program'
+						) {
+							orderItem.pharmco = 'Gilead Sciences, Inc.';
+							orderItem.pharmcoid = '46';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'myAbbVie Assist Patient Assistance Program'
+						) {
+							orderItem.pharmco = 'AbbVie Inc.';
+							orderItem.pharmcoid = '7208';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Lilly Cares Foundation Patient Assistance Program'
+						) {
+							orderItem.pharmco = 'Lilly USA, LLC.';
+							orderItem.pharmcoid = '52';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'AZ&Me Prescription Savings Program for people without insurance'
+						) {
+							orderItem.pharmco = 'Astrazeneca Pharmaceuticals';
+							orderItem.pharmcoid = '31';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Merck Patient Assistance Program, Inc.'
+						) {
+							orderItem.pharmco = 'Merck Patient Assistance Program, Inc.';
+							orderItem.pharmcoid = '172';
 						}
+
 						orderItem.diagnosis = option.getAttribute('cd-diagnosis')!;
 						if (orderItem.ddi === '') {
 							orderItem.ddi = option.getAttribute('cd-webpap-id')!;

@@ -15,11 +15,9 @@ interface OrderItem {
 }
 const brandMeds = [
 	'Enbrel',
-	'Vyvanse',
 	'Humira',
 	'Breo Ellipta',
-	'Trelegy',
-	'Ellipta',
+	'Trelegy Ellipta',
 	'Xarelto',
 	'Wegovy',
 	'Ozempic',
@@ -40,8 +38,7 @@ const brandMeds = [
 	'Emgality',
 	'Qulipta',
 	'Prolia',
-	'Ribavirin',
-	'Sofosbuvir/velpatasvir EPCLUSA',
+	'EPCLUSA',
 	'Tresiba',
 	'Trintellix',
 	'Eliquis',
@@ -923,7 +920,18 @@ function validateForm(
 		if (!emailInput.required) {
 			return;
 		}
-
+		if (Number(yearSelect.value) <= 1958) {
+			brandMeds.forEach((med) => {
+				document.querySelector(`[cd-drug-box="${med}"]`)!.remove();
+			});
+			(document.querySelector('.generic-only') as HTMLElement).style.display =
+				'block';
+		}
+		for (let i = 1; i < 4; i++) {
+			setMedicationNames(
+				document.getElementById(`med-name-${i}`) as HTMLSelectElement
+			);
+		}
 		const re = /\S+@\S+\.\S+/;
 		if (!re.test(emailInput.value)) {
 			valid = false;
@@ -1476,66 +1484,6 @@ const data = {
 };
 
 getpay('https://api.authorize.net/xml/v1/request.api', data);
-
-// async function deletePatient(url: string) {
-// 	await fetch(url, {
-// 		method: 'POST',
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 			Authorization: `Bearer ${authToken}`,
-// 		},
-// 	});
-// }
-// async function deleteDoc(url: string) {
-// 	await fetch(url, {
-// 		method: 'POST',
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 			Authorization: `Bearer ${authToken}`,
-// 		},
-// 	});
-// }
-
-// async function getDoc(url: string) {
-// 	try {
-// 		const response = await fetch(url, {
-// 			method: 'get',
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				Authorization: `Bearer ${authToken}`,
-// 			},
-// 		});
-// 		if (!response.ok) {
-// 			throw new Error('Network response was not ok');
-// 		}
-
-// 		let res = await response.json();
-// 		console.log(res);
-// 		return res;
-// 	} catch (err) {
-// 		console.log(err);
-// 	}
-// }
-
-//@ts-ignore
-window.fsAttributes = window.fsAttributes || [];
-//@ts-ignore
-window.fsAttributes.push([
-	'cmsload',
-	(listInstances: any) => {
-		// The callback passes a `listInstances` array with all the `CMSList` instances on the page.
-		const [listInstance] = listInstances;
-		for (let i = 1; i < 4; i++) {
-			setMedicationNames(
-				document.getElementById(`med-name-${i}`) as HTMLSelectElement
-			);
-		}
-		// The `renderitems` event runs whenever the list renders items after switching pages.
-		listInstance.on('renderitems', (renderedItems: any) => {
-			console.log(renderedItems);
-		});
-	},
-]);
 
 document.querySelector('.navbar-container')!.addEventListener('click', () => {
 	getDrugData();

@@ -29,19 +29,19 @@ async function getAuth2(
 getAuth2(generalURL2, authData2).then((data) => {
 	authToken2 = data.access_token;
 	// getDoc2(
-	// 	`https://www.medserviceswebpap.com/api/physician/getphysician?lname=Bethany Jimenez`
+	// 	`https://www.medserviceswebpap.com/api/physician/getphysician?lname=Brooke Beasley`
 	// );
 	// deletePatient(
-	// 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=111'
+	// 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=117'
 	// );
 	// deleteDoc(
-	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=115'
+	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=114'
 	// );
 	// getProgram(
 	// 	'https://www.medserviceswebpap.com/api/search/availableprograms?drugId=192372'
 	// );
 	searchMed2(
-		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=HumaLOG'
+		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Trintellix'
 	);
 
 	// postDoctorData2(

@@ -16,6 +16,7 @@ interface OrderItem {
 const brandMeds = [
 	'Enbrel',
 	'Humira',
+	'Humulin N (U 100 Injection)',
 	'Breo Ellipta',
 	'Trelegy Ellipta',
 	'Xarelto',
@@ -23,25 +24,56 @@ const brandMeds = [
 	'Ozempic',
 	'Skyrizi',
 	'HumaLOG',
-	'Dexcom',
+	'Ozempic (0.25 or 0.5 MG/DOSE)',
+	'Ozempic (1 MG/DOSE)',
+	'Ozempic (2 MG/DOSE)',
+	'Skyrizi',
+	'Skyrizi (150 MG Dose)',
+	'HumaLOG',
+	'HumaLOG KwikPen',
+	'HumaLOG Mix 50/50',
+	'HumaLOG Mix 75/25',
+	'HumaLOG Mix 75/25 KwikPen',
+	'Dexcom G6 Receiver',
+	'Dexcom G7 Receiver',
+	'Dexcom G7 Sensor',
+	'Dexcom G6 Sensor',
+	'Dexcom G6 Transmitter',
 	'Xeljanz',
+	'Xeljanz XR',
 	'Rybelsus',
 	'OCREVUS',
 	'Botox for migraines',
+	'Cosentyx (300 MG Dose)',
 	'Cosentyx',
+	'Cosentyx Sensoready Pen',
 	'Jardiance',
 	'Multaq',
 	'Januvia',
 	'Suboxone',
 	'Janumet',
+	'Janumet XR',
 	'Fasenra',
 	'Emgality',
 	'Qulipta',
 	'Prolia',
 	'EPCLUSA',
 	'Tresiba',
+	'Tresiba FlexTouch',
 	'Trintellix',
 	'Eliquis',
+	'Prodigy AutoCode Blood Glucose Monitor',
+	'Biktarvy',
+	'Strelara',
+	'Anoro Ellipta',
+	'Zubsolv',
+	'Rexulti',
+	'Taltz',
+	'Creon',
+	'Rinvoq',
+	'Cimzia',
+	'Lovenox',
+	'Lantus',
 ];
 const patientData: webPapData = {
 	fname: '',
@@ -314,6 +346,17 @@ async function getDrugData() {
 						) {
 							orderItem.pharmco = 'AbbVie Inc.';
 							orderItem.pharmcoid = '203';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Zubsolv Patient Assistance Program'
+						) {
+							orderItem.pharmco = 'Orexo US, Inc';
+							orderItem.pharmcoid = '7018';
+						} else if (
+							option.getAttribute('cd-program')! === 'Otsuka PAP-Rexulti'
+						) {
+							orderItem.pharmco = 'Otsuka Patient Assistance Foundation, Inc.';
+							orderItem.pharmcoid = '7084';
 						} else if (option.getAttribute('cd-program')! === 'Amgen Enbrel') {
 							orderItem.pharmco = 'Amgen, Inc.';
 							orderItem.pharmcoid = '7541';
@@ -363,6 +406,23 @@ async function getDrugData() {
 						) {
 							orderItem.pharmco = 'AbbVie Inc.';
 							orderItem.pharmcoid = '7122';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'myAbbVie Assist for Creon, Linzess, Viberzi'
+						) {
+							orderItem.pharmco = 'AbbVie Inc.';
+							orderItem.pharmcoid = '6910';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'myAbbVie Assist for Rinvoq'
+						) {
+							orderItem.pharmco = 'AbbVie Inc.';
+							orderItem.pharmcoid = '7141';
+						} else if (
+							option.getAttribute('cd-program')! === 'UCBCares Program'
+						) {
+							orderItem.pharmco = 'UCB, Inc.';
+							orderItem.pharmcoid = '7081';
 						} else if (
 							option.getAttribute('cd-program')! ===
 							'Novartis Patient Assistance Foundation, Inc. (NPAF)'

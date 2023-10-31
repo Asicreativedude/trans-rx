@@ -32,17 +32,17 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// 	`https://www.medserviceswebpap.com/api/physician/getphysician?lname=Brooke Beasley`
 	// );
 	// deletePatient(
-	// 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=117'
+	// 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=121'
 	// );
 	// deleteDoc(
-	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=114'
+	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=127'
 	// );
 	// getProgram(
 	// 	'https://www.medserviceswebpap.com/api/search/availableprograms?drugId=192372'
 	// );
-	searchMed2(
-		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Trintellix'
-	);
+	// searchMed2(
+	// 	'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Emgality'
+	// );
 
 	// postDoctorData2(
 	// 	'https://www.medserviceswebpap.com/api/physician/createphysician',

@@ -21,9 +21,6 @@ const brandMeds = [
 	'Trelegy Ellipta',
 	'Xarelto',
 	'Wegovy',
-	'Ozempic',
-	'Skyrizi',
-	'HumaLOG',
 	'Ozempic (0.25 or 0.5 MG/DOSE)',
 	'Ozempic (1 MG/DOSE)',
 	'Ozempic (2 MG/DOSE)',
@@ -34,11 +31,6 @@ const brandMeds = [
 	'HumaLOG Mix 50/50',
 	'HumaLOG Mix 75/25',
 	'HumaLOG Mix 75/25 KwikPen',
-	'Dexcom G6 Receiver',
-	'Dexcom G7 Receiver',
-	'Dexcom G7 Sensor',
-	'Dexcom G6 Sensor',
-	'Dexcom G6 Transmitter',
 	'Xeljanz',
 	'Xeljanz XR',
 	'Rybelsus',
@@ -395,6 +387,12 @@ async function getDrugData() {
 						) {
 							orderItem.pharmco = 'Pfizer, Inc.';
 							orderItem.pharmcoid = '7145';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Pzifer Dermatology Patient Access'
+						) {
+							orderItem.pharmco = 'Pfizer, Inc.';
+							orderItem.pharmcoid = '7342';
 						} else if (
 							option.getAttribute('cd-program')! === 'MyAbbvie Assist for Botox'
 						) {

@@ -176,7 +176,7 @@ async function postDoctorData(url: string, data: webPapData) {
 		console.log(data);
 	} catch (err) {
 		//@ts-ignore
-		Sentry.captureException(err);
+		// Sentry.captureException(err);
 		console.log(err);
 	}
 }
@@ -197,8 +197,6 @@ async function postData(url: string, data: webPapData) {
 		const responseJson = await response.json();
 		patientId = responseJson.Id;
 	} catch (err) {
-		//@ts-ignore
-		Sentry.captureException(err);
 		console.log(err);
 	}
 }
@@ -216,8 +214,6 @@ async function postIncomeData(url: string, data: webPapData) {
 			throw new Error('Network response was not ok');
 		}
 	} catch (err) {
-		//@ts-ignore
-		Sentry.captureException(err);
 		console.log(err);
 	}
 }
@@ -244,8 +240,6 @@ async function postIsuranceData(url: string, data: string) {
 			throw new Error('Network response was not ok');
 		}
 	} catch (err) {
-		//@ts-ignore
-		Sentry.captureException(err);
 		console.log(err);
 	}
 }
@@ -266,8 +260,6 @@ async function getDoc(url: string) {
 		console.log(res);
 		return res;
 	} catch (err) {
-		//@ts-ignore
-		Sentry.captureException(err);
 		console.log(err);
 	}
 }
@@ -292,8 +284,6 @@ async function addDrugs(data: any) {
 		console.log(res);
 		return res;
 	} catch (err) {
-		//@ts-ignore
-		Sentry.captureException(err);
 		console.log(err);
 	}
 }
@@ -338,6 +328,12 @@ async function getDrugData() {
 						) {
 							orderItem.pharmco = 'AbbVie Inc.';
 							orderItem.pharmcoid = '203';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Dupixent MyWay Program Allergists (AD, Asthma, CRSwNP)'
+						) {
+							orderItem.pharmco = 'Sanofi and Regeneron Pharmaceuticals, Inc';
+							orderItem.pharmcoid = '7461';
 						} else if (
 							option.getAttribute('cd-program')! ===
 							'Zubsolv Patient Assistance Program'
@@ -1438,6 +1434,8 @@ function addOptionsToSelect(
 				var transResponse = JSON.parse(params['response']);
 				if (transResponse.responseCode === '1') {
 					sendToWebpap();
+				} else {
+					console.log(transResponse);
 				}
 		}
 	};

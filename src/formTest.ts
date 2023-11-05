@@ -41,7 +41,7 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// 	'https://www.medserviceswebpap.com/api/search/availableprograms?drugId=192372'
 	// );
 	searchMed2(
-		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Hydrochlorothiazide'
+		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Trandate'
 	);
 
 	// postDoctorData2(

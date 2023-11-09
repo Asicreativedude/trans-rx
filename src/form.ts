@@ -1226,65 +1226,6 @@ tabs.forEach((tab) => {
 
 //meds
 
-const medicationWrapper = document.getElementById('medicationStep');
-const medicationRow = medicationWrapper?.querySelector('.form-row-wrapper');
-const addMedication = document.getElementById('addMed');
-addMedication!.addEventListener('click', () => {
-	const newMedication = medicationRow!.cloneNode(true) as Element;
-	medicationWrapper!.insertBefore(newMedication, addMedication!.parentElement);
-	newMedication
-		.querySelector('.flex-grow:nth-child(1) > select')
-		?.removeAttribute('required');
-	newMedication
-		.querySelector('.flex-grow:nth-child(4) > input')
-		?.removeAttribute('required');
-	(
-		newMedication.querySelector(
-			'.flex-grow:nth-child(4) > input'
-		) as HTMLInputElement
-	).value = '';
-	newMedication.querySelector(
-		'.flex-grow:nth-child(2) > select'
-	)!.id = `med-name-${medicationWrapper!.childElementCount - 1}`;
-	(newMedication.querySelector(
-		'.flex-grow:nth-child(2) > select'
-	) as HTMLInputElement)!.value = '';
-	newMedication.querySelector(
-		'.flex-grow:nth-child(3) > select'
-	)!.id = `med-strength-${medicationWrapper!.childElementCount - 1}`;
-	newMedication
-		.querySelector('.flex-grow:nth-child(2) > select')!
-		.addEventListener('change', (event) => {
-			newMedication.querySelector(
-				'.flex-grow:nth-child(3) > select'
-			)!.innerHTML = '';
-
-			const value = (event.target as HTMLSelectElement).value
-				.toLocaleLowerCase()
-				.split(' ')
-				.join('-');
-
-			const drug = document.querySelector(`[cd-name=${value}]`)?.parentElement;
-
-			const strength = drug?.querySelectorAll('[cd=strength]');
-			const drugStrength: { strength: string; webpapId: string }[] = [];
-			strength?.forEach((strength) => {
-				const strengthOption = {
-					strength: strength.textContent!,
-					webpapId: strength.getAttribute('cd-webpap-id')!,
-				};
-
-				if (strengthOption.strength !== null) {
-					drugStrength.push(strengthOption);
-				}
-			});
-			addOptionsToSelect(
-				newMedication.querySelector('.flex-grow:nth-child(3) > select')!,
-				drugStrength
-			);
-		});
-});
-
 function isBrandMed(value: string) {
 	if (value === '') return false;
 	if (value === brandMeds.find((med) => med === value)) {
@@ -1303,7 +1244,7 @@ function isBrandMed(value: string) {
 }
 
 //med step
-for (let i = 1; i < 4; i++) {
+for (let i = 1; i < 5; i++) {
 	const selectElement = document.getElementById(
 		`med-name-${i}`
 	) as HTMLSelectElement;

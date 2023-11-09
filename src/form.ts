@@ -719,7 +719,7 @@ function fillSegmentFields() {
 		'segment-field'
 	) as HTMLInputElement;
 
-	for (let i = 1; i < 4; i++) {
+	for (let i = 1; i < 5; i++) {
 		const selectElement = document.getElementById(
 			`med-name-${i}`
 		) as HTMLSelectElement;
@@ -981,7 +981,7 @@ function validateForm(
 			(document.querySelector('.generic-only') as HTMLElement).style.display =
 				'block';
 		}
-		for (let i = 1; i < 4; i++) {
+		for (let i = 1; i < 5; i++) {
 			setMedicationNames(
 				document.getElementById(`med-name-${i}`) as HTMLSelectElement
 			);

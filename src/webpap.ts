@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 	// Retrieve the form data from sessionStorage
 	const formData = sessionStorage.getItem('formData');
 	const parsedFormData = formData ? JSON.parse(formData) : null;
-
 	// Process the retrieved data
 	if (parsedFormData) {
 		await sendData(parsedFormData).then(() => {
@@ -15,7 +14,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 //send data to webpap
-
 let patientId = 0;
 let authToken = '';
 
@@ -64,7 +62,6 @@ async function postDoctorData(url: string, data: webPapData) {
 		const docData = await response.json();
 
 		data.id = docData.Id;
-		console.log(data);
 	} catch (err) {
 		console.log(err);
 	}
@@ -85,7 +82,6 @@ async function postData(url: string, data: webPapData) {
 		}
 		const responseJson = await response.json();
 		patientId = responseJson.Id;
-		console.log(responseJson);
 	} catch (err) {
 		console.log(err);
 	}
@@ -147,7 +143,7 @@ async function getDoc(url: string) {
 		}
 
 		let res = await response.json();
-		console.log(res);
+
 		return res;
 	} catch (err) {
 		console.log(err);
@@ -171,7 +167,6 @@ async function addDrugs(data: any) {
 		}
 
 		let res = await response.json();
-		console.log(res);
 		return res;
 	} catch (err) {
 		console.log(err);
@@ -214,6 +209,7 @@ async function sendData(formData: any) {
 					);
 					await addDrugs(formData.drugData);
 				});
+			//handle loader sceen
 			loader.classList.add('hide');
 			setTimeout(() => {
 				loader.style.display = 'none';

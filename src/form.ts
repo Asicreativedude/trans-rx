@@ -125,183 +125,11 @@ const doctor2Data: webPapData = {
 	id: '',
 };
 
-const submitBtn = document.querySelector(
+const paymentBtn = document.querySelector(
 	'[cd="submit-data"]'
 ) as HTMLButtonElement;
 
-// let patientId: number = 0;
-// let authToken: string = '';
 let insurance: string = '';
-// webPap get authtoken Api
-// const createURL = 'https://www.medserviceswebpap.com/api/patient/createpatient';
-// const createDoctorURL =
-// 	'https://www.medserviceswebpap.com/api/physician/createphysician';
-// const generalURL = 'https://www.medserviceswebpap.com/auth/token?hcpid=89';
-// const authData = {
-// 	grant_type: 'password',
-// 	username: import.meta.env.VITE_USERNAME,
-// 	password: import.meta.env.VITE_PASSWORD,
-// };
-// async function getAuth(
-// 	url: string,
-// 	data: { grant_type: string; username: string; password: string }
-// ) {
-// 	const response = await fetch(url, {
-// 		method: 'POST',
-// 		headers: {
-// 			'Content-Type': 'application/x-www-form-urlencoded',
-// 		},
-// 		body: new URLSearchParams(data).toString(),
-// 	});
-// 	if (!response.ok) {
-// 		//@ts-ignore
-// 		// Sentry.captureException(response.statusText);
-// 		throw new Error(response.statusText);
-// 	}
-
-// 	return response.json();
-// }
-
-// async function postDoctorData(url: string, data: webPapData) {
-// 	try {
-// 		const response = await fetch(url, {
-// 			method: 'POST',
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				Authorization: `Bearer ${authToken}`,
-// 			},
-// 			body: JSON.stringify(data),
-// 		});
-// 		if (!response.ok) {
-// 			throw new Error('Network response was not ok');
-// 		}
-// 		const docData = await response.json();
-
-// 		data.id = docData.Id;
-// 		console.log(data);
-// 	} catch (err) {
-// 		//@ts-ignore
-// 		Sentry.captureException(err);
-// 		console.log(err);
-// 	}
-// }
-
-// async function postData(url: string, data: webPapData) {
-// 	try {
-// 		const response = await fetch(url, {
-// 			method: 'POST',
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				Authorization: `Bearer ${authToken}`,
-// 			},
-// 			body: JSON.stringify(data),
-// 		});
-// 		if (!response.ok) {
-// 			throw new Error('Network response was not ok');
-// 		}
-// 		const responseJson = await response.json();
-// 		patientId = responseJson.Id;
-// 	} catch (err) {
-// 		//@ts-ignore
-// 		Sentry.captureException(err);
-// 		console.log(err);
-// 	}
-// }
-// async function postIncomeData(url: string, data: webPapData) {
-// 	try {
-// 		const response = await fetch(url, {
-// 			method: 'POST',
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				Authorization: `Bearer ${authToken}`,
-// 			},
-// 			body: JSON.stringify(data),
-// 		});
-// 		if (!response.ok) {
-// 			throw new Error('Network response was not ok');
-// 		}
-// 	} catch (err) {
-// 		//@ts-ignore
-// 		Sentry.captureException(err);
-// 		console.log(err);
-// 	}
-// }
-// async function postIsuranceData(url: string, data: string) {
-// 	let insuranceData;
-// 	data === 'private'
-// 		? (insuranceData = {
-// 				privateins: 'true',
-// 		  })
-// 		: (insuranceData = {
-// 				none: 'true',
-// 		  });
-
-// 	try {
-// 		const response = await fetch(url, {
-// 			method: 'POST',
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				Authorization: `Bearer ${authToken}`,
-// 			},
-// 			body: JSON.stringify(insuranceData),
-// 		});
-// 		if (!response.ok) {
-// 			throw new Error('Network response was not ok');
-// 		}
-// 	} catch (err) {
-// 		//@ts-ignore
-// 		Sentry.captureException(err);
-// 		console.log(err);
-// 	}
-// }
-// async function getDoc(url: string) {
-// 	try {
-// 		const response = await fetch(url, {
-// 			method: 'get',
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				Authorization: `Bearer ${authToken}`,
-// 			},
-// 		});
-// 		if (!response.ok) {
-// 			throw new Error('Network response was not ok');
-// 		}
-
-// 		let res = await response.json();
-// 		console.log(res);
-// 		return res;
-// 	} catch (err) {
-// 		//@ts-ignore
-// 		Sentry.captureException(err);
-// 		console.log(err);
-// 	}
-// }
-// async function addDrugs(data: any) {
-// 	try {
-// 		const response = await fetch(
-// 			'https://www.medserviceswebpap.com/api/paporders/additem',
-// 			{
-// 				method: 'POST',
-// 				headers: {
-// 					'Content-Type': 'application/json',
-// 					Authorization: `Bearer ${authToken}`,
-// 				},
-// 				body: JSON.stringify(data),
-// 			}
-// 		);
-// 		if (!response.ok) {
-// 			throw new Error('Network response was not ok');
-// 		}
-
-// 		let res = await response.json();
-// 		console.log(res);
-// 		return res;
-// 	} catch (err) {
-// 		//@ts-ignore
-// 		Sentry.captureException(err);
-// 		console.log(err);
-// 	}
-// }
 
 let addDrugData = {
 	CustomerId: '',
@@ -524,13 +352,11 @@ async function getDrugData() {
 	});
 }
 
-submitBtn.addEventListener('click', () => {
-	sendToWebpap();
+paymentBtn.addEventListener('click', () => {
+	saveToSessionStorage();
 });
 
-async function sendToWebpap() {
-	// //patient address
-
+async function saveToSessionStorage() {
 	//@ts-ignore
 	if (patientAddress) {
 		//@ts-ignore
@@ -555,7 +381,6 @@ async function sendToWebpap() {
 			}
 		});
 	}
-	//doctor address
 	//@ts-ignore
 	if (doctorAddress) {
 		//@ts-ignore
@@ -675,12 +500,9 @@ async function sendToWebpap() {
 
 	// Save the form data to session storage
 	sessionStorage.setItem('formData', JSON.stringify(formData));
-	const uniqueId = Date.now().toString(); // Example UID, you might want something more robust
+	const uniqueId = Date.now().toString();
 	sessionStorage.setItem(uniqueId, JSON.stringify(formData));
 	redirectToStripePayment(uniqueId);
-	// await sendData().then(() => {
-	// 	window.location.replace('https://www.transparentpricerx.com/thank-you');
-	// });
 }
 
 const redirectToStripePayment = async (uniqueId: string) => {
@@ -701,55 +523,6 @@ const redirectToStripePayment = async (uniqueId: string) => {
 	// Assuming the response contains a URL for Stripe Checkout
 	window.location.href = data.checkoutURL;
 };
-
-// //@ts-ignore
-// async function sendData() {
-// 	return new Promise<void>(async (resolve, reject) => {
-// 		try {
-// 			await getAuth(generalURL, authData)
-// 				.then((data) => {
-// 					authToken = data.access_token;
-// 				})
-// 				.then(async () => {
-// 					await postData(createURL, patientData);
-// 					let incomeUrl = `https://www.medserviceswebpap.com/api/patient/updatepatientincome?patientId=${patientId}`;
-// 					await postIncomeData(incomeUrl, patientIncomeData);
-// 					addDrugData.CustomerId = `${patientId}`;
-// 					let insuranceUrl = `https://www.medserviceswebpap.com/api/patient/updatepatientinsurance?patientId=${patientId}`;
-// 					await postIsuranceData(insuranceUrl, insurance);
-// 					await postDoctorData(createDoctorURL, doctorData);
-
-// 					if (
-// 						(document.getElementById('doc2-fname') as HTMLInputElement)!
-// 							.value !== ''
-// 					) {
-// 						await postDoctorData(createDoctorURL, doctor2Data);
-// 					}
-// 					await getDrugData();
-// 					await Promise.all(
-// 						addDrugData.OrderItems.map(async (item) => {
-// 							console.log(item.pharmco);
-// 							await getDoc(
-// 								`https://www.medserviceswebpap.com/api/physician/getphysician?fname=${doctorData.fname}&lname=${doctorData.lname}`
-// 							);
-// 							if (
-// 								item.physicianid.includes(doctorData.fname) &&
-// 								item.physicianid.includes(doctorData.lname)
-// 							) {
-// 								item.physicianid = doctorData.id;
-// 							}
-// 						})
-// 					).then(() => {
-// 						console.log(addDrugData);
-// 					});
-// 					await addDrugs(addDrugData);
-// 				});
-// 			resolve();
-// 		} catch (error) {
-// 			reject(error);
-// 		}
-// 	});
-// }
 
 function fillSegmentFields() {
 	const segmentField = document.getElementById(
@@ -843,8 +616,8 @@ function createMultiStepForm(
 		}
 		if (currentStep === 3) {
 			fillSegmentFields();
-			(document.querySelector('.payment-trigger') as HTMLElement).click();
 			(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
+			paymentBtn.click();
 			return;
 		} else {
 			if (currentStep < numSteps - 1) {
@@ -1451,132 +1224,3 @@ function addOptionsToSelect(
 		selectElement.removeAttribute('required');
 	}
 }
-
-//Payment
-(function () {
-	//@ts-ignore
-	if (!window.AuthorizeNetIFrame) window.AuthorizeNetIFrame = {};
-	//@ts-ignore
-	AuthorizeNetIFrame.onReceiveCommunication = function (querystr) {
-		var params = parseQueryString(querystr);
-		//@ts-ignore
-		switch (params['action']) {
-			case 'resizeWindow':
-				break;
-			case 'successfulSave':
-				break;
-			case 'cancel':
-				break;
-			case 'transactResponse':
-				//@ts-ignore
-				var transResponse = JSON.parse(params['response']);
-				if (transResponse.responseCode === '1') {
-					sendToWebpap();
-				}
-		}
-	};
-
-	function parseQueryString(str: any) {
-		var vars = [];
-		var arr = str.split('&');
-		var pair;
-		for (var i = 0; i < arr.length; i++) {
-			pair = arr[i].split('=');
-			vars.push(pair[0]);
-			vars[pair[0]] = unescape(pair[1]);
-		}
-		return vars;
-	}
-})();
-
-let token = '';
-//@ts-ignore
-let communicatorUrl = '';
-async function getpay(url: string, data: any) {
-	try {
-		const response = await fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-		});
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
-		let res = await response.json();
-		token = res.token;
-		//@ts-ignore
-		document.querySelector('input[name=token]').value = token;
-	} catch (err) {
-		console.log(err);
-	}
-}
-
-const data = {
-	getHostedPaymentPageRequest: {
-		merchantAuthentication: {
-			name: '9QRrX47T4DkY',
-			transactionKey: '5GN3E8m559X9pdSf',
-		},
-		transactionRequest: {
-			transactionType: 'authCaptureTransaction',
-			amount: '200.00',
-		},
-		hostedPaymentSettings: {
-			setting: [
-				{
-					settingName: 'hostedPaymentReturnOptions',
-					settingValue:
-						'{"showReceipt": false, "url": "https://www.transparentpricerx.com", "urlText": "Continue", "cancelUrl": "https://www.transparentpricerx.com", "cancelUrlText": "Cancel"}',
-				},
-				{
-					settingName: 'hostedPaymentButtonOptions',
-					settingValue: '{"text": "Pay"}',
-				},
-				{
-					settingName: 'hostedPaymentStyleOptions',
-					settingValue: '{"bgColor": "blue"}',
-				},
-				{
-					settingName: 'hostedPaymentPaymentOptions',
-					settingValue:
-						'{"cardCodeRequired": false, "showCreditCard": true, "showBankAccount": true}',
-				},
-				{
-					settingName: 'hostedPaymentSecurityOptions',
-					settingValue: '{"captcha": false}',
-				},
-				{
-					settingName: 'hostedPaymentShippingAddressOptions',
-					settingValue: '{"show": false, "required": false}',
-				},
-				{
-					settingName: 'hostedPaymentBillingAddressOptions',
-					settingValue: '{"show": true, "required": true}',
-				},
-				{
-					settingName: 'hostedPaymentCustomerOptions',
-					settingValue:
-						'{"showEmail": true, "requiredEmail": true, "addPaymentProfile": true}',
-				},
-				{
-					settingName: 'hostedPaymentOrderOptions',
-					settingValue:
-						'{"show": false, "merchantName": "TrasnaparentPrice RX"}',
-				},
-				{
-					settingName: 'hostedPaymentIFrameCommunicatorUrl',
-					settingValue:
-						'{"url": "https://www.transparentpricerx.com/communicator"}',
-				},
-			],
-		},
-	},
-};
-
-getpay('https://api.authorize.net/xml/v1/request.api', data);
-
-document.querySelector('.navbar-container')!.addEventListener('click', () => {
-	getDrugData();
-});

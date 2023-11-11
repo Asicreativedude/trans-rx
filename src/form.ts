@@ -14,63 +14,57 @@ interface OrderItem {
 	diagnosis: string;
 }
 const brandMeds = [
-	'Enbrel',
-	'Humira',
-	'Humulin N (U 100 Injection)',
+	'Anoro Ellipta',
+	'Biktarvy',
+	'Botox for migraines',
 	'Breo Ellipta',
-	'Trelegy Ellipta',
-	'Xarelto',
-	'Wegovy',
-	'Ozempic (0.25 or 0.5 MG/DOSE)',
-	'Ozempic (1 MG/DOSE)',
-	'Ozempic (2 MG/DOSE)',
-	'Skyrizi',
-	'Skyrizi (150 MG Dose)',
+	'Cimzia',
+	'Cosentyx',
+	'Cosentyx (300 MG Dose)',
+	'Cosentyx Sensoready Pen',
+	'Creon',
+	'Eliquis',
+	'Emgality',
+	'Enbrel',
+	'EPCLUSA',
+	'Fasenra',
 	'HumaLOG',
 	'HumaLOG KwikPen',
 	'HumaLOG Mix 50/50',
 	'HumaLOG Mix 75/25',
 	'HumaLOG Mix 75/25 KwikPen',
-	'Dexcom G6 Receiver',
-	'Dexcom G7 Receiver',
-	'Dexcom G7 Sensor',
-	'Dexcom G6 Sensor',
-	'Dexcom G6 Transmitter',
-	'Xeljanz',
-	'Xeljanz XR',
-	'Rybelsus',
-	'OCREVUS',
-	'Botox for migraines',
-	'Cosentyx (300 MG Dose)',
-	'Cosentyx',
-	'Cosentyx Sensoready Pen',
+	'Humira',
+	'Humulin N (U 100 Injection)',
 	'Jardiance',
-	'Multaq',
-	'Januvia',
-	'Suboxone',
 	'Janumet',
 	'Janumet XR',
-	'Fasenra',
-	'Emgality',
-	'Qulipta',
+	'Januvia',
+	'Lantus',
+	'Lovenox',
+	'Multaq',
+	'Ocrevus',
+	'Ozempic (0.25 or 0.5 MG Dose)',
+	'Ozempic (1 MG Dose)',
+	'Ozempic (2 MG Dose)',
+	'Prodigy AutoCode Blood Glucose Monitor',
 	'Prolia',
-	'EPCLUSA',
+	'Rexulti',
+	'Rinvoq',
+	'Rybelsus',
+	'Skyrizi',
+	'Skyrizi (150 MG Dose)',
+	'Stelara',
+	'Suboxone',
+	'Taltz',
 	'Tresiba',
 	'Tresiba FlexTouch',
+	'Trelegy Ellipta',
 	'Trintellix',
-	'Eliquis',
-	'Prodigy AutoCode Blood Glucose Monitor',
-	'Biktarvy',
-	'Strelara',
-	'Anoro Ellipta',
+	'Wegovy',
+	'Xarelto',
+	'Xeljanz',
+	'Xeljanz XR',
 	'Zubsolv',
-	'Rexulti',
-	'Taltz',
-	'Creon',
-	'Rinvoq',
-	'Cimzia',
-	'Lovenox',
-	'Lantus',
 ];
 const patientData: webPapData = {
 	fname: '',
@@ -489,6 +483,7 @@ async function saveToSessionStorage() {
 		patientData[data.field] = data.value;
 	});
 	await getDrugData();
+	const uniqueId = Date.now().toString();
 	const formData = {
 		patientData: patientData,
 		patientIncomeData: patientIncomeData,
@@ -496,11 +491,11 @@ async function saveToSessionStorage() {
 		doctorData: doctorData,
 		doctor2Data: doctor2Data,
 		drugData: addDrugData,
+		uniqueId: uniqueId,
 	};
 
 	// Save the form data to session storage
 	sessionStorage.setItem('formData', JSON.stringify(formData));
-	const uniqueId = Date.now().toString();
 	sessionStorage.setItem(uniqueId, JSON.stringify(formData));
 	redirectToStripePayment(uniqueId);
 }
@@ -1036,65 +1031,6 @@ tabs.forEach((tab) => {
 });
 
 //meds
-
-const medicationWrapper = document.getElementById('medicationStep');
-const medicationRow = medicationWrapper?.querySelector('.form-row-wrapper');
-const addMedication = document.getElementById('addMed');
-addMedication!.addEventListener('click', () => {
-	const newMedication = medicationRow!.cloneNode(true) as Element;
-	medicationWrapper!.insertBefore(newMedication, addMedication!.parentElement);
-	newMedication
-		.querySelector('.flex-grow:nth-child(1) > select')
-		?.removeAttribute('required');
-	newMedication
-		.querySelector('.flex-grow:nth-child(4) > input')
-		?.removeAttribute('required');
-	(
-		newMedication.querySelector(
-			'.flex-grow:nth-child(4) > input'
-		) as HTMLInputElement
-	).value = '';
-	newMedication.querySelector(
-		'.flex-grow:nth-child(2) > select'
-	)!.id = `med-name-${medicationWrapper!.childElementCount - 1}`;
-	(newMedication.querySelector(
-		'.flex-grow:nth-child(2) > select'
-	) as HTMLInputElement)!.value = '';
-	newMedication.querySelector(
-		'.flex-grow:nth-child(3) > select'
-	)!.id = `med-strength-${medicationWrapper!.childElementCount - 1}`;
-	newMedication
-		.querySelector('.flex-grow:nth-child(2) > select')!
-		.addEventListener('change', (event) => {
-			newMedication.querySelector(
-				'.flex-grow:nth-child(3) > select'
-			)!.innerHTML = '';
-
-			const value = (event.target as HTMLSelectElement).value
-				.toLocaleLowerCase()
-				.split(' ')
-				.join('-');
-
-			const drug = document.querySelector(`[cd-name=${value}]`)?.parentElement;
-
-			const strength = drug?.querySelectorAll('[cd=strength]');
-			const drugStrength: { strength: string; webpapId: string }[] = [];
-			strength?.forEach((strength) => {
-				const strengthOption = {
-					strength: strength.textContent!,
-					webpapId: strength.getAttribute('cd-webpap-id')!,
-				};
-
-				if (strengthOption.strength !== null) {
-					drugStrength.push(strengthOption);
-				}
-			});
-			addOptionsToSelect(
-				newMedication.querySelector('.flex-grow:nth-child(3) > select')!,
-				drugStrength
-			);
-		});
-});
 
 function isBrandMed(value: string) {
 	if (value === '') return false;

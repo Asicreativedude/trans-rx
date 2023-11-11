@@ -29,13 +29,14 @@ async function getAuth2(
 getAuth2(generalURL2, authData2).then((data) => {
 	authToken2 = data.access_token;
 	// getDoc2(
-	// 	`https://www.medserviceswebpap.com/api/physician/getphysician?lname=Brooke Beasley`
+	// 	`https://www.medserviceswebpap.com/api/physician/getphysician?lname=Jasmine Gray`
 	// );
+	// ); Farrah Stephens Jasmine Gray
 	// deletePatient(
-	// 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=121'
+	// 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=130'
 	// );
 	// deleteDoc(
-	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=127'
+	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=136'
 	// );
 	// getProgram(
 	// 	'https://www.medserviceswebpap.com/api/search/availableprograms?drugId=192372'

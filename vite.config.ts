@@ -9,6 +9,7 @@ export default defineConfig(({ command, mode }) => {
 					form: 'src/form.ts',
 					search: 'src/search.ts',
 					formTest: 'src/formTest.ts',
+					webpap: 'src/webpap.ts',
 					// Add more entry points as needed
 				},
 				output: {

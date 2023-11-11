@@ -118,6 +118,10 @@ const doctor2Data: webPapData = {
 	zip: '',
 	id: '',
 };
+const uniqueId = Date.now().toString() + Math.random().toString();
+(
+	document.querySelector('#unique-id') as HTMLInputElement
+).value = `${uniqueId}`;
 
 const paymentBtn = document.querySelector(
 	'[cd="submit-data"]'
@@ -495,7 +499,6 @@ async function saveToSessionStorage() {
 		patientData[data.field] = data.value;
 	});
 	await getDrugData();
-	const uniqueId = Date.now().toString();
 	const formData = {
 		patientData: patientData,
 		patientIncomeData: patientIncomeData,
@@ -1172,4 +1175,3 @@ function addOptionsToSelect(
 		selectElement.removeAttribute('required');
 	}
 }
-

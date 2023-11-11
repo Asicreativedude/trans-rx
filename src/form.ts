@@ -167,6 +167,12 @@ async function getDrugData() {
 							orderItem.pharmcoid = '203';
 						} else if (
 							option.getAttribute('cd-program')! ===
+							'Dupixent MyWay Program Allergists (AD, Asthma, CRSwNP)'
+						) {
+							orderItem.pharmco = 'Sanofi and Regeneron Pharmaceuticals, Inc';
+							orderItem.pharmcoid = '7461';
+						} else if (
+							option.getAttribute('cd-program')! ===
 							'Zubsolv Patient Assistance Program'
 						) {
 							orderItem.pharmco = 'Orexo US, Inc';
@@ -214,6 +220,12 @@ async function getDrugData() {
 						) {
 							orderItem.pharmco = 'Pfizer, Inc.';
 							orderItem.pharmcoid = '7145';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Pzifer Dermatology Patient Access'
+						) {
+							orderItem.pharmco = 'Pfizer, Inc.';
+							orderItem.pharmcoid = '7342';
 						} else if (
 							option.getAttribute('cd-program')! === 'MyAbbvie Assist for Botox'
 						) {
@@ -524,7 +536,7 @@ function fillSegmentFields() {
 		'segment-field'
 	) as HTMLInputElement;
 
-	for (let i = 1; i < 4; i++) {
+	for (let i = 1; i < 5; i++) {
 		const selectElement = document.getElementById(
 			`med-name-${i}`
 		) as HTMLSelectElement;
@@ -787,7 +799,7 @@ function validateForm(
 			(document.querySelector('.generic-only') as HTMLElement).style.display =
 				'block';
 		}
-		for (let i = 1; i < 4; i++) {
+		for (let i = 1; i < 5; i++) {
 			setMedicationNames(
 				document.getElementById(`med-name-${i}`) as HTMLSelectElement
 			);
@@ -1050,7 +1062,7 @@ function isBrandMed(value: string) {
 }
 
 //med step
-for (let i = 1; i < 4; i++) {
+for (let i = 1; i < 5; i++) {
 	const selectElement = document.getElementById(
 		`med-name-${i}`
 	) as HTMLSelectElement;
@@ -1160,3 +1172,4 @@ function addOptionsToSelect(
 		selectElement.removeAttribute('required');
 	}
 }
+

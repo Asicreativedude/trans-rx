@@ -41,9 +41,6 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// getProgram(
 	// 	'https://www.medserviceswebpap.com/api/search/availableprograms?drugId=192372'
 	// );
-	// searchMed2(
-	// 	'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Emgality'
-	// );
 
 	// postDoctorData2(
 	// 	'https://www.medserviceswebpap.com/api/physician/createphysician',

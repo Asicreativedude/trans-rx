@@ -118,7 +118,7 @@ const doctor2Data: webPapData = {
 	zip: '',
 	id: '',
 };
-
+const uniqueId = Date.now().toString() + Math.random().toString();
 const paymentBtn = document.querySelector(
 	'[cd="submit-data"]'
 ) as HTMLButtonElement;
@@ -495,7 +495,6 @@ async function saveToSessionStorage() {
 		patientData[data.field] = data.value;
 	});
 	await getDrugData();
-	const uniqueId = Date.now().toString();
 	const formData = {
 		patientData: patientData,
 		patientIncomeData: patientIncomeData,
@@ -622,6 +621,10 @@ function createMultiStepForm(
 			return;
 		}
 		if (currentStep === 3) {
+			(
+				document.querySelector('#unique-id') as HTMLInputElement
+			).value = `${uniqueId}`;
+
 			fillSegmentFields();
 			(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
 			paymentBtn.click();
@@ -1172,4 +1175,3 @@ function addOptionsToSelect(
 		selectElement.removeAttribute('required');
 	}
 }
-

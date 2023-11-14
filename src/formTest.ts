@@ -51,6 +51,10 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// ).then((docdata) => {
 	// 	console.log(docdata);
 	// });
+
+	searchMed2(
+		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Toujeo'
+	);
 });
 
 async function searchMed2(url: string): Promise<any> {

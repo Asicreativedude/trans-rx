@@ -591,6 +591,9 @@ function createMultiStepForm(
 
 	// Add event listeners to the buttons
 	prevButton.addEventListener('click', () => {
+		if (currentStep === 3) {
+			nextButton.innerHTML = 'Continue';
+		}
 		if (currentStep > 0) {
 			elements[currentStep].style.display = 'none';
 			currentStep--;
@@ -607,9 +610,6 @@ function createMultiStepForm(
 			prevButton.style.display = 'none';
 		} else {
 			prevButton.style.display = 'block';
-		}
-		if (currentStep === 3) {
-			nextButton.innerHTML = 'Continue';
 		}
 	});
 

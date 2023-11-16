@@ -182,6 +182,12 @@ async function getDrugData() {
 							orderItem.pharmco = 'Orexo US, Inc';
 							orderItem.pharmcoid = '7018';
 						} else if (
+							option.getAttribute('cd-program')! ===
+							'Entyvio Patient Assistance Program'
+						) {
+							orderItem.pharmco = 'Takeda Pharmaceuticals';
+							orderItem.pharmcoid = '7137';
+						} else if (
 							option.getAttribute('cd-program')! === 'Otsuka PAP-Rexulti'
 						) {
 							orderItem.pharmco = 'Otsuka Patient Assistance Foundation, Inc.';

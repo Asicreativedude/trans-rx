@@ -53,7 +53,7 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// });
 
 	searchMed2(
-		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Aubagio'
+		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Dexedrine'
 	);
 });
 

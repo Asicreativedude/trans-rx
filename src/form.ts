@@ -481,7 +481,7 @@ async function saveToSessionStorage() {
 			return;
 		}
 		if (data.field === 'patwages') {
-			patientIncomeData[data.field] = data.value.slice(1);
+			patientIncomeData[data.field] = data.value.slice(1).replace(/,/g, '');
 			return;
 		}
 		if (data.field.includes('doc-')) {
@@ -987,13 +987,12 @@ function validateAddress(address: string) {
 //income-fields
 const incomeField = document.querySelector('.money-field') as HTMLInputElement;
 incomeField.addEventListener('input', function (this: HTMLInputElement) {
-	// remove all non-numric characters
+	// remove all non-numeric characters
 	this.value = this.value.replace(/\D/g, '');
 	if (this.value === '') return;
-	// add $ at the beginning
-	this.value = '$' + this.value;
+	// add $ at the beginning and commas for thousands separator
+	this.value = '$' + parseInt(this.value).toLocaleString();
 });
-
 //form step indicator
 const barContainer = document.querySelector('.progress-bar-c') as HTMLElement;
 const bar = document.querySelector('.progress-bar') as HTMLElement;

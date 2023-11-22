@@ -810,7 +810,6 @@ function validateForm(
 		}
 		if (Number(yearSelect.value) <= 1958) {
 			brandMeds.forEach((med) => {
-				console.log(med);
 				document.querySelector(`[cd-drug-box="${med}"]`)!.remove();
 			});
 			(document.querySelector('.generic-only') as HTMLElement).style.display =

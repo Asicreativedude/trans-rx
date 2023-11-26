@@ -695,9 +695,15 @@ function validateForm(
 			return;
 		}
 		if (input.value === '') {
+			if (input.id === 'doc2-mname') {
+				return;
+			}
 			valid = false;
 			input.nextElementSibling!.classList.add('active');
 		} else {
+			if (input.id === 'doc2-mname') {
+				return;
+			}
 			input.nextElementSibling!.classList.remove('active');
 		}
 	});
@@ -831,9 +837,9 @@ function validateForm(
 			if (!re.test(emailInput2.value)) {
 				valid = false;
 				emailInput2.nextElementSibling!.classList.add('active');
+			} else {
+				emailInput2.nextElementSibling!.classList.remove('active');
 			}
-		} else {
-			emailInput2.nextElementSibling!.classList.remove('active');
 		}
 
 		const phoneInput = document.getElementById(
@@ -914,8 +920,48 @@ function validateForm(
 			}
 		}
 	}
+
 	return valid;
 }
+
+//doc2 fields
+const secondDoc = document.querySelector('.second-doc') as HTMLElement;
+(
+	secondDoc.querySelectorAll('.input-field') as NodeListOf<HTMLInputElement>
+).forEach((field) => {
+	console;
+	field.addEventListener('change', () => {
+		if (field.value !== '') {
+			(
+				secondDoc.querySelectorAll(
+					'.input-field'
+				) as NodeListOf<HTMLInputElement>
+			).forEach((field) => {
+				field.required = true;
+			});
+		} else {
+			let allEmpty = Array.from(
+				secondDoc.querySelectorAll(
+					'.input-field'
+				) as NodeListOf<HTMLInputElement>
+			).every((field) => field.value === '');
+			if (allEmpty) {
+				(
+					secondDoc.querySelectorAll(
+						'.input-field'
+					) as NodeListOf<HTMLInputElement>
+				).forEach((field) => {
+					console.log(field);
+					if (field.getAttribute('id') === 'doc2-mname') {
+						return;
+					}
+					field.required = false;
+					field.nextElementSibling!.classList.remove('active');
+				});
+			}
+		}
+	});
+});
 
 // phone fax
 const phoneInput = document.querySelectorAll('.phone-field');
@@ -1025,38 +1071,6 @@ indicators.forEach((indicator) => {
 	observer.observe(indicator as Node, options);
 });
 
-//tabs
-const tabs = document.querySelectorAll(
-	'.doc-content-c-tab'
-) as NodeListOf<HTMLElement>;
-const tabsContent = document.querySelectorAll('.doc-content-w');
-const openIcon = document.querySelectorAll('.tab-minus-icon');
-const closeIcon = document.querySelectorAll('.tab-plus-icon');
-
-tabs.forEach((tab) => {
-	tab.addEventListener('click', () => {
-		tabsContent.forEach((tabContent) => {
-			tabContent.classList.remove('active');
-			if (tabContent.parentElement === tab) {
-				tabContent.classList.add('active');
-			}
-		});
-
-		openIcon.forEach((icon) => {
-			icon.classList.remove('active');
-			if (tab.querySelector('.tab-minus-icon') === icon) {
-				icon.classList.add('active');
-			}
-		});
-		closeIcon.forEach((icon) => {
-			icon.classList.remove('active');
-			if (tab.querySelector('.tab-plus-icon') !== icon) {
-				icon.classList.add('active');
-			}
-		});
-	});
-});
-
 //meds
 
 function isBrandMed(value: string) {
@@ -1124,6 +1138,37 @@ for (let i = 1; i < 5; i++) {
 		addOptionsToSelect(strengthSelect, drugStrength);
 		isBrandMed((event.target as HTMLSelectElement).value);
 	});
+
+	if (i !== 1) {
+		const row = document.getElementById(`med-row-${i}`) as HTMLElement;
+		(
+			row.querySelectorAll('.input-field') as NodeListOf<HTMLInputElement>
+		).forEach((field) => {
+			field.addEventListener('change', () => {
+				if (field.value !== '') {
+					(
+						row.querySelectorAll('.input-field') as NodeListOf<HTMLInputElement>
+					).forEach((field) => {
+						field.required = true;
+					});
+				} else {
+					let allEmpty = Array.from(
+						row.querySelectorAll('.input-field') as NodeListOf<HTMLInputElement>
+					).every((field) => field.value === '');
+					if (allEmpty) {
+						(
+							row.querySelectorAll(
+								'.input-field'
+							) as NodeListOf<HTMLInputElement>
+						).forEach((field) => {
+							field.required = false;
+							field.nextElementSibling!.classList.remove('active');
+						});
+					}
+				}
+			});
+		});
+	}
 }
 
 function setMedicationNames(selectElement: HTMLSelectElement) {

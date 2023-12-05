@@ -29,7 +29,7 @@ async function getAuth2(
 getAuth2(generalURL2, authData2).then((data) => {
 	authToken2 = data.access_token;
 	// getDoc2(
-	// 	`https://www.medserviceswebpap.com/api/physician/getphysician?lname=Jasmine Gray`
+	// 	`https://www.medserviceswebpap.com/api/physician/getphysician?lname=Robertson%20II`
 	// );
 	// ); Farrah Stephens Jasmine Gray
 	// deletePatient(
@@ -53,7 +53,7 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// });
 
 	searchMed2(
-		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Evoxac'
+		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Suboxone'
 	);
 });
 

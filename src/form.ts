@@ -1122,7 +1122,15 @@ for (let i = 1; i < 5; i++) {
 			.replace(/[\(\)\/.]/g, '')
 			.split(' ')
 			.join('-');
-		const drug = document.querySelector(`[cd-name=${value}]`)?.parentElement;
+		if (value === '') {
+			const defaultOption = document.createElement('option');
+			defaultOption.text = 'Select Medication First';
+			defaultOption.value = '';
+			strengthSelect.add(defaultOption);
+			return;
+		}
+		const drug = document.querySelector(`[cd-name=${value}]`)!.parentElement;
+
 		const strength = drug?.querySelectorAll('[cd=strength]');
 		const drugStrength: { strength: string; webpapId: string }[] = [];
 		strength?.forEach((strength) => {

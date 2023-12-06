@@ -33,10 +33,10 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// );
 	// ); Farrah Stephens Jasmine Gray
 	// deletePatient(
-	// 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=130'
+	// 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=151'
 	// );
 	// deleteDoc(
-	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=136'
+	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=160'
 	// );
 	// getProgram(
 	// 	'https://www.medserviceswebpap.com/api/search/availableprograms?drugId=192372'
@@ -52,9 +52,9 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// 	console.log(docdata);
 	// });
 
-	searchMed2(
-		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Suboxone'
-	);
+	// searchMed2(
+	// 	'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Suboxone'
+	// );
 });
 
 async function searchMed2(url: string): Promise<any> {

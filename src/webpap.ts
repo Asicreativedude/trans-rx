@@ -204,6 +204,11 @@ async function sendData(formData: any) {
 								item.physicianid.includes(formData.doctorData.lname)
 							) {
 								item.physicianid = formData.doctorData.id;
+							} else if (
+								item.physicianid.includes(formData.doctor2Data.fname) &&
+								item.physicianid.includes(formData.doctor2Data.lname)
+							) {
+								item.physicianid = formData.doctor2Data.id;
 							}
 						})
 					);

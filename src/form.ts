@@ -112,6 +112,7 @@ const doctorData: webPapData = {
 	state: '',
 	zip: '',
 	id: '',
+	office: '',
 };
 const doctor2Data: webPapData = {
 	fname: '',

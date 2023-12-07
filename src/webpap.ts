@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 	// Retrieve the form data from sessionStorage
 	const formData = sessionStorage.getItem('formData');
 	const parsedFormData = formData ? JSON.parse(formData) : null;
-	// Process the retrieved data
 	if (parsedFormData) {
 		await sendData(parsedFormData).then(() => {
 			// Optionally, clear the sessionStorage if you no longer need the data
@@ -186,7 +185,7 @@ async function sendData(formData: any) {
 					await postData(createURL, formData.patientData);
 					let incomeUrl = `https://www.medserviceswebpap.com/api/patient/updatepatientincome?patientId=${patientId}`;
 					await postIncomeData(incomeUrl, formData.patientIncomeData);
-					formData.drugData.CustomerId = `${patientId}`;
+					formData.drugData.webpapOrder.customerId = patientId;
 					let insuranceUrl = `https://www.medserviceswebpap.com/api/patient/updatepatientinsurance?patientId=${patientId}`;
 					await postIsuranceData(insuranceUrl, formData.insurance);
 					await postDoctorData(createDoctorURL, formData.doctorData);
@@ -195,7 +194,7 @@ async function sendData(formData: any) {
 						await postDoctorData(createDoctorURL, formData.doctor2Data);
 					}
 					await Promise.all(
-						formData.drugData.OrderItems.map(async (item: any) => {
+						formData.drugData.webpapOrder.orderItems.map(async (item: any) => {
 							await getDoc(
 								`https://www.medserviceswebpap.com/api/physician/getphysician?fname=${formData.doctorData.fname}&lname=${formData.doctorData.lname}`
 							);
@@ -212,7 +211,19 @@ async function sendData(formData: any) {
 							}
 						})
 					);
-					await addDrugs(formData.drugData);
+					formData.patientData.webpapId = patientId;
+					formData.patientData.submissionDate = new Date();
+
+					await addDrugs(formData.drugData.webpapOrder);
+					formData.drugData.webpapOrder.orderItems.forEach((item: any) => {
+						item.orderDate = new Date();
+						formData.drugData.drugData.forEach((drug: any) => {
+							if (item.name === drug.name) {
+								item.strength = drug.strength;
+							}
+						});
+					});
+					await sendDataToDB(formData);
 				});
 			//handle loader sceen
 			loader.classList.add('hide');
@@ -224,4 +235,27 @@ async function sendData(formData: any) {
 			reject(error);
 		}
 	});
+}
+
+async function sendDataToDB(data: any) {
+	try {
+		const response = await fetch(
+			'https://us-central1-transparent-rx.cloudfunctions.net/sendDataToFirebase',
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+			}
+		);
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+
+		let res = await response.json();
+		return res;
+	} catch (err) {
+		console.log(err);
+	}
 }

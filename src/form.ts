@@ -138,8 +138,11 @@ const paymentBtn = document.querySelector(
 let insurance: string = '';
 
 let addDrugData = {
-	CustomerId: '',
-	OrderItems: [] as OrderItem[],
+	webpapOrder: {
+		customerId: '',
+		orderItems: [] as OrderItem[],
+	},
+	drugData: [] as any[],
 };
 async function getDrugData() {
 	function setOrder(row: HTMLElement) {
@@ -154,7 +157,10 @@ async function getDrugData() {
 			sig: '',
 			diagnosis: '',
 		};
-
+		const firebaseDrug = {
+			name: '',
+			strength: '',
+		};
 		let fields = row.querySelectorAll(
 			'.input-field'
 		) as NodeListOf<HTMLInputElement>;
@@ -351,11 +357,13 @@ async function getDrugData() {
 					}
 				});
 				orderItem.name = fieldOption;
+				firebaseDrug.name = fieldOption;
 			} else if (field.name.includes('med-strength')) {
 				let fieldOption = '';
 				field.querySelectorAll('option').forEach((option) => {
 					if (option.innerHTML === field.value) {
 						fieldOption = option.getAttribute('cd-webpap-id')!;
+						firebaseDrug.strength = option.innerHTML;
 					}
 				});
 				if (fieldOption !== '') orderItem.ddi = fieldOption;
@@ -365,7 +373,8 @@ async function getDrugData() {
 				orderItem.physicianid = field.value;
 			}
 		});
-		addDrugData.OrderItems.push(orderItem);
+		addDrugData.webpapOrder.orderItems.push(orderItem);
+		addDrugData.drugData.push(firebaseDrug);
 	}
 	const rows = document.querySelectorAll('[cd="med"]');
 	rows.forEach((row) => {

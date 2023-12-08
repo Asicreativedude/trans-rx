@@ -1082,10 +1082,18 @@ indicators.forEach((indicator) => {
 });
 
 //meds
-
-function isBrandMed(value: string) {
-	if (value === '') return false;
-	if (value === brandMeds.find((med) => med === value)) {
+function anyBrandMeds() {
+	let anyBrand = false;
+	for (let i = 1; i < 5; i++) {
+		const selectElement = document.getElementById(
+			`med-name-${i}`
+		) as HTMLSelectElement;
+		const value = selectElement.value;
+		if (value === brandMeds.find((med) => med === value)) {
+			anyBrand = true;
+		}
+	}
+	if (anyBrand) {
 		document.getElementById('insurance-row')!.classList.remove('hidden');
 		(document.getElementById(
 			'insurance-field'
@@ -1109,6 +1117,8 @@ for (let i = 1; i < 5; i++) {
 		`med-strength-${i}`
 	) as HTMLSelectElement;
 	selectElement.addEventListener('change', (event) => {
+		anyBrandMeds();
+
 		if (i !== 1) {
 			if (selectElement.value !== '') {
 				(
@@ -1154,7 +1164,6 @@ for (let i = 1; i < 5; i++) {
 			}
 		});
 		addOptionsToSelect(strengthSelect, drugStrength);
-		isBrandMed((event.target as HTMLSelectElement).value);
 	});
 
 	if (i !== 1) {

@@ -32,15 +32,15 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// 	`https://www.medserviceswebpap.com/api/physician/getphysician?lname=Robertson%20II`
 	// );
 	// ); Farrah Stephens Jasmine Gray
-	deletePatient(
-		'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=163'
-	);
+	// deletePatient(
+	// 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=163'
+	// );
 	// deleteDoc(
 	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=163'
 	// );
-	deleteDoc(
-		'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=176'
-	);
+	// deleteDoc(
+	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=176'
+	// );
 	// deleteDoc(
 	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=104'
 	// );

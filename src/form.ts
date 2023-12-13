@@ -651,12 +651,7 @@ function createMultiStepForm(
 		if (currentStep === 3) {
 			fillSegmentFields();
 			(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
-			document
-				.getElementById('wf-form-application-form')!
-				.addEventListener('submit', () => {
-					console.log('submit');
-					paymentBtn.click();
-				});
+
 			return;
 		} else {
 			if (currentStep < numSteps - 1) {
@@ -1264,3 +1259,11 @@ function addOptionsToSelect(
 		selectElement.removeAttribute('required');
 	}
 }
+
+//make sure we send data to webflow before leaving the page
+document
+	.getElementById('wf-form-application-form')!
+	.addEventListener('submit', () => {
+		console.log('submit');
+		paymentBtn.click();
+	});

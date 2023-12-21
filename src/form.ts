@@ -533,10 +533,15 @@ async function saveToSessionStorage() {
 	).forEach((field) => {
 		let fieldId = field.name;
 		let value = field.id;
-		allFields.push({ field: fieldId, value: value });
+		if (field.name === 'residency') {
+			allFields.push({ field: fieldId, value: 'US Citizen' });
+		} else {
+			allFields.push({ field: fieldId, value: value });
+		}
 	});
 	//@ts-ignore
 	allFields.forEach((data: { field: string; value: string }) => {
+		console;
 		if (data.field === 'insurance-field') {
 			insurance = data.value;
 			return;
@@ -563,10 +568,11 @@ async function saveToSessionStorage() {
 			patientData['dob'] = `${patientData['dob']}/${data.value}`;
 			return;
 		}
-		if (data.field === 'residency' || data.field === 'disabled') {
+		if (data.field === 'disabled') {
 			patientData[data.field] = data.value === 'Yes' ? 'true' : 'false';
 			return;
 		}
+
 		if (data.field === 'ssn') {
 			patientData[data.field] = data.value.replace(/-/g, '');
 			return;
@@ -797,7 +803,11 @@ function validateForm(
 	if (citizenRadio.length === 0) {
 		document.getElementById('citizen-radio-error')!.classList.add('active');
 		valid = false;
+	} else if (citizenRadio[0].id === 'No') {
+		document.querySelector('.error-announcement-c')!.classList.add('active');
+		valid = false;
 	} else {
+		document.querySelector('.error-announcement-c')!.classList.remove('active');
 		document.getElementById('citizen-radio-error')!.classList.remove('active');
 	}
 	if (disabledRadio.length === 0) {

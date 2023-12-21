@@ -111,7 +111,7 @@ const doctorData: webPapData = {
 	city: '',
 	state: '',
 	zip: '',
-	id: '',
+	webpapId: '',
 	office: '',
 };
 const doctor2Data: webPapData = {
@@ -179,11 +179,26 @@ async function getDrugData() {
 							orderItem.pharmco = 'GlaxoSmithKline';
 							orderItem.pharmcoid = '5331';
 						} else if (
+							option.getAttribute('cd-program')! === 'Adbry Advocate Program'
+						) {
+							orderItem.pharmco = 'Leo Pharma Inc.';
+							orderItem.pharmcoid = '7269';
+						} else if (
 							option.getAttribute('cd-program')! ===
 							'myAbbvie Assist for Humira'
 						) {
 							orderItem.pharmco = 'AbbVie Inc.';
 							orderItem.pharmcoid = '203';
+						} else if (
+							option.getAttribute('cd-program')! === 'Afrezza Support Program'
+						) {
+							orderItem.pharmco = 'Sanofi Pharmaceuticals';
+							orderItem.pharmcoid = '7070';
+						} else if (
+							option.getAttribute('cd-program')! === '(ASNF) Aimovig'
+						) {
+							orderItem.pharmco = 'Amgen, Inc.';
+							orderItem.pharmcoid = '7537';
 						} else if (
 							option.getAttribute('cd-program')! ===
 							'Dupixent MyWay Program Allergists (AD, Asthma, CRSwNP)'
@@ -245,6 +260,18 @@ async function getDrugData() {
 						) {
 							orderItem.pharmco = 'Pfizer, Inc.';
 							orderItem.pharmcoid = '7145';
+						} else if (option.getAttribute('cd-program')! === 'Pfizer Nurtec') {
+							orderItem.pharmco = 'Pfizer, Inc.';
+							orderItem.pharmcoid = '7542';
+						} else if (option.getAttribute('cd-program')! === 'Merck Connect') {
+							orderItem.pharmco = 'Merck & Co., Inc.';
+							orderItem.pharmcoid = '7108';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'GSK Patient Assistance Program (Nucala)'
+						) {
+							orderItem.pharmco = 'GlaxoSmithKline';
+							orderItem.pharmcoid = '7178';
 						} else if (
 							option.getAttribute('cd-program')! ===
 							'Pzifer Dermatology Patient Access'
@@ -268,6 +295,12 @@ async function getDrugData() {
 						) {
 							orderItem.pharmco = 'AbbVie Inc.';
 							orderItem.pharmcoid = '6910';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Nestle Health Science Patient Ass'
+						) {
+							orderItem.pharmco = 'Nestle Health Science';
+							orderItem.pharmcoid = '6818';
 						} else if (
 							option.getAttribute('cd-program')! ===
 							'myAbbVie Assist for Rinvoq'
@@ -337,6 +370,24 @@ async function getDrugData() {
 						) {
 							orderItem.pharmco = 'Lilly USA, LLC.';
 							orderItem.pharmcoid = '52';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Lilly Insulin Value Program - Savings Card'
+						) {
+							orderItem.pharmco = 'Lilly';
+							orderItem.pharmcoid = '7507';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Access Virology Patient Assistance Program'
+						) {
+							orderItem.pharmco = 'Bristol-Myers Squibb Company';
+							orderItem.pharmcoid = '5335';
+						} else if (
+							option.getAttribute('cd-program')! ===
+							'Botox Patient Assistance Program'
+						) {
+							orderItem.pharmco = 'Allergan';
+							orderItem.pharmcoid = '3236';
 						} else if (
 							option.getAttribute('cd-program')! ===
 							'AZ&Me Prescription Savings Program for people without insurance'

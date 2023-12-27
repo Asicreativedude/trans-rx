@@ -59,7 +59,7 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// });
 
 	searchMed2(
-		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=NovoLOG'
+		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Budesonide'
 	);
 });
 

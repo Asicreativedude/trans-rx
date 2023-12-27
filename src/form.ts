@@ -534,7 +534,7 @@ async function saveToSessionStorage() {
 		let fieldId = field.name;
 		let value = field.id;
 		if (field.name === 'residency') {
-			allFields.push({ field: fieldId, value: 'US Citizen' });
+			allFields.push({ field: fieldId, value: 'US Citizen/Resident' });
 		} else {
 			allFields.push({ field: fieldId, value: value });
 		}

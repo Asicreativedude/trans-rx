@@ -584,7 +584,6 @@ async function saveToSessionStorage() {
 	});
 	//@ts-ignore
 	allFields.forEach((data: { field: string; value: string }) => {
-		console;
 		if (data.field === 'insurance-field') {
 			insurance = data.value;
 			return;
@@ -1037,7 +1036,6 @@ const secondDoc = document.querySelector('.second-doc') as HTMLElement;
 (
 	secondDoc.querySelectorAll('.input-field') as NodeListOf<HTMLInputElement>
 ).forEach((field) => {
-	console;
 	field.addEventListener('change', () => {
 		if (field.value !== '') {
 			(
@@ -1045,6 +1043,9 @@ const secondDoc = document.querySelector('.second-doc') as HTMLElement;
 					'.input-field'
 				) as NodeListOf<HTMLInputElement>
 			).forEach((field) => {
+				if (field.name === 'doc2-email') {
+					return;
+				}
 				field.required = true;
 			});
 		} else {
@@ -1059,7 +1060,6 @@ const secondDoc = document.querySelector('.second-doc') as HTMLElement;
 						'.input-field'
 					) as NodeListOf<HTMLInputElement>
 				).forEach((field) => {
-					console.log(field);
 					if (field.getAttribute('id') === 'doc2-mname') {
 						return;
 					}
@@ -1362,6 +1362,5 @@ function addOptionsToSelect(
 document
 	.getElementById('wf-form-application-form')!
 	.addEventListener('submit', () => {
-		console.log('submit');
 		paymentBtn.click();
 	});

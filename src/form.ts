@@ -928,13 +928,7 @@ function validateForm(
 		if (!emailInput.required) {
 			return;
 		}
-		if (Number(yearSelect.value) <= 1958) {
-			brandMeds.forEach((med) => {
-				document.querySelector(`[cd-drug-box="${med}"]`)!.remove();
-			});
-			(document.querySelector('.generic-only') as HTMLElement).style.display =
-				'block';
-		}
+
 		for (let i = 1; i < 5; i++) {
 			setMedicationNames(
 				document.getElementById(`med-name-${i}`) as HTMLSelectElement

@@ -924,17 +924,13 @@ function validateForm(
 			'doc2-email-2'
 		) as HTMLInputElement;
 
-		if (!emailInput.required) {
-			return;
-		}
-
 		for (let i = 1; i < 5; i++) {
 			setMedicationNames(
 				document.getElementById(`med-name-${i}`) as HTMLSelectElement
 			);
 		}
 		const re = /\S+@\S+\.\S+/;
-		if (!re.test(emailInput.value)) {
+		if (!re.test(emailInput.value) && emailInput.value !== '') {
 			valid = false;
 			emailInput.nextElementSibling!.classList.add('active');
 		} else {

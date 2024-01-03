@@ -1231,7 +1231,7 @@ for (let i = 1; i < 5; i++) {
 			}
 		}
 		strengthSelect.innerHTML = '';
-		const value = (event.target as HTMLSelectElement).value
+		let value = (event.target as HTMLSelectElement).value
 			.toLocaleLowerCase()
 			.replace(/[\(\)\/.]/g, '')
 			.split(' ')
@@ -1242,6 +1242,10 @@ for (let i = 1; i < 5; i++) {
 			defaultOption.value = '';
 			strengthSelect.add(defaultOption);
 			return;
+		}
+		//ozempric fix
+		if (value === 'ozempic-025-or-05-mg-dose') {
+			value = 'ozempic-0-25-or-0-5-mg-dose';
 		}
 		const drug = document.querySelector(`[cd-name=${value}]`)!.parentElement;
 

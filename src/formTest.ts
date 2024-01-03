@@ -33,10 +33,10 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// );
 	// ); Farrah Stephens Jasmine Gray
 	// deletePatient(
-	// 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=168'
+	// 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=187'
 	// );
 	// deleteDoc(
-	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=163'
+	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=203'
 	// );
 	// deleteDoc(
 	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=180'
@@ -59,7 +59,7 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// });
 
 	searchMed2(
-		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=Zidovudine'
+		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=metformin'
 	);
 });
 

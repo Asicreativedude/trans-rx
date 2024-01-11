@@ -18,8 +18,8 @@
 // 	disabled: boolean;
 // 	numinhouse: string;
 // 	EmerContactName: string;
-// 	EmerContactPhone1: string;
-// 	patwages: string;
+// 	EmerContactPhone: string;
+// 	Patwages__c: string;
 // 	insurance: string;
 // }
 // interface TPRXDoctor {
@@ -27,22 +27,25 @@
 // 	mname: string;
 // 	lname: string;
 // 	email: string;
-// 	phone: string;
+// 	Phone: string;
 // 	fax: string;
 // 	address: string;
 // 	city: string;
 // 	state: string;
 // 	zip: string;
 // 	country: string;
-// 	facility: string;
+// 	Facility_Name__c: string;
 // }
 // interface TPRXOrderItem {
-// 	doctor: string;
-// 	medicationName: string;
-// 	frequency: string;
-// 	strength: string;
+// 	Doctor__c: string;
+// 	Medication_Name__c: string;
+// 	Frequency__c: string;
+// 	Strength__c: string;
 // }
-
+// interface newOrder {
+// 	Patient__c: string;
+// 	orderItems: TPRXOrderItem[];
+// }
 // const patientData: TPRXPatient = {
 // 	fname: '',
 // 	lname: '',
@@ -63,8 +66,8 @@
 // 	disabled: false,
 // 	numinhouse: '',
 // 	EmerContactName: '',
-// 	EmerContactPhone1: '',
-// 	patwages: '',
+// 	EmerContactPhone: '',
+// 	Patwages__c: '',
 // 	insurance: '',
 // };
 
@@ -73,13 +76,13 @@
 // 	mname: '',
 // 	lname: '',
 // 	email: '',
-// 	phone: '',
+// 	Phone: '',
 // 	fax: '',
 // 	address: '',
 // 	city: '',
 // 	state: '',
 // 	zip: '',
-// 	facility: '',
+// 	Facility_Name__c: '',
 // 	country: 'USA',
 // };
 // const doctor2Data: TPRXDoctor = {
@@ -87,17 +90,20 @@
 // 	mname: '',
 // 	lname: '',
 // 	email: '',
-// 	phone: '',
+// 	Phone: '',
 // 	fax: '',
 // 	address: '',
 // 	city: '',
 // 	state: '',
 // 	zip: '',
-// 	facility: '',
+// 	Facility_Name__c: '',
 // 	country: 'USA',
 // };
 
-// const newOrder: TPRXOrderItem[] = [];
+// const newOrder: newOrder = {
+// 	Patient__c: '',
+// 	orderItems: [],
+// };
 
 // const uniqueId = Date.now().toString() + Math.random().toString();
 // (
@@ -315,14 +321,13 @@
 
 // 	allFields.forEach((data: { field: string; value: string }) => {
 // 		if (data.field.includes('choose') && data.value !== '') {
-// 			newOrder.push({
-// 				doctor: data.value,
-// 				medicationName: '',
-// 				frequency: '',
-// 				strength: '',
+// 			newOrder.orderItems.push({
+// 				Doctor__c: data.value,
+// 				Medication_Name__c: '',
+// 				Frequency__c: '',
+// 				Strength__c: '',
 // 			});
 // 		}
-// 		console.log(newOrder);
 // 	});
 // 	allFields.forEach((data: { field: string; value: string }) => {
 // 		if (data.field.includes('doc-')) {
@@ -336,7 +341,20 @@
 // 			return;
 // 		}
 // 		if (data.field === 'month') {
-// 			patientData['dob'] = `${data.value}`;
+// 			const month = data.value.length === 1 ? `0${data.value}` : data.value;
+// 			patientData['dob'] = `${month}`;
+// 			return;
+// 		}
+// 		if (data.field === 'marital') {
+// 			patientData.marital = data.value;
+// 			return;
+// 		}
+// 		if (data.field === 'employed') {
+// 			patientData.employed = data.value;
+// 			return;
+// 		}
+// 		if (data.field === 'patwages') {
+// 			patientData.Patwages__c = data.value;
 // 			return;
 // 		}
 // 		if (data.field === 'day' || data.field === 'year') {
@@ -354,29 +372,41 @@
 // 				data.value.replace(/-/g, '');
 // 			return;
 // 		}
+// 		if (data.field === 'dayphone') {
+// 			(patientData as any)['phone'] = data.value.replace(/-/g, '');
+// 			return;
+// 		}
+// 		if (data.field.includes('choose') || data.field.includes('residency'))
+// 			return;
 
-// 		if (data.field.includes('med-name-')) {
+// 		if (data.field.includes('med-name-') && data.value !== '') {
 // 			let index = data.field.split('-')[2] as unknown as number;
-// 			(newOrder[index - 1] as any).medicationName = data.value;
+// 			(newOrder.orderItems[index - 1] as any).Medication_Name__c = data.value;
 // 			return;
 // 		}
-// 		if (data.field.includes('med-strength-')) {
+// 		if (data.field.includes('med-strength-') && data.value !== '') {
 // 			let index = data.field.split('-')[2] as unknown as number;
-// 			(newOrder[index - 1] as any).strength = data.value;
+// 			(newOrder.orderItems[index - 1] as any).Strength__c = data.value;
 // 			return;
 // 		}
-// 		if (data.field.includes('frequency-')) {
+// 		if (data.field.includes('Frequency') && data.value !== '') {
 // 			let index = data.field.split('-')[1] as unknown as number;
-// 			(newOrder[index - 1] as any).frequency = data.value;
+// 			(newOrder.orderItems[index - 1] as any).Frequency__c = data.value;
+// 			return;
+// 		}
+// 		if (data.field.includes('insurance')) {
+// 			(patientData as any)['insurance'] = data.value;
 // 			return;
 // 		}
 // 		(patientData as any)[data.field as keyof TPRXPatient] = data.value;
 // 	});
+// 	const dateParts = patientData['dob'].split('-');
+// 	patientData['dob'] = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
 // 	const formData = {
-// 		patientData: patientData,
-// 		doctorData: doctorData,
-// 		doctor2Data: doctor2Data,
-// 		drugData: newOrder,
+// 		patient: patientData,
+// 		doctor: doctorData,
+// 		doctor2: doctor2Data,
+// 		orders: newOrder,
 // 		uniqueId: uniqueId,
 // 	};
 
@@ -387,22 +417,21 @@
 // }
 
 // const redirectToStripePayment = async (uniqueId: string) => {
-// 	// Call a function (e.g., a Netlify function) that creates a Stripe Checkout session
-// 	const response = await fetch(
-// 		'https://voluble-axolotl-2e6e1c.netlify.app/.netlify/functions/create-stripe-session',
-// 		{
-// 			method: 'POST',
-// 			body: JSON.stringify({ uniqueId }),
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				// Don't include Access-Control-Allow-* headers here; they are response headers, not request headers.
-// 			},
-// 		}
-// 	);
-// 	const data = await response.json();
-
-// 	// Assuming the response contains a URL for Stripe Checkout
-// 	window.location.href = data.checkoutURL;
+// 	// const response = await fetch(
+// 	// 	'http://127.0.0.1:5001/transparent-rx/us-central1/createStripe',
+// 	// 	{
+// 	// 		method: 'POST',
+// 	// 		body: JSON.stringify({ uniqueId }),
+// 	// 		headers: {
+// 	// 			'Content-Type': 'application/json',
+// 	// 		},
+// 	// 	}
+// 	// );
+// 	// const data = await response.json();
+// 	// console.log(data);
+// 	// // Assuming the response contains a URL for Stripe Checkout
+// 	// window.location.href = data.checkoutURL;
+// 	console.log('redirecting to stripe', uniqueId);
 // };
 
 // function fillSegmentFields() {

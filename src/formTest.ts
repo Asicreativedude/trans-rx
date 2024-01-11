@@ -115,7 +115,7 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// );
 	// ); Farrah Stephens Jasmine Gray
 	// deletePatient(
-	// 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=187'
+	// 	'https://www.medserviceswebpap.com/api/patient/deletepatient?patientId=202'
 	// );
 	// deleteDoc(
 	// 	'https://www.medserviceswebpap.com/api/physician/deletephysician?physicianId=203'
@@ -129,14 +129,14 @@ getAuth2(generalURL2, authData2).then((data) => {
 	// getProgram(
 	// 	'https://www.medserviceswebpap.com/api/search/availableprograms?drugId=192372'
 	// );
-	brandMeds2.forEach(async (med) => {
-		await searchMed2(
-			'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=' +
-				med
-		).then(async (data) => {
-			await massOrders(med, data);
-		});
-	});
+	// brandMeds2.forEach(async (med) => {
+	// 	await searchMed2(
+	// 		'https://www.medserviceswebpap.com/api/search/availabledrugs?drugname=' +
+	// 			med
+	// 	).then(async (data) => {
+	// 		await massOrders(med, data);
+	// 	});
+	// });
 	// postDoctorData2(
 	// 	'https://www.medserviceswebpap.com/api/physician/createphysician',
 	// 	{

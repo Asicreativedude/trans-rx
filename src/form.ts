@@ -1259,7 +1259,6 @@ for (let i = 1; i < 5; i++) {
 		} else if (value === 'prodigy-insulin-syringe-28g-127mm-1cc') {
 			value = 'Prodigy Insulin Syringe 28G 12.7mm-1cc';
 		}
-		console.log(value);
 		const drug = document.querySelector(`[cd-name=${value}]`)!.parentElement;
 
 		const strength = drug?.querySelectorAll('[cd=strength]');

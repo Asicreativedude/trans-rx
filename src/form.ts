@@ -630,22 +630,33 @@ async function saveToSessionStorage() {
 }
 
 const redirectToStripePayment = async (uniqueId: string) => {
-	// Call a function (e.g., a Netlify function) that creates a Stripe Checkout session
-	const response = await fetch(
-		'https://voluble-axolotl-2e6e1c.netlify.app/.netlify/functions/create-stripe-session',
-		{
-			method: 'POST',
-			body: JSON.stringify({ uniqueId }),
-			headers: {
-				'Content-Type': 'application/json',
-				// Don't include Access-Control-Allow-* headers here; they are response headers, not request headers.
-			},
-		}
-	);
-	const data = await response.json();
+	try {
+		// Call a function (e.g., a Netlify function) that creates a Stripe Checkout session
+		const response = await fetch(
+			'https://voluble-axolotl-2e6e1c.netlify.app/.netlify/functions/create-stripe-session',
+			{
+				method: 'POST',
+				body: JSON.stringify({ uniqueId }),
+				headers: {
+					'Content-Type': 'application/json',
+					// Don't include Access-Control-Allow-* headers here; they are response headers, not request headers.
+				},
+			}
+		);
 
-	// Assuming the response contains a URL for Stripe Checkout
-	window.location.href = data.checkoutURL;
+		if (!response.ok) {
+			console.log(response);
+			throw new Error('Failed to create Stripe Checkout session');
+		}
+
+		const data = await response.json();
+
+		// Assuming the response contains a URL for Stripe Checkout
+		window.location.href = data.checkoutURL;
+	} catch (error) {
+		console.error('Error redirecting to Stripe payment:', error);
+		// Handle the error here (e.g., show an error message to the user)
+	}
 };
 
 function fillSegmentFields() {

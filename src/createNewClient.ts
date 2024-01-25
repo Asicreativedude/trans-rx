@@ -7,6 +7,7 @@
 // }
 
 // document.addEventListener('DOMContentLoaded', async () => {
+// 	const loader = document.querySelector('.loader-s') as HTMLDivElement;
 // 	// Retrieve the form data from sessionStorage
 // 	const formData = sessionStorage.getItem('formData');
 // 	const parsedFormData = formData ? JSON.parse(formData) : null;
@@ -14,6 +15,10 @@
 // 		console.log('Form data found in sessionStorage: ', parsedFormData);
 // 		await createClient(parsedFormData).then(() => {
 // 			// Optionally, clear the sessionStorage if you no longer need the data
+// 			loader.classList.add('hide');
+// 			setTimeout(() => {
+// 				loader.style.display = 'none';
+// 			}, 200);
 // 		});
 // 	} else {
 // 		console.log('No form data found in sessionStorage.');

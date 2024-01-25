@@ -19,8 +19,9 @@
 // 	numinhouse: string;
 // 	EmerContactName: string;
 // 	EmerContactPhone: string;
-// 	Patwages__c: string;
+// 	Patwages__c: number;
 // 	insurance: string;
+// 	medicationType: string;
 // }
 // interface TPRXDoctor {
 // 	fname: string;
@@ -67,8 +68,9 @@
 // 	numinhouse: '',
 // 	EmerContactName: '',
 // 	EmerContactPhone: '',
-// 	Patwages__c: '',
+// 	Patwages__c: 0.0,
 // 	insurance: '',
+// 	medicationType: '',
 // };
 
 // const doctorData: TPRXDoctor = {
@@ -333,11 +335,27 @@
 // 		if (data.field.includes('doc-')) {
 // 			let field = data.field.split('-')[1];
 // 			(doctorData as any)[field] = data.value;
+// 			if (field === 'office') {
+// 				doctorData['Facility_Name__c'] = data.value;
+// 				return;
+// 			}
+// 			if (field === 'officephone') {
+// 				doctorData.Phone = data.value;
+// 				return;
+// 			}
 // 			return;
 // 		}
 // 		if (data.field.includes('doc2-')) {
 // 			let field = data.field.split('-')[1];
 // 			(doctor2Data as any)[field] = data.value;
+// 			if (field === 'office') {
+// 				doctor2Data['Facility_Name__c'] = data.value;
+// 				return;
+// 			}
+// 			if (field === 'officephone') {
+// 				doctor2Data.Phone = data.value;
+// 				return;
+// 			}
 // 			return;
 // 		}
 // 		if (data.field === 'month') {
@@ -354,7 +372,7 @@
 // 			return;
 // 		}
 // 		if (data.field === 'patwages') {
-// 			patientData.Patwages__c = data.value;
+// 			patientData.Patwages__c = parseFloat(data.value.split('$')[1]);
 // 			return;
 // 		}
 // 		if (data.field === 'day' || data.field === 'year') {
@@ -398,10 +416,14 @@
 // 			(patientData as any)['insurance'] = data.value;
 // 			return;
 // 		}
+// 		if (data.field.includes('segment-field')) {
+// 			patientData['medicationType'] = data.value;
+// 		}
 // 		(patientData as any)[data.field as keyof TPRXPatient] = data.value;
 // 	});
 // 	const dateParts = patientData['dob'].split('-');
 // 	patientData['dob'] = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+
 // 	const formData = {
 // 		patient: patientData,
 // 		doctor: doctorData,

@@ -1245,7 +1245,6 @@ for (let i = 1; i < 5; i++) {
 			strengthSelect.add(defaultOption);
 			return;
 		}
-
 		//ozempric fix
 		if (value === 'ozempic-025-or-05-mg-dose') {
 			value = 'ozempic-0-25-or-0-5-mg-dose';
@@ -1264,11 +1263,11 @@ for (let i = 1; i < 5; i++) {
 		} else if (value === 'humalog-mix-7525-kwikpen') {
 			value = 'humalog-mix-75-25-kwikpen';
 		} else if (value === 'prodigy-insulin-syringe-31g-8mm-13cc') {
-			value = 'Prodigy Insulin Syringe 31G 8mm-1/3cc';
+			value = 'prodigy-insulin-syringe-31g-8mm-1-3cc';
 		} else if (value === 'prodigy-insulin-syringe-31g-8mm-12cc') {
-			value = 'Prodigy Insulin Syringe 31G 8mm-1/2cc';
+			value = 'prodigy-insulin-syringe-31g-8mm-1-2cc';
 		} else if (value === 'prodigy-insulin-syringe-28g-127mm-1cc') {
-			value = 'Prodigy Insulin Syringe 28G 12.7mm-1cc';
+			value = 'prodigy-insulin-syringe-28g-12-7mm-1cc';
 		}
 		const drug = document.querySelector(`[cd-name=${value}]`)!.parentElement;
 

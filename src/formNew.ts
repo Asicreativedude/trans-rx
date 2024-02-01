@@ -440,7 +440,7 @@ async function saveToSessionStorage() {
 
 const redirectToStripePayment = async (uniqueId: string) => {
 	const response = await fetch(
-		'http://127.0.0.1:5001/transparent-rx/us-central1/createStripe',
+		'https://voluble-axolotl-2e6e1c.netlify.app/.netlify/functions/create-stripe-session',
 		{
 			method: 'POST',
 			body: JSON.stringify({ uniqueId }),

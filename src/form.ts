@@ -1512,7 +1512,7 @@
 // 			.replace(/[\(\)\/.]/g, '')
 // 			.split(' ')
 // 			.join('-');
-// 		if (value === '') {
+// 		if (value === '')c {
 // 			const defaultOption = document.createElement('option');
 // 			defaultOption.text = 'Select Medication First';
 // 			defaultOption.value = '';

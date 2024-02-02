@@ -126,7 +126,6 @@ const brandMeds = [
 	'Basaglar KwikPen',
 	'Basaglar Tempo Pen',
 	'Biktarvy',
-	'Botox Cosmetic',
 	'Botox for migraines',
 	'Breo Ellipta',
 	'Cimzia',
@@ -1242,8 +1241,6 @@ function checkEligibilty(fpl: number, drugName: string) {
 			return fpl <= 500;
 		case 'Biktarvy':
 			return fpl <= 500;
-		case 'Botox Cosmetic':
-			return fpl <= 600;
 		case 'Botox for migraines':
 			return fpl <= 600;
 		case 'Breo Ellipta':

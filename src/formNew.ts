@@ -545,9 +545,7 @@ function createMultiStepForm(
 		}
 		if (currentStep === 3) {
 			fillSegmentFields();
-			// (document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
-			paymentBtn.click();
-
+			(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
 			return;
 		} else {
 			if (currentStep < numSteps - 1) {

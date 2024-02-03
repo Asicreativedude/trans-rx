@@ -142,7 +142,6 @@ const brandMeds = [
 	'Entyvio',
 	'Epclusa',
 	'Eucrisa',
-	'Evotaz',
 	'Fasenra',
 	'Forteo',
 	'HumaLOG',
@@ -1271,8 +1270,6 @@ function checkEligibilty(fpl: number, drugName: string) {
 			return fpl <= 500;
 		case 'Eucrisa':
 			return fpl <= 300;
-		case 'Evotaz':
-			return fpl <= 500;
 		case 'Fasenra':
 			return fpl <= 235;
 		case 'Forteo':

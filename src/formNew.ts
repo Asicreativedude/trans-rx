@@ -20,7 +20,6 @@ interface TPRXPatient {
 	EmerContactName: string;
 	EmerContactPhone: string;
 	Patwages__c: number;
-	insurance: string;
 	medicationType: string;
 }
 interface TPRXDoctor {
@@ -69,7 +68,6 @@ const patientData: TPRXPatient = {
 	EmerContactName: '',
 	EmerContactPhone: '',
 	Patwages__c: 0.0,
-	insurance: '',
 	medicationType: '',
 };
 
@@ -410,10 +408,7 @@ async function saveToSessionStorage() {
 			(newOrder.orderItems[index - 1] as any).Frequency__c = data.value;
 			return;
 		}
-		if (data.field.includes('insurance')) {
-			(patientData as any)['insurance'] = data.value;
-			return;
-		}
+
 		if (data.field.includes('segment-field')) {
 			patientData['medicationType'] = data.value;
 		}
@@ -993,7 +988,6 @@ indicators.forEach((indicator) => {
 //meds
 
 function anyBrandMeds() {
-	let anyBrand = false;
 	let allEligible = true;
 	for (let i = 1; i < 5; i++) {
 		const selectElement = document.getElementById(
@@ -1001,9 +995,6 @@ function anyBrandMeds() {
 		) as HTMLSelectElement;
 		const value = selectElement.value;
 		const isEligible = checkEligibilty(fpl, value);
-		if (value === brandMeds.find((med) => med === value)) {
-			anyBrand = true;
-		}
 		if (!isEligible) {
 			allEligible = false;
 			document
@@ -1011,19 +1002,6 @@ function anyBrandMeds() {
 				.classList.remove('hidden');
 			document.querySelector('.eligability-med-name')!.textContent = value;
 		}
-	}
-	if (anyBrand) {
-		document.getElementById('insurance-row')!.classList.remove('hidden');
-		(document.getElementById(
-			'insurance-field'
-		) as HTMLSelectElement)!.required = true;
-		document.getElementById('brand-note')!.classList.remove('hidden');
-	} else {
-		document.getElementById('insurance-row')!.classList.add('hidden');
-		(document.getElementById(
-			'insurance-field'
-		) as HTMLSelectElement)!.required = false;
-		document.getElementById('brand-note')!.classList.add('hidden');
 	}
 
 	if (allEligible) {

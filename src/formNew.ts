@@ -1201,7 +1201,7 @@ function fplCalculator(household: number, income: number) {
 function checkEligibilty(fpl: number, drugName: string) {
 	switch (drugName) {
 		case 'Adbry':
-			return fpl <= 500;
+			return fpl <= 600;
 		case 'Admelog':
 			return fpl <= 500;
 		case 'Admelog SoloStar':
@@ -1209,7 +1209,7 @@ function checkEligibilty(fpl: number, drugName: string) {
 		case 'Aimovig':
 			return fpl <= 290;
 		case 'Anoro Ellipta':
-			return fpl <= 600;
+			return fpl <= 300;
 		case 'Basaglar KwikPen':
 			return fpl <= 500;
 		case 'Basaglar Tempo Pen':
@@ -1249,7 +1249,7 @@ function checkEligibilty(fpl: number, drugName: string) {
 		case 'Eucrisa':
 			return fpl <= 300;
 		case 'Fasenra':
-			return fpl <= 235;
+			return fpl <= 300;
 		case 'Forteo':
 			return fpl <= 300;
 		case 'HumaLOG':

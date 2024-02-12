@@ -368,7 +368,9 @@ async function saveToSessionStorage() {
 			return;
 		}
 		if (data.field === 'patwages') {
-			patientData.Patwages__c = parseFloat(data.value.split('$')[1]);
+			patientData.Patwages__c = parseFloat(
+				data.value.split('$')[1].replace(/,/g, '')
+			);
 			return;
 		}
 		if (data.field === 'day' || data.field === 'year') {

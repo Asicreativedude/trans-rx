@@ -41,6 +41,7 @@ interface TPRXOrderItem {
 	Medication_Name__c: string;
 	Frequency__c: string;
 	Strength__c: string;
+	timeStamp: string;
 }
 interface newOrder {
 	Patient__c: string;
@@ -324,6 +325,7 @@ async function saveToSessionStorage() {
 				Medication_Name__c: '',
 				Frequency__c: '',
 				Strength__c: '',
+				timeStamp: '',
 			});
 		}
 	});
@@ -419,6 +421,9 @@ async function saveToSessionStorage() {
 	const dateParts = patientData['dob'].split('-');
 	patientData['dob'] = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
 
+	newOrder.orderItems.forEach((order) => {
+		order.timeStamp = new Date().toISOString();
+	});
 	const formData = {
 		patient: patientData,
 		doctor: doctorData,

@@ -1135,7 +1135,9 @@ function setMedicationNames(selectElement: HTMLSelectElement) {
 	const medNames = document.querySelectorAll('[cd=drug]');
 	medNames.forEach((medName) => {
 		const nameOption = document.createElement('option');
-		const medNameText = medName.textContent;
+		const medNameText = `${medName.textContent} ${medName.getAttribute(
+			'cd-generic'
+		)}`;
 		const webpapProgram = medName.getAttribute('cd-program');
 		const webpapDiagnosis = medName.getAttribute('cd-diagnosis');
 		if (medNameText !== null) {

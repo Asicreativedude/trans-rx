@@ -1136,13 +1136,14 @@ function setMedicationNames(selectElement: HTMLSelectElement) {
 	medNames.forEach((medName) => {
 		const nameOption = document.createElement('option');
 		const medNameText = medName.textContent;
-		const webpapProgram = medName.getAttribute('cd-program');
-		const webpapDiagnosis = medName.getAttribute('cd-diagnosis');
+		const genericName = medName.getAttribute('cd-generic');
+		const medProgram = medName.getAttribute('cd-program');
+		const medDiagnosis = medName.getAttribute('cd-diagnosis');
 		if (medNameText !== null) {
-			nameOption.text = medNameText;
+			nameOption.text = `${medNameText} (${genericName})`;
 			nameOption.value = medNameText;
-			nameOption.setAttribute('cd-program', webpapProgram!);
-			nameOption.setAttribute('cd-diagnosis', webpapDiagnosis!);
+			nameOption.setAttribute('cd-program', medProgram!);
+			nameOption.setAttribute('cd-diagnosis', medDiagnosis!);
 			selectElement.add(nameOption);
 		}
 	});

@@ -1242,7 +1242,15 @@ function checkEligibilty(fpl: number, drugName: string) {
 			return fpl <= 600;
 		case 'Delstrigo':
 			return fpl <= 400;
-		case 'Dupixent':
+		case 'Dupixent For Asthma':
+			return fpl <= 400;
+		case 'Dupixent for Prurigo Nodularis':
+			return fpl <= 400;
+		case 'Dupixent for Rhinosinusitis with Nasal Polyposis':
+			return fpl <= 400;
+		case 'Dupixent for Eosinophilic Esophagitis':
+			return fpl <= 400;
+		case 'Dupixent for Atopic Dermatitis':
 			return fpl <= 400;
 		case 'Eliquis':
 			return fpl <= 250;

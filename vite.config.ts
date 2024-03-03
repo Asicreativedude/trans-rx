@@ -6,10 +6,7 @@ export default defineConfig(({ command, mode }) => {
 		build: {
 			rollupOptions: {
 				input: {
-					form: 'src/form.ts',
 					search: 'src/search.ts',
-					formTest: 'src/formTest.ts',
-					webpap: 'src/webpap.ts',
 					formNew: 'src/formNew.ts',
 					createNewClient: 'src/createNewClient.ts',
 					// Add more entry points as needed

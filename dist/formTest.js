@@ -1,1 +1,0 @@
-const n="https://www.medserviceswebpap.com/auth/token?hcpid=89",s={grant_type:"password",username:"apiuser",password:"123456"};async function o(e,a){const t=await fetch(e,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(a).toString()});if(!t.ok)throw new Error(t.statusText);return t.json()}o(n,s).then(e=>{e.access_token});

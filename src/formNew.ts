@@ -832,6 +832,26 @@ function validateForm(
 		}
 	}
 
+	if (currentStep === 3) {
+		for (let i = 1; i < 5; i++) {
+			const coverageRow = document.getElementById(
+				`coverage-${i}`
+			) as HTMLElement;
+			const coverageCheckbox = document.getElementById(
+				`coverage-checkbox-${i}`
+			) as HTMLInputElement;
+			if (
+				!coverageRow.classList.contains('hidden') &&
+				!coverageCheckbox.checked
+			) {
+				console.log('coverage checkbox not found');
+				valid = false;
+				coverageRow.querySelector('.error-message')!.classList.add('active');
+			} else {
+				coverageRow.querySelector('.error-message')!.classList.remove('active');
+			}
+		}
+	}
 	return valid;
 }
 
@@ -1037,12 +1057,20 @@ for (let i = 1; i < 5; i++) {
 				(
 					document.getElementById(`choose-doctor-${i}`) as HTMLSelectElement
 				).required = true;
+				document.getElementById(`coverage-${i}`)!.classList.remove('hidden');
+				(
+					document.getElementById(`coverage-checkbox-${i}`) as HTMLInputElement
+				).required = true;
 			} else {
 				(
 					document.getElementById(`med-strength-${i}`) as HTMLSelectElement
 				).required = false;
 				(
 					document.getElementById(`choose-doctor-${i}`) as HTMLSelectElement
+				).required = false;
+				document.getElementById(`coverage-${i}`)!.classList.add('hidden');
+				(
+					document.getElementById(`coverage-checkbox-${i}`) as HTMLInputElement
 				).required = false;
 			}
 		}

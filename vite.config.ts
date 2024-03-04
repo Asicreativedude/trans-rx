@@ -9,6 +9,7 @@ export default defineConfig(({ command, mode }) => {
 					search: 'src/search.ts',
 					formNew: 'src/formNew.ts',
 					createNewClient: 'src/createNewClient.ts',
+					eligibility: 'src/eligibility.ts',
 					// Add more entry points as needed
 				},
 				output: {

@@ -884,9 +884,6 @@ const secondDoc = document.querySelector('.second-doc') as HTMLElement;
 						'.input-field'
 					) as NodeListOf<HTMLInputElement>
 				).forEach((field) => {
-					if (field.getAttribute('id') === 'doc2-mname') {
-						return;
-					}
 					field.required = false;
 					field.nextElementSibling!.classList.remove('active');
 				});

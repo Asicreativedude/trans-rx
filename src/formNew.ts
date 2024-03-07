@@ -867,7 +867,7 @@ const secondDoc = document.querySelector('.second-doc') as HTMLElement;
 					'.input-field'
 				) as NodeListOf<HTMLInputElement>
 			).forEach((field) => {
-				if (field.name === 'doc2-email') {
+				if (field.name === 'doc2-email' || field.name === 'doc2-mname') {
 					return;
 				}
 				field.required = true;

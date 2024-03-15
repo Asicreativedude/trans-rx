@@ -947,7 +947,18 @@ function formatSSN(input: string) {
 	);
 	return formattedSSN;
 }
+function capitalizeValue(input: string) {
+	// Ensure the first character is uppercase and the rest are lowercase
+	const formattedInput =
+		input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
 
+	return formattedInput;
+}
+document.querySelectorAll('[cd="capitelize"]').forEach((input) => {
+	input.addEventListener('change', function (this: HTMLInputElement) {
+		this.value = capitalizeValue(this.value);
+	});
+});
 const ssnInput = document.getElementById('ssn');
 ssnInput!.addEventListener('input', function (this: HTMLInputElement) {
 	this.value = formatSSN(this.value);

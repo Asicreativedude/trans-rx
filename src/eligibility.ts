@@ -232,7 +232,6 @@ function setMedications(selectElement: HTMLSelectElement) {
 		}
 	});
 }
-setMedications(medFieldAgent);
 
 eligbleBtn.addEventListener('click', function () {
 	const household = parseInt(householdFieldAgent.value);
@@ -251,3 +250,14 @@ eligbleBtn.addEventListener('click', function () {
 		result.textContent = `Your client isn't eligible for ${drugName}`;
 	}
 });
+
+//@ts-ignore
+window.fsAttributes = window.fsAttributes || [];
+//@ts-ignore
+window.fsAttributes.push([
+	'cmsload',
+	() => {
+		console.log('cmsload Successfully loaded!');
+		setMedications(medFieldAgent);
+	},
+]);

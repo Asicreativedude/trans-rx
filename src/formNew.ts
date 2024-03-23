@@ -126,7 +126,6 @@ const brandMeds = [
 	'Biktarvy',
 	'Botox for migraines',
 	'Breo Ellipta',
-	'Cimzia',
 	'Combivent Respimat',
 	'Cosentyx',
 	'Cosentyx (300 MG Dose)',

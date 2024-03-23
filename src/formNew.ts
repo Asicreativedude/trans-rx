@@ -839,7 +839,6 @@ function validateForm(
 				!coverageRow.classList.contains('hidden') &&
 				!coverageCheckbox.checked
 			) {
-				console.log('coverage checkbox not found');
 				valid = false;
 				coverageRow.querySelector('.error-message')!.classList.add('active');
 			} else {
@@ -1024,6 +1023,7 @@ function anyBrandMeds() {
 			`med-name-${i}`
 		) as HTMLSelectElement;
 		const value = selectElement.value;
+
 		const isEligible = checkEligibilty(fpl, value);
 		if (!isEligible) {
 			allEligible = false;
@@ -1051,6 +1051,18 @@ for (let i = 1; i < 5; i++) {
 	) as HTMLSelectElement;
 	selectElement.addEventListener('change', (event) => {
 		anyBrandMeds();
+		const coverageRow = document.getElementById(`coverage-${i}`) as HTMLElement;
+		const coverageCheckbox = document.getElementById(
+			`coverage-checkbox-${i}`
+		) as HTMLInputElement;
+		console.log(selectElement.value);
+		if (brandMeds.find((med) => med === selectElement.value)) {
+			coverageRow.classList.remove('hidden');
+			coverageCheckbox.required = true;
+		} else {
+			coverageRow.classList.add('hidden');
+			coverageCheckbox.required = false;
+		}
 
 		if (i !== 1) {
 			if (selectElement.value !== '') {
@@ -1060,20 +1072,12 @@ for (let i = 1; i < 5; i++) {
 				(
 					document.getElementById(`choose-doctor-${i}`) as HTMLSelectElement
 				).required = true;
-				document.getElementById(`coverage-${i}`)!.classList.remove('hidden');
-				(
-					document.getElementById(`coverage-checkbox-${i}`) as HTMLInputElement
-				).required = true;
 			} else {
 				(
 					document.getElementById(`med-strength-${i}`) as HTMLSelectElement
 				).required = false;
 				(
 					document.getElementById(`choose-doctor-${i}`) as HTMLSelectElement
-				).required = false;
-				document.getElementById(`coverage-${i}`)!.classList.add('hidden');
-				(
-					document.getElementById(`coverage-checkbox-${i}`) as HTMLInputElement
 				).required = false;
 			}
 		}
@@ -1113,6 +1117,8 @@ for (let i = 1; i < 5; i++) {
 			value = 'prodigy-insulin-syringe-31g-8mm-1-2cc';
 		} else if (value === 'prodigy-insulin-syringe-28g-127mm-1cc') {
 			value = 'prodigy-insulin-syringe-28g-12-7mm-1cc';
+		} else if (value === 'entocort-ecr') {
+			value = 'entocort-ec-r';
 		}
 		const drug = document.querySelector(`[cd-name=${value}]`)!.parentElement;
 

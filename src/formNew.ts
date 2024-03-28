@@ -17,36 +17,31 @@ interface TPRXPatient {
 	sex: string;
 	disabled: boolean;
 	numinhouse: string;
-	EmerContactName: string;
-	EmerContactPhone: string;
-	Patwages__c: number;
-	medicationType: string;
+	emerContactName: string;
+	emerContactPhone: string;
+	income: number;
 }
 interface TPRXDoctor {
 	fname: string;
 	mname: string;
 	lname: string;
 	email: string;
-	Phone: string;
+	phone: string;
 	fax: string;
 	address: string;
 	city: string;
 	state: string;
 	zip: string;
 	country: string;
-	Facility_Name__c: string;
+	facility: string;
 }
 interface TPRXOrderItem {
-	Doctor__c: string;
-	Medication_Name__c: string;
-	Frequency__c: string;
-	Strength__c: string;
-	timeStamp: string;
+	doctorName: string;
+	medicationName: string;
+	medicationFrequency: string;
+	medicationStrength: string;
 }
-interface newOrder {
-	Patient__c: string;
-	orderItems: TPRXOrderItem[];
-}
+
 const patientData: TPRXPatient = {
 	fname: '',
 	lname: '',
@@ -66,10 +61,9 @@ const patientData: TPRXPatient = {
 	sex: '',
 	disabled: false,
 	numinhouse: '',
-	EmerContactName: '',
-	EmerContactPhone: '',
-	Patwages__c: 0.0,
-	medicationType: '',
+	emerContactName: '',
+	emerContactPhone: '',
+	income: 0.0,
 };
 
 const doctorData: TPRXDoctor = {
@@ -77,13 +71,13 @@ const doctorData: TPRXDoctor = {
 	mname: '',
 	lname: '',
 	email: '',
-	Phone: '',
+	phone: '',
 	fax: '',
 	address: '',
 	city: '',
 	state: '',
 	zip: '',
-	Facility_Name__c: '',
+	facility: '',
 	country: 'USA',
 };
 const doctor2Data: TPRXDoctor = {
@@ -91,20 +85,17 @@ const doctor2Data: TPRXDoctor = {
 	mname: '',
 	lname: '',
 	email: '',
-	Phone: '',
+	phone: '',
 	fax: '',
 	address: '',
 	city: '',
 	state: '',
 	zip: '',
-	Facility_Name__c: '',
+	facility: '',
 	country: 'USA',
 };
 
-const newOrder: newOrder = {
-	Patient__c: '',
-	orderItems: [],
-};
+const newOrder: TPRXOrderItem[] = [];
 
 const uniqueId = Date.now().toString() + Math.random().toString();
 (
@@ -312,12 +303,11 @@ async function saveToSessionStorage() {
 
 	allFields.forEach((data: { field: string; value: string }) => {
 		if (data.field.includes('choose') && data.value !== '') {
-			newOrder.orderItems.push({
-				Doctor__c: data.value,
-				Medication_Name__c: '',
-				Frequency__c: '',
-				Strength__c: '',
-				timeStamp: '',
+			newOrder.push({
+				doctorName: data.value,
+				medicationName: '',
+				medicationFrequency: '',
+				medicationStrength: '',
 			});
 		}
 	});
@@ -326,11 +316,11 @@ async function saveToSessionStorage() {
 			let field = data.field.split('-')[1];
 			(doctorData as any)[field] = data.value;
 			if (field === 'office') {
-				doctorData['Facility_Name__c'] = data.value;
+				doctorData['facility'] = data.value;
 				return;
 			}
 			if (field === 'officephone') {
-				doctorData.Phone = data.value;
+				doctorData.phone = data.value;
 				return;
 			}
 			return;
@@ -339,11 +329,11 @@ async function saveToSessionStorage() {
 			let field = data.field.split('-')[1];
 			(doctor2Data as any)[field] = data.value;
 			if (field === 'office') {
-				doctor2Data['Facility_Name__c'] = data.value;
+				doctor2Data['facility'] = data.value;
 				return;
 			}
 			if (field === 'officephone') {
-				doctor2Data.Phone = data.value;
+				doctor2Data.phone = data.value;
 				return;
 			}
 			return;
@@ -362,7 +352,7 @@ async function saveToSessionStorage() {
 			return;
 		}
 		if (data.field === 'patwages') {
-			patientData.Patwages__c = parseFloat(
+			patientData.income = parseFloat(
 				data.value.split('$')[1].replace(/,/g, '')
 			);
 			return;
@@ -391,31 +381,25 @@ async function saveToSessionStorage() {
 
 		if (data.field.includes('med-name-') && data.value !== '') {
 			let index = data.field.split('-')[2] as unknown as number;
-			(newOrder.orderItems[index - 1] as any).Medication_Name__c = data.value;
+			(newOrder[index - 1] as any).medicationName = data.value;
 			return;
 		}
 		if (data.field.includes('med-strength-') && data.value !== '') {
 			let index = data.field.split('-')[2] as unknown as number;
-			(newOrder.orderItems[index - 1] as any).Strength__c = data.value;
+			(newOrder[index - 1] as any).medicationStrength = data.value;
 			return;
 		}
 		if (data.field.includes('Frequency') && data.value !== '') {
 			let index = data.field.split('-')[1] as unknown as number;
-			(newOrder.orderItems[index - 1] as any).Frequency__c = data.value;
+			(newOrder[index - 1] as any).medicationFrequency = data.value;
 			return;
 		}
 
-		if (data.field.includes('segment-field')) {
-			patientData['medicationType'] = data.value;
-		}
 		(patientData as any)[data.field as keyof TPRXPatient] = data.value;
 	});
 	const dateParts = patientData['dob'].split('-');
 	patientData['dob'] = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
 
-	newOrder.orderItems.forEach((order) => {
-		order.timeStamp = new Date().toISOString();
-	});
 	const formData = {
 		patient: patientData,
 		doctor: doctorData,
@@ -683,7 +667,7 @@ function validateForm(
 		}
 		const phoneInput = document.getElementById('dayphone') as HTMLInputElement;
 		const phoneInput2 = document.getElementById(
-			'EmerContactPhone'
+			'emerContactPhone'
 		) as HTMLInputElement;
 
 		if (phoneInput.value.length !== 16) {

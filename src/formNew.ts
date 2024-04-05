@@ -110,7 +110,6 @@ const brandMeds = [
 	'Adbry',
 	'Admelog',
 	'Admelog SoloStar',
-	'Aimovig',
 	'Anoro Ellipta',
 	'Basaglar KwikPen',
 	'Basaglar Tempo Pen',

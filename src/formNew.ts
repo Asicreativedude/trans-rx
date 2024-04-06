@@ -1035,7 +1035,6 @@ for (let i = 1; i < 5; i++) {
 		const coverageCheckbox = document.getElementById(
 			`coverage-checkbox-${i}`
 		) as HTMLInputElement;
-		console.log(selectElement.value);
 		if (brandMeds.find((med) => med === selectElement.value)) {
 			coverageRow.classList.remove('hidden');
 			coverageCheckbox.required = true;
@@ -1074,6 +1073,7 @@ for (let i = 1; i < 5; i++) {
 			strengthSelect.add(defaultOption);
 			return;
 		}
+
 		//ozempric fix
 		if (value === 'ozempic-025-or-05-mg-dose') {
 			value = 'ozempic-0-25-or-0-5-mg-dose';
@@ -1114,6 +1114,20 @@ for (let i = 1; i < 5; i++) {
 			}
 		});
 		addOptionsToSelect(strengthSelect, drugStrength);
+		if (
+			!brandMeds.find(
+				(med) =>
+					med ===
+					(selectElement.querySelector('option:checked') as HTMLOptionElement)
+						.value
+			)
+		) {
+			(
+				selectElement.querySelector('option:checked') as HTMLOptionElement
+			).value = drug
+				?.querySelector('[cd-generic]')!
+				.getAttribute('cd-generic')!;
+		}
 	});
 
 	if (i !== 1) {
@@ -1161,6 +1175,9 @@ function setMedicationNames(selectElement: HTMLSelectElement) {
 			nameOption.value = medNameText;
 			nameOption.setAttribute('cd-program', medProgram!);
 			nameOption.setAttribute('cd-diagnosis', medDiagnosis!);
+			if (!brandMeds.find((med) => med === medNameText)) {
+				nameOption.setAttribute('cd-generic', genericName!);
+			}
 			selectElement.add(nameOption);
 		}
 	});

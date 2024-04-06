@@ -39,7 +39,6 @@ async function createClient(data: ClientData) {
 		if (!response.ok) {
 			throw new Error('Network response was not ok');
 		}
-
 		let res = await response.json();
 		return res;
 	} catch (err) {

@@ -401,7 +401,7 @@ async function saveToSessionStorage() {
 		(patientData as any)[data.field as keyof TPRXPatient] = data.value;
 	});
 	const dateParts = patientData['dob'].split('-');
-	patientData['dob'] = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+	patientData['dob'] = `${dateParts[2]}-${dateParts[0]}-${dateParts[1]}`;
 
 	const formData = {
 		patient: patientData,

@@ -106,6 +106,10 @@ const paymentBtn = document.querySelector(
 	'[cd="submit-data"]'
 ) as HTMLButtonElement;
 
+const confirmationScreen = document.querySelector(
+	'.confirmation-s'
+) as HTMLElement;
+
 const brandMeds = [
 	'Adbry',
 	'Admelog',
@@ -198,7 +202,7 @@ const brandMeds = [
 ];
 let fpl = 0;
 paymentBtn.addEventListener('click', () => {
-	saveToSessionStorage();
+	redirectToStripePayment(uniqueId);
 });
 
 async function saveToSessionStorage() {
@@ -414,7 +418,100 @@ async function saveToSessionStorage() {
 	// Save the form data to session storage
 	sessionStorage.setItem('formData', JSON.stringify(formData));
 	sessionStorage.setItem(uniqueId, JSON.stringify(formData));
-	redirectToStripePayment(uniqueId);
+	// redirectToStripePayment(uniqueId);
+	fillConfirmationScreen();
+
+	confirmationScreen!.classList.add('active');
+}
+
+function fillConfirmationScreen() {
+	const formData = JSON.parse(sessionStorage.getItem('formData')!);
+	const patientConfrimation = document.querySelectorAll(
+		'[confirmation="patient"]'
+	);
+	const doctorConfrimation = document.querySelectorAll(
+		'[confirmation="doctor"]'
+	);
+	const doctor2Confrimation = document.querySelectorAll(
+		'[confirmation="doctor2"]'
+	);
+	const orderConfrimation = document.querySelectorAll('[confirmation="order"]');
+	patientConfrimation.forEach((element) => {
+		const field = element.getAttribute('id')!.split('-')[1];
+		if (field === 'name') {
+			element.textContent = `${formData.patient.fname} ${formData.patient.mname} ${formData.patient.lname}`;
+			return;
+		}
+		if (field === 'address') {
+			element.textContent = `${(formData.patient as any)[field]} ,${
+				formData.patient.city
+			}, ${formData.patient.state} ,${formData.patient.zip}`;
+			return;
+		}
+		element.textContent = (formData.patient as any)[field];
+	});
+	doctorConfrimation.forEach((element) => {
+		const field = element.getAttribute('id')!.split('-')[1];
+		if (field === 'name') {
+			element.textContent = `${formData.doctor.fname} ${formData.doctor.mname} ${formData.doctor.lname}`;
+			return;
+		}
+		if (field === 'address') {
+			element.textContent = `${(formData.doctor as any)[field]}, ${
+				formData.doctor.city
+			}, ${formData.doctor.state}, ${formData.doctor.zip}`;
+			return;
+		}
+		element.textContent = (formData.doctor as any)[field];
+	});
+	if (formData.doctor2.fname !== '') {
+		document
+			.getElementById('second-healthcare-confirmation')!
+			.classList.remove('hidden');
+		doctor2Confrimation.forEach((element) => {
+			const field = element.getAttribute('id')!.split('-')[1];
+			if (field === 'name') {
+				element.textContent = `${formData.doctor2.fname} ${formData.doctor2.mname} ${formData.doctor2.lname}`;
+				return;
+			}
+			if (field === 'address') {
+				element.textContent = `${(formData.doctor2 as any)[field]}, ${
+					formData.doctor2.city
+				}, ${formData.doctor2.state}, ${formData.doctor2.zip}`;
+				return;
+			}
+			element.textContent = (formData.doctor2 as any)[field];
+		});
+	}
+	let totalCostValue = 0;
+
+	for (let i = 1; i <= formData.orders.length; i++) {
+		orderConfrimation.forEach((element) => {
+			const order = document.getElementById(`order-${i}`)!;
+			order.classList.remove('hidden');
+			const field = element.getAttribute('id')!.split('-')[0];
+			if (field === 'medicationName') {
+				order.querySelector(`#${field}-${i}`)!.textContent =
+					(formData.orders[i - 1] as any)[field] +
+					' ' +
+					(formData.orders[i - 1] as any)['medicationStrength'];
+			} else if (field === 'cost') {
+				return;
+			} else {
+				order.querySelector(`#${field}-${i}`)!.textContent = (
+					formData.orders[i - 1] as any
+				)[field];
+			}
+		});
+		if (document.getElementById(`cost-med-${i}`)!.textContent !== 'No cost') {
+			totalCostValue += parseFloat(
+				document.getElementById(`cost-med-${i}`)!.textContent!.split('$')[1]
+			);
+		}
+	}
+	(
+		document.getElementById('total-med-cost') as HTMLElement
+	).textContent = `$${totalCostValue}`;
 }
 
 const redirectToStripePayment = async (uniqueId: string) => {
@@ -437,7 +534,6 @@ function fillSegmentFields() {
 	const segmentField = document.getElementById(
 		'segment-field'
 	) as HTMLInputElement;
-
 	for (let i = 1; i < 5; i++) {
 		const selectElement = document.getElementById(
 			`med-name-${i}`
@@ -525,7 +621,7 @@ function createMultiStepForm(
 		}
 		if (currentStep === 3) {
 			fillSegmentFields();
-			(document.querySelector('.submit-btn') as HTMLButtonElement)!.click();
+			saveToSessionStorage();
 			return;
 		} else {
 			if (currentStep < numSteps - 1) {
@@ -546,7 +642,7 @@ function createMultiStepForm(
 				prevButton.style.display = 'block';
 			}
 			if (currentStep === 3) {
-				nextButton.innerHTML = 'Continue To Payment';
+				nextButton.innerHTML = 'Verify application';
 			}
 		}
 		if (currentStep === 2) {
@@ -562,6 +658,37 @@ function createMultiStepForm(
 			);
 		}
 	});
+	confirmApplicationBtn!.addEventListener('click', () => {
+		let allChecked = false;
+		if (confirmationScreen!.classList.contains('active')) {
+			const checkboxes = confirmationScreen.querySelectorAll(
+				'input[type=checkbox]'
+			) as NodeListOf<HTMLInputElement>;
+			checkboxes.forEach((checkbox) => {
+				if (!checkbox.checked) {
+					checkbox.parentElement!.nextElementSibling!.classList.add('active');
+					allChecked = false;
+				} else {
+					checkbox.parentElement!.nextElementSibling!.classList.remove(
+						'active'
+					);
+					allChecked = true;
+				}
+			});
+		}
+		allChecked
+			? (document.querySelector('.submit-btn') as HTMLButtonElement)!.click()
+			: null;
+	});
+	returnToFormBtn!.addEventListener('click', () => {
+		sessionStorage.removeItem('formData');
+		sessionStorage.removeItem(uniqueId);
+		confirmationScreen!.classList.remove('active');
+		confirmationScreen.querySelector('#order-2')!.classList.add('hidden');
+		confirmationScreen.querySelector('#order-3')!.classList.add('hidden');
+		confirmationScreen.querySelector('#order-4')!.classList.add('hidden');
+		newOrder.length = 0;
+	});
 }
 
 const elements = document.querySelectorAll(
@@ -576,6 +703,12 @@ const nextButton = document.querySelector(
 const indicators = document.querySelectorAll(
 	'[cd-form=progress-indicator]'
 ) as NodeListOf<HTMLElement>;
+const confirmApplicationBtn = document.querySelector(
+	'[cd-form="confirmation-btn"]'
+) as HTMLButtonElement;
+const returnToFormBtn = document.querySelector(
+	'[cd-form="confirmation-back"]'
+) as HTMLButtonElement;
 createMultiStepForm(elements, prevButton, nextButton, indicators);
 
 //form step validation
@@ -655,6 +788,14 @@ function validateForm(
 		document.getElementById('ssn-error')!.classList.remove('active');
 	}
 
+	const age = document.getElementById('year') as HTMLSelectElement;
+
+	if (parseInt(age.value) < 1960 || disabledRadio[0].id === 'Yes') {
+		document.querySelector('.error-announcement-c')!.classList.add('active');
+		document.querySelector('.error-announcement-c')!.textContent =
+			'We are currently enhancing our services to better accommodate individuals aged 65+ and those with disabilities. We expect these improvements to be available in one month. Thank you for your patience and understanding. Please check back soon!';
+		valid = false;
+	}
 	//email validation and phone number validation
 	if (currentStep === 1) {
 		const emailInput = document.getElementById('email') as HTMLInputElement;
@@ -830,6 +971,7 @@ function validateForm(
 			}
 		}
 	}
+
 	return valid;
 }
 
@@ -1107,10 +1249,11 @@ for (let i = 1; i < 5; i++) {
 		const drug = document.querySelector(`[cd-name=${value}]`)!.parentElement;
 
 		const strength = drug?.querySelectorAll('[cd=strength]');
-		const drugStrength: { strength: string }[] = [];
+		const drugStrength: { strength: string; price: string }[] = [];
 		strength?.forEach((strength) => {
 			const strengthOption = {
 				strength: strength.textContent!,
+				price: strength.getAttribute('cd-price')!,
 			};
 
 			if (strengthOption.strength !== null) {
@@ -1132,6 +1275,17 @@ for (let i = 1; i < 5; i++) {
 				?.querySelector('[cd-generic]')!
 				.getAttribute('cd-generic')!;
 		}
+	});
+	strengthSelect.addEventListener('change', (e) => {
+		const strengthPrice = (e.target as HTMLSelectElement)
+			.querySelector('option:checked')!
+			.getAttribute('cd-price')!;
+		document.getElementById(`med-cost-${i}`)!.textContent =
+			strengthPrice === 'No cost'
+				? strengthPrice
+				: `Price: ${strengthPrice}(90 day supply)`;
+		document.getElementById(`cost-med-${i}`)!.textContent =
+			document.getElementById(`med-cost-${i}`)!.textContent;
 	});
 
 	if (i !== 1) {
@@ -1189,7 +1343,7 @@ function setMedicationNames(selectElement: HTMLSelectElement) {
 
 function addOptionsToSelect(
 	selectElement: HTMLSelectElement,
-	options: { strength: string }[]
+	options: { strength: string; price: string }[]
 ) {
 	if (options.length > 9) {
 		selectElement.innerHTML = '';
@@ -1209,15 +1363,16 @@ function addOptionsToSelect(
 	selectElement.add(defaultOption);
 	// Add new options
 	let zeroOptions = true;
-	options.forEach((optons) => {
-		if (optons.strength === '') {
+	options.forEach((option) => {
+		if (option.strength === '') {
 			return;
 		}
 		zeroOptions = false;
-		const option = document.createElement('option');
-		option.text = optons.strength;
-		option.value = optons.strength;
-		selectElement.add(option);
+		const newOption = document.createElement('option');
+		newOption.text = option.strength;
+		newOption.value = option.strength;
+		newOption.setAttribute('cd-price', option.price);
+		selectElement.add(newOption);
 	});
 
 	if (zeroOptions) {

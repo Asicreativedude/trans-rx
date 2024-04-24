@@ -1281,9 +1281,7 @@ for (let i = 1; i < 5; i++) {
 			.querySelector('option:checked')!
 			.getAttribute('cd-price')!;
 		document.getElementById(`med-cost-${i}`)!.textContent =
-			strengthPrice === 'No cost'
-				? strengthPrice
-				: `Price: ${strengthPrice}(90 day supply)`;
+			strengthPrice === 'No cost' ? strengthPrice : `Price: ${strengthPrice}`;
 		document.getElementById(`cost-med-${i}`)!.textContent =
 			document.getElementById(`med-cost-${i}`)!.textContent;
 	});

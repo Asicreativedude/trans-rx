@@ -1212,6 +1212,7 @@ for (let i = 1; i < 5; i++) {
 			.replace(/[\(\)\/.]/g, '')
 			.split(' ')
 			.join('-');
+
 		if (value === '') {
 			const defaultOption = document.createElement('option');
 			defaultOption.text = 'Select Medication First';
@@ -1246,7 +1247,15 @@ for (let i = 1; i < 5; i++) {
 		} else if (value === 'entocort-ecr') {
 			value = 'entocort-ec-r';
 		}
-		const drug = document.querySelector(`[cd-name=${value}]`)!.parentElement;
+		let drug;
+		if (brandMeds.find((med) => med === selectElement.value)) {
+			drug = document.querySelector(`[cd-name=${value}]`)!.parentElement;
+		} else {
+			drug = document.querySelector(
+				`[cd-drug-box="${selectElement.value}"]`
+			)!.parentElement;
+		}
+		console.log(drug);
 
 		const strength = drug?.querySelectorAll('[cd=strength]');
 		const drugStrength: { strength: string; price: string }[] = [];
@@ -1327,7 +1336,8 @@ function setMedicationNames(selectElement: HTMLSelectElement) {
 		const medProgram = medName.getAttribute('cd-program');
 		const medDiagnosis = medName.getAttribute('cd-diagnosis');
 		if (medNameText !== null) {
-			nameOption.text = `${medNameText} (${genericName})`;
+			nameOption.text =
+				genericName === '-' ? medNameText : `${medNameText} (${genericName})`;
 			nameOption.value = medNameText;
 			nameOption.setAttribute('cd-program', medProgram!);
 			nameOption.setAttribute('cd-diagnosis', medDiagnosis!);

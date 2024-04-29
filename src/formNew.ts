@@ -224,9 +224,14 @@ async function saveToSessionStorage() {
 					patientData['address'] += ` ${component.long_name}`;
 					break;
 				}
-				case 'locality':
+				case 'locality': {
 					patientData['city'] = component.long_name;
 					break;
+				}
+				case 'neighborhood': {
+					patientData['city'] = component.long_name;
+					break;
+				}
 				case 'administrative_area_level_1': {
 					patientData['state'] = component.short_name;
 					break;

@@ -34,6 +34,7 @@ interface TPRXDoctor {
 	zip: string;
 	country: string;
 	facility: string;
+	suite: string;
 }
 interface TPRXOrderItem {
 	doctorName: string;
@@ -79,6 +80,7 @@ const doctorData: TPRXDoctor = {
 	zip: '',
 	facility: '',
 	country: 'USA',
+	suite: '',
 };
 const doctor2Data: TPRXDoctor = {
 	fname: '',
@@ -93,6 +95,7 @@ const doctor2Data: TPRXDoctor = {
 	zip: '',
 	facility: '',
 	country: 'USA',
+	suite: '',
 };
 
 const newOrder: TPRXOrderItem[] = [];
@@ -938,7 +941,7 @@ function validateForm(
 			}
 		}
 
-		const zipCode = document.getElementById('doc-zip-2') as HTMLInputElement;
+		const zipCode = document.getElementById('doc-zip') as HTMLInputElement;
 		const zipCode2 = document.getElementById('doc2-zip-2') as HTMLInputElement;
 
 		if (zipCode.value.length !== 5) {

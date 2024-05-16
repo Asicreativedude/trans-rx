@@ -220,7 +220,7 @@ async function saveToSessionStorage() {
 					break;
 				}
 				case 'route': {
-					patientData['address'] += component.short_name;
+					patientData['address'] += component.long_name;
 					break;
 				}
 				case 'subpremise': {
@@ -253,12 +253,20 @@ async function saveToSessionStorage() {
 					break;
 				}
 				case 'route': {
-					doctorData['address'] += component.short_name;
+					doctorData['address'] += component.long_name;
+					break;
+				}
+				case 'subpremise': {
+					doctorData['address'] += ` ${component.long_name}`;
 					break;
 				}
 				case 'locality':
 					doctorData['city'] = component.long_name;
 					break;
+				case 'neighborhood': {
+					doctorData['city'] = component.long_name;
+					break;
+				}
 				case 'administrative_area_level_1': {
 					doctorData['state'] = component.short_name;
 					break;
@@ -277,12 +285,20 @@ async function saveToSessionStorage() {
 					break;
 				}
 				case 'route': {
-					doctor2Data['address'] += component.short_name;
+					doctor2Data['address'] += component.long_name;
+					break;
+				}
+				case 'subpremise': {
+					doctor2Data['address'] += ` ${component.long_name}`;
 					break;
 				}
 				case 'locality':
 					doctor2Data['city'] = component.long_name;
 					break;
+				case 'neighborhood': {
+					doctor2Data['city'] = component.long_name;
+					break;
+				}
 				case 'administrative_area_level_1': {
 					doctor2Data['state'] = component.short_name;
 					break;

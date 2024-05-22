@@ -814,10 +814,14 @@ function validateForm(
 
 	const age = document.getElementById('year') as HTMLSelectElement;
 
-	if (parseInt(age.value) < 1960 || disabledRadio[0].id === 'Yes') {
+	if (
+		parseInt(age.value) < 1960 ||
+		parseInt(age.value) > 2003 ||
+		disabledRadio[0].id === 'Yes'
+	) {
 		document.querySelector('.error-announcement-c')!.classList.add('active');
 		document.querySelector('.error-announcement-c')!.textContent =
-			'We are currently enhancing our services to better accommodate individuals aged 65+ and those with disabilities. We expect these improvements to be available in one month. Thank you for your patience and understanding. Please check back soon!';
+			'We are currently enhancing our services to better accommodate individuals aged 65+ or under 21, and those with disabilities. We expect these improvements to be available in one month. Thank you for your patience and understanding. Please check back soon!';
 		valid = false;
 	}
 	//email validation and phone number validation

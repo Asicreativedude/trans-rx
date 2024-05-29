@@ -129,7 +129,11 @@ const brandMeds = [
 	'Cosentyx Sensoready Pen',
 	'Creon',
 	'Delstrigo',
-	'Dupixent',
+	'Dupixent for Prurigo Nodularis',
+	'Dupixent for Rhinosinusitis with Nasal Polyposis',
+	'Dupixent for Eosinophilic Esophagitis',
+	'Dupixent for Atopic Dermatitis',
+	'Dupixent For Asthma',
 	'Eliquis',
 	'Emgality',
 	'Enbrel',
@@ -1209,7 +1213,10 @@ for (let i = 1; i < 5; i++) {
 		const coverageCheckbox = document.getElementById(
 			`coverage-checkbox-${i}`
 		) as HTMLInputElement;
-		if (brandMeds.find((med) => med === selectElement.value)) {
+		if (
+			brandMeds.find((med) => med === selectElement.value) ||
+			brandMeds.find((med) => med === selectElement.value.split(' ')[0])
+		) {
 			coverageRow.classList.remove('hidden');
 			coverageCheckbox.required = true;
 		} else {
@@ -1276,8 +1283,12 @@ for (let i = 1; i < 5; i++) {
 			value = 'entocort-ec-r';
 		}
 		let drug;
-		if (brandMeds.find((med) => med === selectElement.value)) {
+		if (
+			brandMeds.find((med) => med === selectElement.value) ||
+			brandMeds.find((med) => med === selectElement.value.split(' ')[0])
+		) {
 			drug = document.querySelector(`[cd-name=${value}]`)!.parentElement;
+			console.log('brand');
 		} else {
 			drug = document.querySelector(
 				`[cd-drug-box="${selectElement.value}"]`
@@ -1369,7 +1380,10 @@ function setMedicationNames(selectElement: HTMLSelectElement) {
 			nameOption.value = medNameText;
 			nameOption.setAttribute('cd-program', medProgram!);
 			nameOption.setAttribute('cd-diagnosis', medDiagnosis!);
-			if (!brandMeds.find((med) => med === medNameText)) {
+			if (
+				!brandMeds.find((med) => med === medNameText) ||
+				!brandMeds.find((med) => med === medNameText.split(' ')[0])
+			) {
 				nameOption.setAttribute('cd-generic', genericName!);
 			}
 			selectElement.add(nameOption);

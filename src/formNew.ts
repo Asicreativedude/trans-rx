@@ -576,7 +576,7 @@ function fillSegmentFields() {
 			segmentField.value = 'Generic';
 			return;
 		} else {
-			if (segmentField.value === 'Generic') {
+			if (segmentField.value === 'Generic' || segmentField.value === 'Both') {
 				segmentField.value = 'Both';
 				return;
 			}

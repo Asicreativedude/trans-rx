@@ -2,9 +2,8 @@ import htmx from 'htmx.org';
 
 htmx.onLoad(function (content) {
 	const links = document.querySelectorAll('.brokers-menu-link');
-
+	const mainScreen = document.getElementById('brokers-main');
 	content.addEventListener('htmx:load', function (event) {
-		console.log(event);
 		if ((event.target as Element).id !== 'pre-enrollment') return;
 		const incomeFieldAgent = document.getElementById(
 			'income'
@@ -276,6 +275,9 @@ htmx.onLoad(function (content) {
 				setMedications(medFieldAgent);
 			},
 		]);
+	});
+	content.addEventListener('htmx:afterSwap', function () {
+		mainScreen!.scrollTop = 0;
 	});
 	links.forEach((link) => {
 		link.addEventListener('click', function () {

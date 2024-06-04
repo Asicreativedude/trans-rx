@@ -407,7 +407,7 @@ async function saveToSessionStorage() {
 				data.value.replace(/-/g, '');
 			return;
 		}
-		if (data.field === 'dayphone') {
+		if (data.field === 'dayphone' || data.field === 'emerContactPhone') {
 			(patientData as any)['phone'] = data.value.replace(/-/g, '');
 			return;
 		}

@@ -407,8 +407,12 @@ async function saveToSessionStorage() {
 				data.value.replace(/-/g, '');
 			return;
 		}
-		if (data.field === 'dayphone' || data.field === 'emerContactPhone') {
+		if (data.field === 'dayphone') {
 			(patientData as any)['phone'] = data.value.replace(/-/g, '');
+			return;
+		}
+		if (data.field === 'emerContactPhone') {
+			(patientData as any)['emerContactPhone'] = data.value.replace(/-/g, '');
 			return;
 		}
 		if (data.field.includes('choose') || data.field.includes('residency'))

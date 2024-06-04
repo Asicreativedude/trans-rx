@@ -10,6 +10,7 @@ export default defineConfig(({ command, mode }) => {
 					formNew: 'src/formNew.ts',
 					createNewClient: 'src/createNewClient.ts',
 					eligibility: 'src/eligibility.ts',
+					brokersPortal: 'src/brokersPortal.ts',
 					// Add more entry points as needed
 				},
 				output: {

@@ -416,7 +416,12 @@ async function saveToSessionStorage() {
 
 		if (data.field.includes('med-name-') && data.value !== '') {
 			let index = data.field.split('-')[2] as unknown as number;
-			(newOrder[index - 1] as any).medicationName = data.value;
+			const customName = 'Ozempic';
+			if (data.value.includes(customName)) {
+				newOrder[index - 1].medicationName = customName;
+			} else {
+				(newOrder[index - 1] as any).medicationName = data.value;
+			}
 			return;
 		}
 		if (data.field.includes('med-strength-') && data.value !== '') {

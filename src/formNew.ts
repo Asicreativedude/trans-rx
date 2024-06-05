@@ -5,6 +5,7 @@ interface TPRXPatient {
 	dob: string;
 	ssn: string;
 	address: string;
+	apt: string;
 	city: string;
 	state: string;
 	zip: string;
@@ -50,6 +51,7 @@ const patientData: TPRXPatient = {
 	dob: '',
 	ssn: '',
 	address: '',
+	apt: '',
 	city: '',
 	state: '',
 	zip: '',
@@ -178,6 +180,7 @@ const brandMeds = [
 	'Ozempic (0.25 or 0.5 MG Dose)',
 	'Ozempic (1 MG Dose)',
 	'Ozempic (2 MG Dose)',
+	'Ozempic',
 	'Qulipta',
 	'Remicade',
 	'Rexulti',
@@ -417,7 +420,10 @@ async function saveToSessionStorage() {
 		}
 		if (data.field.includes('choose') || data.field.includes('residency'))
 			return;
-
+		if (data.field.includes('patientApt')) {
+			patientData.apt = data.value;
+			return;
+		}
 		if (data.field.includes('med-name-') && data.value !== '') {
 			let index = data.field.split('-')[2] as unknown as number;
 			const customName = 'Ozempic';
@@ -480,9 +486,11 @@ function fillConfirmationScreen() {
 			return;
 		}
 		if (field === 'address') {
-			element.textContent = `${(formData.patient as any)[field]} ,${
-				formData.patient.city
-			}, ${formData.patient.state} ,${formData.patient.zip}`;
+			element.textContent = `${(formData.patient as any)[field]}, ${
+				formData.patient.apt
+			},${formData.patient.city}, ${formData.patient.state} ,${
+				formData.patient.zip
+			}`;
 			return;
 		}
 		element.textContent = (formData.patient as any)[field];

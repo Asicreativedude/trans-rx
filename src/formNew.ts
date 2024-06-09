@@ -601,6 +601,14 @@ function fillSegmentFields() {
 		}
 	}
 }
+//verify FAX
+(
+	document.querySelectorAll('[cd="verify-fax"]') as NodeListOf<HTMLInputElement>
+).forEach((input: HTMLInputElement) => {
+	input.onpaste = (e) => {
+		e.preventDefault();
+	};
+});
 
 //populate year select field
 const yearSelect = document.getElementById('year') as HTMLSelectElement;
@@ -959,7 +967,31 @@ function validateForm(
 				fax2.nextElementSibling!.classList.remove('active');
 			}
 		}
-
+		//fax validation
+		(
+			document.querySelectorAll(
+				'[cd="doc-fax"]'
+			) as NodeListOf<HTMLInputElement>
+		).forEach((input: HTMLInputElement, index: number) => {
+			if (
+				input.value !==
+				(
+					document.querySelectorAll('[cd="verify-fax"]')![
+						index
+					] as HTMLInputElement
+				).value
+			) {
+				document
+					.querySelectorAll('[cd="verify-fax"]')!
+					[index].nextElementSibling!.classList.add('active');
+				valid = false;
+			} else {
+				document
+					.querySelectorAll('[cd="verify-fax"]')!
+					[index].nextElementSibling!.classList.remove('active');
+				valid = true;
+			}
+		});
 		const doctorAddress = document.getElementById(
 			'doctorAddress'
 		) as HTMLInputElement;

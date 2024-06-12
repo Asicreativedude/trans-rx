@@ -859,7 +859,8 @@ function validateForm(
 		if (!emailInput.required) {
 			return;
 		}
-		const re = /\S+@\S+\.\S+/;
+		const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 		if (!re.test(emailInput.value)) {
 			valid = false;
 			emailInput.nextElementSibling!.classList.add('active');
@@ -914,7 +915,7 @@ function validateForm(
 				document.getElementById(`med-name-${i}`) as HTMLSelectElement
 			);
 		}
-		const re = /\S+@\S+\.\S+/;
+		const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 		if (!re.test(emailInput.value) && emailInput.value !== '') {
 			valid = false;
 			emailInput.nextElementSibling!.classList.add('active');
@@ -1337,13 +1338,11 @@ for (let i = 1; i < 5; i++) {
 			brandMeds.find((med) => med === selectElement.value.split(' ')[0])
 		) {
 			drug = document.querySelector(`[cd-name=${value}]`)!.parentElement;
-			console.log('brand');
 		} else {
 			drug = document.querySelector(
 				`[cd-drug-box="${selectElement.value}"]`
 			)!.parentElement;
 		}
-		console.log(drug);
 
 		const strength = drug?.querySelectorAll('[cd=strength]');
 		const drugStrength: { strength: string; price: string }[] = [];

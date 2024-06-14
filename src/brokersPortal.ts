@@ -1,9 +1,60 @@
 import htmx from 'htmx.org';
-
 htmx.onLoad(function (content) {
 	const links = document.querySelectorAll('.brokers-menu-link');
 	const mainScreen = document.getElementById('brokers-main');
 	content.addEventListener('htmx:load', function (event) {
+		if ((event.target as Element).id === 'request') {
+			// Re-init forms
+			//@ts-ignore
+			Webflow.require('forms').ready();
+			const requestMedForm = document.getElementById(
+				'wf-form-request-medication'
+			) as HTMLFormElement;
+			const requestCta = document.getElementById(
+				'submit-med-request'
+			) as HTMLButtonElement;
+
+			requestCta!.addEventListener('click', function (e) {
+				if (
+					(requestMedForm.querySelector('#broker-name') as HTMLInputElement)
+						.value === '' ||
+					(requestMedForm.querySelector('#medication-name') as HTMLInputElement)
+						.value === ''
+				)
+					return;
+
+				e.preventDefault();
+				const data = {
+					agentName: (requestMedForm.querySelector(
+						'#broker-name'
+					) as HTMLInputElement)!.value,
+					requestedMed: (
+						requestMedForm.querySelector('#medication-name') as HTMLInputElement
+					).value,
+				};
+				requestCta!.value = 'Sending...';
+				fetch('http://127.0.0.1:5001/transparent-rx/us-central1/requestMed', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(data),
+				})
+					.then((response) => {
+						response;
+						requestMedForm.style.display = 'none';
+						(
+							document.querySelector('.request-med-success') as HTMLDivElement
+						).style.display = 'block';
+					})
+
+					.catch((error) => {
+						console.error('Error:', error);
+					});
+			});
+			return;
+		}
+
 		if ((event.target as Element).id !== 'pre-enrollment') return;
 		const incomeFieldAgent = document.getElementById(
 			'income'

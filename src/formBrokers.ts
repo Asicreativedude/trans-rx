@@ -680,7 +680,6 @@
 		});
 		returnToFormBtn!.addEventListener('click', () => {
 			sessionStorage.removeItem('formData');
-			sessionStorage.removeItem(uniqueId);
 			confirmationScreen!.classList.remove('active');
 			confirmationScreen.querySelector('#order-2')!.classList.add('hidden');
 			confirmationScreen.querySelector('#order-3')!.classList.add('hidden');

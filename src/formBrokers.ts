@@ -73,7 +73,8 @@
 	) as HTMLElement;
 
 	const brandMeds = [
-		'Abilify Injection',
+		'Abilify Asimtufii',
+		'Abilify Maintena',
 		'Adbry',
 		'Admelog',
 		'Admelog SoloStar',
@@ -178,8 +179,6 @@
 	submitForm.addEventListener('click', async () => {
 		// Functionality for the payment button
 		await submitToDB(formData);
-		window.location.href =
-			'https://www.transparentpricerx.com/thank-you-applied';
 	});
 	async function saveToSessionStorage() {
 		//@ts-ignore
@@ -1457,6 +1456,10 @@
 
 	function checkEligibilty(fpl: number, drugName: string) {
 		switch (drugName) {
+			case 'Abilify Maintena':
+				return fpl <= 300;
+			case 'Abilify Asimtufii':
+				return fpl <= 300;
 			case 'Adbry':
 				return fpl <= 600;
 			case 'Admelog':
@@ -1651,8 +1654,9 @@
 	}
 
 	async function submitToDB(preBillingClient: preBillingClient) {
-		fetch(
-			'https://us-central1-transparent-rx.cloudfunctions.net/addPreBillingClient',
+		const response = await fetch(
+			// 'https://us-central1-transparent-rx.cloudfunctions.net/addPreBillingClient',
+			'http://127.0.0.1:5001/transparent-rx/us-central1/brokerAddClient',
 			{
 				method: 'POST',
 				headers: {
@@ -1660,13 +1664,19 @@
 				},
 				body: JSON.stringify(preBillingClient),
 			}
-		)
-			.then((response) => response.json())
-			.then((data) => {
-				console.log('Success:', data);
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
+		);
+
+		if (response.status === 404) {
+			(
+				document.querySelector('.broker-error-screen') as HTMLDivElement
+			).style.display = 'block';
+			(
+				document.querySelector('.success-screen') as HTMLDivElement
+			).style.display = 'none';
+			return;
+		} else {
+			window.location.href =
+				'https://www.transparentpricerx.com/thank-you-applied';
+		}
 	}
 })();

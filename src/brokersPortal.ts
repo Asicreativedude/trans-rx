@@ -92,6 +92,10 @@ htmx.onLoad(function (content) {
 
 		function checkEligibiltyAgent(fpl: number, drugName: string) {
 			switch (drugName) {
+				case 'Abilify Maintena':
+					return fpl <= 300;
+				case 'Abilify Asimtufii':
+					return fpl <= 300;
 				case 'Adbry':
 					return fpl <= 600;
 				case 'Admelog':

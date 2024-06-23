@@ -123,6 +123,7 @@ window.fsAttributes.push([
 		) as HTMLElement;
 
 		const brandMeds = [
+			'Abilify Injection',
 			'Adbry',
 			'Admelog',
 			'Admelog SoloStar',

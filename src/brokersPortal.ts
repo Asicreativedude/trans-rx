@@ -78,6 +78,8 @@ htmx.onLoad(function (content) {
 				this.value = '$' + parseInt(this.value).toLocaleString();
 			}
 		);
+		//@ts-ignore
+		const player = new Plyr('#player');
 
 		function fplCalculatorAgent(household: number, income: number) {
 			const yearlyRate = 15060;

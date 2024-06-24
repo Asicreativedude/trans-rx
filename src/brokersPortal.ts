@@ -311,14 +311,19 @@ htmx.onLoad(function (content) {
 			const drugName = medFieldAgent.value;
 			const eligibility = checkEligibiltyAgent(fpl, drugName);
 			const result = document.getElementById('result') as HTMLDivElement;
+			const resultProgrmas = document.getElementById(
+				'result-programs'
+			) as HTMLDivElement;
 			if (eligibility) {
 				result.classList.remove('not-eligible');
 				result.classList.add('eligible');
 				result.textContent = `Your client is eligible for ${drugName}`;
+				resultProgrmas.classList.remove('active');
 			} else {
 				result.classList.remove('eligible');
 				result.classList.add('not-eligible');
 				result.textContent = `Your client isn't eligible for ${drugName}`;
+				resultProgrmas.classList.add('active');
 			}
 		});
 

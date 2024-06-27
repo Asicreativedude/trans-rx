@@ -225,103 +225,58 @@ window.fsAttributes.push([
 		});
 
 		async function saveToSessionStorage() {
-			//@ts-ignore
-			if (patientAddress) {
-				//@ts-ignore
-				patientAddress.forEach((component) => {
-					let componentType = component.types[0];
-					switch (componentType) {
-						case 'street_number': {
-							patientData['address'] = `${component.long_name} `;
-							break;
-						}
-						case 'route': {
-							patientData['address'] += component.long_name;
-							break;
-						}
-						case 'subpremise': {
-							patientData['address'] += ` ${component.long_name}`;
-							break;
-						}
-						case 'locality': {
-							patientData['city'] = component.long_name;
-							break;
-						}
-						case 'neighborhood': {
-							patientData['city'] = component.long_name;
-							break;
-						}
-						case 'administrative_area_level_1': {
-							patientData['state'] = component.short_name;
-							break;
-						}
-					}
-				});
-			}
-			//@ts-ignore
-			if (doctorAddress) {
-				//@ts-ignore
-				doctorAddress.forEach((component) => {
-					let componentType = component.types[0];
-					switch (componentType) {
-						case 'street_number': {
-							doctorData['address'] = `${component.long_name} `;
-							break;
-						}
-						case 'route': {
-							doctorData['address'] += component.long_name;
-							break;
-						}
-						case 'subpremise': {
-							doctorData['address'] += ` ${component.long_name}`;
-							break;
-						}
-						case 'locality':
-							doctorData['city'] = component.long_name;
-							break;
-						case 'neighborhood': {
-							doctorData['city'] = component.long_name;
-							break;
-						}
-						case 'administrative_area_level_1': {
-							doctorData['state'] = component.short_name;
-							break;
-						}
-					}
-				});
-			}
-			//@ts-ignore
-			if (doctor2Address) {
-				//@ts-ignore
-				doctor2Address.forEach((component) => {
-					let componentType = component.types[0];
-					switch (componentType) {
-						case 'street_number': {
-							doctor2Data['address'] = `${component.long_name} `;
-							break;
-						}
-						case 'route': {
-							doctor2Data['address'] += component.long_name;
-							break;
-						}
-						case 'subpremise': {
-							doctor2Data['address'] += ` ${component.long_name}`;
-							break;
-						}
-						case 'locality':
-							doctor2Data['city'] = component.long_name;
-							break;
-						case 'neighborhood': {
-							doctor2Data['city'] = component.long_name;
-							break;
-						}
-						case 'administrative_area_level_1': {
-							doctor2Data['state'] = component.short_name;
-							break;
-						}
-					}
-				});
-			}
+			const patientAddress = document.getElementById(
+				'patientAddress'
+			) as HTMLInputElement;
+			patientAddress.value.split(',').forEach((component, index) => {
+				switch (index) {
+					case 0:
+						patientData['address'] = component;
+						break;
+					case 1:
+						patientData['city'] = component.slice(1);
+						break;
+					case 2:
+						patientData['state'] = component.slice(1);
+						break;
+				}
+			});
+			const doctorAddress = document.getElementById(
+				'doctorAddress'
+			) as HTMLInputElement;
+
+			doctorAddress.value.split(',').forEach((component, index) => {
+				switch (index) {
+					case 0:
+						doctorData['address'] = component;
+						break;
+					case 1:
+						doctorData['city'] = component.slice(1);
+						break;
+					case 2:
+						doctorData['state'] = component.slice(1);
+						break;
+				}
+			});
+
+			const doctor2Address = document.getElementById(
+				'doctor2Address'
+			) as HTMLInputElement;
+
+			doctor2Address.value.split(',').forEach((component, index) => {
+				switch (index) {
+					case 0:
+						doctor2Data['address'] = component;
+						break;
+					case 1:
+						doctor2Data['city'] = component.split(' ')[1];
+						break;
+					case 2:
+						doctor2Data['state'] = component.split(' ')[1];
+						break;
+				}
+			});
+
 			const allFields: any = [];
 			(
 				document.querySelectorAll(
@@ -475,7 +430,6 @@ window.fsAttributes.push([
 			// Save the form data to session storage
 			sessionStorage.setItem('formData', JSON.stringify(formData));
 			sessionStorage.setItem(uniqueId, JSON.stringify(formData));
-			// redirectToStripePayment(uniqueId);
 			fillConfirmationScreen();
 
 			confirmationScreen!.classList.add('active');
@@ -1549,7 +1503,6 @@ window.fsAttributes.push([
 				selectElement.removeAttribute('required');
 			}
 		}
-
 		// make sure we send data to webflow before leaving the page
 		document
 			.getElementById('wf-form-application-form')!

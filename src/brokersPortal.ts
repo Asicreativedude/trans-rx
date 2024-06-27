@@ -344,6 +344,7 @@ htmx.onLoad(function (content) {
 	content.addEventListener('htmx:afterSwap', function () {
 		mainScreen!.scrollTop = 0;
 	});
+
 	links.forEach((link) => {
 		link.addEventListener('click', function () {
 			link.classList.add('current');

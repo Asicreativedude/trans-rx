@@ -3,9 +3,10 @@ import htmx from 'htmx.org';
 htmx.onLoad(function (content) {
 	const links = document.querySelectorAll('.brokers-menu-link');
 	const mainScreen = document.getElementById('brokers-main');
-	const mobileMenu = document.querySelector(
+	const mobileMenuBurger = document.querySelector(
 		'.mobile-broker-menu-icon'
 	) as HTMLDivElement;
+
 	content.addEventListener('htmx:load', function (event) {
 		if ((event.target as Element).id === 'request') {
 			// Re-init forms
@@ -348,11 +349,10 @@ htmx.onLoad(function (content) {
 	content.addEventListener('htmx:afterSwap', function () {
 		mainScreen!.scrollTop = 0;
 	});
-
 	links.forEach((link) => {
 		link.addEventListener('click', function () {
 			if (window.innerWidth < 992) {
-				mobileMenu.click();
+				mobileMenuBurger.click();
 			}
 			link.classList.add('current');
 			links.forEach((l) => {

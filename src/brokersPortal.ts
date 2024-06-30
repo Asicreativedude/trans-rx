@@ -1,7 +1,11 @@
 import htmx from 'htmx.org';
+
 htmx.onLoad(function (content) {
 	const links = document.querySelectorAll('.brokers-menu-link');
 	const mainScreen = document.getElementById('brokers-main');
+	const mobileMenu = document.querySelector(
+		'.mobile-broker-menu-icon'
+	) as HTMLDivElement;
 	content.addEventListener('htmx:load', function (event) {
 		if ((event.target as Element).id === 'request') {
 			// Re-init forms
@@ -347,6 +351,9 @@ htmx.onLoad(function (content) {
 
 	links.forEach((link) => {
 		link.addEventListener('click', function () {
+			if (window.innerWidth < 992) {
+				mobileMenu.click();
+			}
 			link.classList.add('current');
 			links.forEach((l) => {
 				if (l !== link) {

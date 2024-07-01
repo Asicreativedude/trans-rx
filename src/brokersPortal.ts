@@ -186,7 +186,7 @@ htmx.onLoad(function (content) {
 					case 'Januvia':
 						return fpl <= 400;
 					case 'Jardiance':
-						return fpl <= 250;
+						return fpl <= 300;
 					case 'Kazano':
 						return fpl <= 500;
 					case 'Lantus':

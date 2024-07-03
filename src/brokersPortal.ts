@@ -60,7 +60,7 @@ htmx.onLoad(function (content) {
 			return;
 		}
 
-		if ((event.target as Element).id === 'pre-enrollment') {
+		if ((event.target as Element).id === 'video-tutorial') {
 			//@ts-ignore
 			const player = new Plyr('#player');
 		}

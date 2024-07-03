@@ -38,13 +38,16 @@ htmx.onLoad(function (content) {
 					).value,
 				};
 				requestCta!.value = 'Sending...';
-				fetch('http://127.0.0.1:5001/transparent-rx/us-central1/requestMed', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(data),
-				})
+				fetch(
+					'https://us-central1-transparent-rx.cloudfunctions.net/requestMed',
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify(data),
+					}
+				)
 					.then((response) => {
 						response;
 						requestMedForm.style.display = 'none';

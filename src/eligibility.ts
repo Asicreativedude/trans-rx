@@ -257,7 +257,6 @@ window.fsAttributes = window.fsAttributes || [];
 window.fsAttributes.push([
 	'cmsload',
 	() => {
-		console.log('cmsload Successfully loaded!');
 		setMedications(medFieldAgent);
 	},
 ]);

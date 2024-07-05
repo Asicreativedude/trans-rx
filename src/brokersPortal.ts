@@ -333,7 +333,6 @@ htmx.onLoad(function (content) {
 					result.classList.remove('eligible');
 					result.classList.add('not-eligible');
 					result.textContent = `Your client isn't eligible for ${drugName}`;
-					resultProgrmas.classList.add('active');
 				}
 			});
 

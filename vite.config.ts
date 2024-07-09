@@ -12,6 +12,7 @@ export default defineConfig(({ command, mode }) => {
 					eligibility: 'src/eligibility.ts',
 					brokersPortal: 'src/brokersPortal.ts',
 					brokerForm: 'src/formBrokers.ts',
+					formBackup: 'src/formBackup.ts',
 					// Add more entry points as needed
 				},
 				output: {

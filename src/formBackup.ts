@@ -1484,7 +1484,7 @@
 			}
 			// make sure we send data to webflow before leaving the page
 			document
-				.getElementById('wf-form-application-form')!
+				.getElementById('wf-form-application-form-ach')!
 				.addEventListener('submit', () => {
 					paymentBtn.click();
 				});

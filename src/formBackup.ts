@@ -65,9 +65,6 @@
 			const newOrder: TPRXOrderItem[] = [];
 
 			const uniqueId = Date.now().toString() + Math.random().toString();
-			(
-				document.querySelector('#unique-id') as HTMLInputElement
-			).value = `${uniqueId}`;
 
 			const paymentBtn = document.querySelector(
 				'[cd="submit-data"]'

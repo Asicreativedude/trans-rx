@@ -1,10 +1,12 @@
 import htmx from 'htmx.org';
 const mainArea = document.getElementById('brokers-main') as HTMLDivElement;
 const drugLookup = document.getElementById('drug-lookup') as HTMLDivElement;
-const drugLookupLink = document.querySelector('[cd="drug-lookup"]');
-drugLookupLink!.addEventListener('click', () => {
-	drugLookup.style.display = 'block';
-	mainArea.style.display = 'none';
+const drugLookupLink = document.querySelectorAll('[cd="drug-lookup"]');
+drugLookupLink.forEach((link) => {
+	link.addEventListener('click', () => {
+		drugLookup.style.display = 'block';
+		mainArea.style.display = 'none';
+	});
 });
 
 htmx.onLoad(function (content) {

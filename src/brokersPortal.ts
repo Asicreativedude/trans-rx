@@ -2,8 +2,14 @@ import htmx from 'htmx.org';
 const mainArea = document.getElementById('brokers-main') as HTMLDivElement;
 const drugLookup = document.getElementById('drug-lookup') as HTMLDivElement;
 const drugLookupLink = document.querySelectorAll('[cd="drug-lookup"]');
+const mobileMenuBurger = document.querySelector(
+	'.mobile-broker-menu-icon'
+) as HTMLDivElement;
 drugLookupLink.forEach((link) => {
 	link.addEventListener('click', () => {
+		if (window.innerWidth < 992) {
+			mobileMenuBurger.click();
+		}
 		drugLookup.style.display = 'block';
 		mainArea.style.display = 'none';
 	});
@@ -11,9 +17,6 @@ drugLookupLink.forEach((link) => {
 
 htmx.onLoad(function (content) {
 	const links = document.querySelectorAll('.brokers-menu-link');
-	const mobileMenuBurger = document.querySelector(
-		'.mobile-broker-menu-icon'
-	) as HTMLDivElement;
 
 	content.addEventListener('htmx:load', function (event) {
 		if ((event.target as Element).id === 'request') {

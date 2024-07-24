@@ -1,8 +1,14 @@
 import htmx from 'htmx.org';
+const mainArea = document.getElementById('brokers-main') as HTMLDivElement;
+const drugLookup = document.getElementById('drug-lookup') as HTMLDivElement;
+const drugLookupLink = document.querySelector('[cd="drug-lookup"]');
+drugLookupLink!.addEventListener('click', () => {
+	drugLookup.style.display = 'block';
+	mainArea.style.display = 'none';
+});
 
 htmx.onLoad(function (content) {
 	const links = document.querySelectorAll('.brokers-menu-link');
-	const mainScreen = document.getElementById('brokers-main');
 	const mobileMenuBurger = document.querySelector(
 		'.mobile-broker-menu-icon'
 	) as HTMLDivElement;
@@ -349,10 +355,14 @@ htmx.onLoad(function (content) {
 		}
 	});
 	content.addEventListener('htmx:afterSwap', function () {
-		mainScreen!.scrollTop = 0;
+		mainArea!.scrollTop = 0;
 	});
 	links.forEach((link) => {
 		link.addEventListener('click', function () {
+			if (drugLookup.style.display === 'block') {
+				drugLookup.style.display = 'none';
+				mainArea.style.display = 'block';
+			}
 			if (window.innerWidth < 992) {
 				mobileMenuBurger.click();
 			}

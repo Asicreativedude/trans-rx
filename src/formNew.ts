@@ -833,17 +833,29 @@ window.fsAttributes.push([
 			}
 
 			const age = document.getElementById('year') as HTMLSelectElement;
+			const month = document.getElementById('month') as HTMLSelectElement;
+			const day = document.getElementById('day') as HTMLSelectElement;
+			const dob = `${month.value}-${day.value}-${age.value}`;
+			const dobDate = new Date(dob);
+			const today = new Date();
 
+			// Calculate the age
+			const diffYears = today.getFullYear() - dobDate.getFullYear();
+			const diffMonths = today.getMonth() - dobDate.getMonth();
+			const diffDays = today.getDate() - dobDate.getDate();
+
+			// Check if age is above 20
 			if (
-				parseInt(age.value) < 1960 ||
-				parseInt(age.value) > 2003 ||
+				diffYears < 20 ||
+				(diffYears === 20 && diffMonths < 0) ||
+				(diffYears === 20 && diffMonths === 0 && diffDays < 0) ||
 				disabledRadio[0].id === 'Yes'
 			) {
 				document
 					.querySelector('.error-announcement-c')!
 					.classList.add('active');
 				document.querySelector('.error-announcement-c')!.textContent =
-					'We are currently enhancing our services to better accommodate individuals aged 65+ or under 21, and those with disabilities. We expect these improvements to be available in one month. Thank you for your patience and understanding. Please check back soon!';
+					'We are currently enhancing our services to better accommodate individuals aged 20 and older. We expect these improvements to be available in one month. Thank you for your patience and understanding. Please check back soon!';
 				valid = false;
 			}
 			//email validation and phone number validation

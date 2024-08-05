@@ -14,10 +14,17 @@ drugLookupLink.forEach((link) => {
 		mainArea.style.display = 'none';
 	});
 });
+let hasRun = false;
 
 htmx.onLoad(function (content) {
 	const links = document.querySelectorAll('.brokers-menu-link');
-	checkQueryParams();
+	// Check if the function has already run
+
+	// Run the function only if it hasn't run before
+	if (!hasRun) {
+		checkQueryParams();
+		hasRun = true;
+	}
 
 	content.addEventListener('htmx:load', function (event) {
 		if ((event.target as Element).id === 'request') {

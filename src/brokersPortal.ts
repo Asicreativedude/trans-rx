@@ -17,6 +17,7 @@ drugLookupLink.forEach((link) => {
 
 htmx.onLoad(function (content) {
 	const links = document.querySelectorAll('.brokers-menu-link');
+	checkQueryParams();
 
 	content.addEventListener('htmx:load', function (event) {
 		if ((event.target as Element).id === 'request') {
@@ -380,3 +381,18 @@ htmx.onLoad(function (content) {
 		});
 	});
 });
+
+function checkQueryParams() {
+	const urlParams = new URLSearchParams(window.location.search);
+	const param1 = urlParams.get('section');
+
+	if (param1 === 'medications') {
+		document
+			.querySelector('[cd="drug-lookup"]')!
+			.dispatchEvent(new Event('click'));
+	} else if (param1 === 'info') {
+		document
+			.querySelector('[hx-select="#pre-enrollment"]')!
+			.dispatchEvent(new Event('click'));
+	}
+}

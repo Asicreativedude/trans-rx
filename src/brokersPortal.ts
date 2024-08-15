@@ -177,6 +177,8 @@ htmx.onLoad(function (content) {
 						return fpl <= 290;
 					case 'Entyvio':
 						return fpl <= 500;
+					case 'Entresto':
+						return fpl <= 400;
 					case 'Epclusa':
 						return fpl <= 500;
 					case 'Eucrisa':

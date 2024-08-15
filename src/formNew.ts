@@ -148,6 +148,7 @@ window.fsAttributes.push([
 			'Eliquis',
 			'Emgality',
 			'Enbrel',
+			'Entresto',
 			'Entyvio',
 			'Epclusa',
 			'Eucrisa',
@@ -1590,6 +1591,8 @@ window.fsAttributes.push([
 					return fpl <= 290;
 				case 'Entyvio':
 					return fpl <= 500;
+				case 'Entresto':
+					return fpl <= 400;
 				case 'Epclusa':
 					return fpl <= 500;
 				case 'Eucrisa':

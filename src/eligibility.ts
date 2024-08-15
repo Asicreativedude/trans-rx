@@ -75,6 +75,8 @@ function checkEligibiltyAgent(fpl: number, drugName: string) {
 			return fpl <= 400;
 		case 'Enbrel':
 			return fpl <= 290;
+		case 'Entresto':
+			return fpl <= 400;
 		case 'Entyvio':
 			return fpl <= 500;
 		case 'Epclusa':

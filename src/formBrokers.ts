@@ -1624,8 +1624,8 @@
 
 	async function submitToDB(preBillingClient: preBillingClient) {
 		const response = await fetch(
-			// 'https://us-central1-transparent-rx.cloudfunctions.net/addPreBillingClient',
-			'http://127.0.0.1:5001/transparent-rx/us-central1/brokerAddClient',
+			'https://us-central1-transparent-rx.cloudfunctions.net/brokerAddClient',
+			// 'http://127.0.0.1:5001/transparent-rx/us-central1/brokerAddClient',
 			{
 				method: 'POST',
 				headers: {

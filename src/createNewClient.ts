@@ -5,10 +5,26 @@ interface ClientData {
 	orders: TPRXOrderItem[];
 	uniqueId: string;
 }
-
+// Retrieve the cookie data
 document.addEventListener('DOMContentLoaded', async () => {
 	const loader = document.querySelector('.loader-s') as HTMLDivElement;
-	// Retrieve the form data from sessionStorage
+	// const queryParam = new URLSearchParams(window.location.search);
+	// queryParam.has('uniqueId');
+	// const uniqueId = queryParam.get('uniqueId');
+	// // fetch('https://us-central1-transparent-rx.cloudfunctions.net/newClient', {
+	// fetch('http://127.0.0.1:5001/transparent-rx/us-central1/newClient', {
+	// 	method: 'POST',
+	// 	headers: {
+	// 		'Content-Type': 'application/json',
+	// 	},
+	// 	body: JSON.stringify({ uniqueId: uniqueId }),
+	// })
+	// 	.then((response) => response)
+	// 	.then((data) => {
+	// 		console.log(data);
+	// 	});
+
+	//Retrieve the form data from sessionStorage
 	const formData = sessionStorage.getItem('formData');
 	const parsedFormData = formData ? JSON.parse(formData) : null;
 	if (parsedFormData) {

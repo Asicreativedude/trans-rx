@@ -13,6 +13,7 @@ export default defineConfig(({ command, mode }) => {
 					brokersPortal: 'src/brokersPortal.ts',
 					brokerForm: 'src/formBrokers.ts',
 					formBackup: 'src/formBackup.ts',
+					newClient: 'src/newClient.ts',
 					// Add more entry points as needed
 				},
 				output: {

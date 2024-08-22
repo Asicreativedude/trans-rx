@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 			}, 200);
 		});
 	} else {
-		alert('Error occured, please contact support');
+		sendErrorToSlack();
 	}
 });
 
@@ -32,7 +32,52 @@ async function createNEwClient(data: string) {
 			throw new Error('Network response was not ok');
 		}
 		let res = await response.json();
-		return res;
+		return res.message;
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+export async function sendErrorToSlack() {
+	const message = {
+		blocks: [
+			{
+				type: 'header',
+				text: {
+					type: 'plain_text',
+					text: '🚨 *Error Occurred* 🚨',
+					emoji: true,
+				},
+			},
+			{
+				type: 'section',
+				fields: [
+					{
+						type: 'mrkdwn',
+						text: `*Message:*\n Thank you page without uniqueId`,
+					},
+				],
+			},
+			{
+				type: 'divider',
+			},
+		],
+	};
+
+	try {
+		const response = await fetch(
+			'https://us-central1-transparent-rx.cloudfunctions.net/slackErrors',
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(message),
+			}
+		);
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
 	} catch (err) {
 		console.log(err);
 	}

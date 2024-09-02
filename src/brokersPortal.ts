@@ -123,3 +123,28 @@ function checkQueryParams() {
 			.dispatchEvent(new Event('click'));
 	}
 }
+
+const handleMessage = (event: MessageEvent) => {
+	const { path } = event.data;
+	if (path) {
+		const pathParams = new URLSearchParams(path);
+		let newUrl = new URL(window.location.href);
+
+		// Clear existing search params
+		newUrl.searchParams.forEach((_, key) => {
+			newUrl.searchParams.delete(key);
+		});
+
+		// Add new params from the message
+		pathParams.forEach((value, key) => {
+			newUrl.searchParams.set(key, value);
+		});
+
+		// Update only the search params
+		window.history.pushState({}, '', `?${newUrl.searchParams.toString()}`);
+		//@ts-ignore
+		appendUrlParametersToLinks();
+	}
+};
+
+window.addEventListener('message', handleMessage);

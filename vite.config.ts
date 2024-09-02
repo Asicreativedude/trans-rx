@@ -7,12 +7,8 @@ export default defineConfig(({ command, mode }) => {
 			rollupOptions: {
 				input: {
 					search: 'src/search.ts',
-					formNew: 'src/formNew.ts',
-					createNewClient: 'src/createNewClient.ts',
 					eligibility: 'src/eligibility.ts',
 					brokersPortal: 'src/brokersPortal.ts',
-					brokerForm: 'src/formBrokers.ts',
-					formBackup: 'src/formBackup.ts',
 					newClient: 'src/newClient.ts',
 					// Add more entry points as needed
 				},

@@ -76,6 +76,10 @@ htmx.onLoad(function (content) {
 			//@ts-ignore
 			const player = new Plyr('#player');
 		}
+		if ((event.target as Element).id === 'client-guidelines') {
+			//@ts-ignore
+			Webflow.require('tabs').redraw();
+		}
 	});
 	content.addEventListener('htmx:afterSwap', function () {
 		mainArea!.scrollTop = 0;

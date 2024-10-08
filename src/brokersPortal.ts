@@ -5,14 +5,15 @@ const mobileMenuBurger = document.querySelector(
 ) as HTMLDivElement;
 
 let hasRun = false;
-function sendPathnameToIframe(iframeId: string) {
-  const iframe = document.getElementById(iframeId) as HTMLIFrameElement;
-  if (iframe && iframe.contentWindow) {
-    const pathname = window.location.pathname;
-    iframe.contentWindow.postMessage({ pathname }, '*');
-  }
-}
+
 htmx.onLoad(function (content) {
+  function sendPathnameToIframe(iframeId: string) {
+    const iframe = document.getElementById(iframeId) as HTMLIFrameElement;
+    if (iframe && iframe.contentWindow) {
+      const pathname = window.location.pathname;
+      iframe.contentWindow.postMessage({ pathname }, '*');
+    }
+  }
   const links = document.querySelectorAll('.brokers-menu-link');
   // Check if the function has already run
 
@@ -23,6 +24,8 @@ htmx.onLoad(function (content) {
   }
 
   content.addEventListener('htmx:load', function (event) {
+    setTimeout(() => sendPathnameToIframe('medication-list'), 350);
+
     if ((event.target as Element).id === 'request') {
       // Re-init forms
       //@ts-ignore
@@ -34,7 +37,7 @@ htmx.onLoad(function (content) {
         'submit-med-request'
       ) as HTMLButtonElement;
 
-      requestCta!.addEventListener('click', function (e) {
+      requestCta.addEventListener('click', function (e) {
         if (
           (requestMedForm.querySelector('#broker-name') as HTMLInputElement)
             .value === '' ||
@@ -89,9 +92,6 @@ htmx.onLoad(function (content) {
   });
   content.addEventListener('htmx:afterSwap', function () {
     mainArea!.scrollTop = 0;
-
-    // Usage: call this function with the ID of the iframe
-    sendPathnameToIframe('medication-list');
   });
   links.forEach((link) => {
     link.addEventListener('click', function () {

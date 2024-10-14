@@ -93,6 +93,7 @@ htmx.onLoad(function (content) {
       const emailLink = document.getElementById(
         'email-link'
       ) as HTMLLinkElement;
+      emailLink.innerHTML = 'CHCquotes@transparentpricerx.com';
       const email = 'CHCquotes@transparentpricerx.com';
       emailLink.href = `mailto:${email}`;
     }

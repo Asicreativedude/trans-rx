@@ -89,6 +89,13 @@ htmx.onLoad(function (content) {
       //@ts-ignore
       Webflow.require('tabs').redraw();
     }
+    if ((event.target as Element).id === 'contact-us') {
+      const emailLink = document.getElementById(
+        'email-link'
+      ) as HTMLLinkElement;
+      const email = 'CHCquotes@transparentpricerx.com';
+      emailLink.href = `mailto:${email}`;
+    }
   });
   content.addEventListener('htmx:afterSwap', function () {
     mainArea!.scrollTop = 0;

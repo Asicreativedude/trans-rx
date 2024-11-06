@@ -126,9 +126,12 @@ function checkQueryParams() {
   const source = urlParams.get('utm_campaign');
   const param1 = urlParams.get('section');
   if (source === 'chc') {
-    (document.querySelector('.chc-broker-logo') as HTMLElement)!.style.opacity =
-      '1';
+    (document.querySelector('.chc-broker-logo') as HTMLElement)!.style.display =
+      'block';
   } else if (source === 'eprime') {
+    (document.querySelector(
+      '.eprime-broker-logo'
+    ) as HTMLElement)!.style.display = 'block';
     document
       .querySelector('[hx-select="#general-medicare-calc"]')!
       .classList.add('hidden');

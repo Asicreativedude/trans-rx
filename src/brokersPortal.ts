@@ -54,7 +54,12 @@ htmx.onLoad(function (content) {
           requestedMed: (
             requestMedForm.querySelector('#medication-name') as HTMLInputElement
           ).value,
+          email: (
+            requestMedForm.querySelector('#broker-email') as HTMLInputElement
+          ).value,
+          timestamp: new Date(),
         };
+
         requestCta!.value = 'Sending...';
         fetch(
           'https://us-central1-transparent-rx.cloudfunctions.net/requestMed',
@@ -136,11 +141,6 @@ const handleMessage = (event: MessageEvent) => {
   if (path) {
     const pathParams = new URLSearchParams(path);
     let newUrl = new URL(window.location.href);
-
-    // Clear existing search params
-    newUrl.searchParams.forEach((_, key) => {
-      newUrl.searchParams.delete(key);
-    });
 
     // Add new params from the message
     pathParams.forEach((value, key) => {

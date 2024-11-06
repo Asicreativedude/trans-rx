@@ -128,6 +128,16 @@ function checkQueryParams() {
   if (source === 'chc') {
     (document.querySelector('.chc-broker-logo') as HTMLElement)!.style.opacity =
       '1';
+  } else if (source === 'eprime') {
+    document
+      .querySelector('[hx-select="#general-medicare-calc"]')!
+      .classList.add('hidden');
+    document
+      .querySelector('.broker-copy-link')!
+      .setAttribute(
+        'r-copy-to-clipboard',
+        'https://transparentpricerx.com/ep-self-enroll'
+      );
   }
   if (param1 === 'medications') {
     document

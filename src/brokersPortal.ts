@@ -9,6 +9,16 @@ let hasRun = false;
 htmx.onLoad(function (content) {
   function sendPathnameToIframe(iframeId: string) {
     const iframe = document.getElementById(iframeId) as HTMLIFrameElement;
+    if (iframeId === 'eligibility-calc') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const source = urlParams.get('utm_campaign');
+      if (source === 'chc') {
+        sendMessageToIframe('eligibility-calc', { source: 'chc' });
+      } else if (source === 'eprime') {
+        console.log('sending eprime message');
+        sendMessageToIframe('eligibility-calc', { source: 'eprime' });
+      }
+    }
     if (iframe && iframe.contentWindow) {
       const pathname = window.location.pathname;
       iframe.contentWindow.postMessage({ pathname }, '*');
@@ -25,7 +35,9 @@ htmx.onLoad(function (content) {
 
   content.addEventListener('htmx:load', function (event) {
     setTimeout(() => sendPathnameToIframe('medication-list'), 350);
-
+    if ((event.target as Element).id === 'eligibility-calc') {
+      setTimeout(() => sendPathnameToIframe('eligibility-calc'), 1000);
+    }
     if ((event.target as Element).id === 'request') {
       // Re-init forms
       //@ts-ignore
@@ -128,6 +140,7 @@ function checkQueryParams() {
   if (source === 'chc') {
     (document.querySelector('.chc-broker-logo') as HTMLElement)!.style.display =
       'block';
+    sendMessageToIframe('eligibility-calc', { source: 'chc' });
   } else if (source === 'eprime') {
     (document.querySelector(
       '.eprime-broker-logo'
@@ -172,3 +185,10 @@ const handleMessage = (event: MessageEvent) => {
 };
 
 window.addEventListener('message', handleMessage);
+
+function sendMessageToIframe(iframeId: string, message: any) {
+  const iframe = document.getElementById(iframeId) as HTMLIFrameElement;
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.postMessage(message, '*');
+  }
+}

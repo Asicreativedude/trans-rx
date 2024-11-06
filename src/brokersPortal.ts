@@ -123,8 +123,12 @@ htmx.onLoad(function (content) {
 
 function checkQueryParams() {
   const urlParams = new URLSearchParams(window.location.search);
+  const source = urlParams.get('utm_campaign');
   const param1 = urlParams.get('section');
-
+  if (source === 'chc') {
+    (document.querySelector('.chc-broker-logo') as HTMLElement)!.style.opacity =
+      '1';
+  }
   if (param1 === 'medications') {
     document
       .querySelector('[cd="drug-lookup"]')!

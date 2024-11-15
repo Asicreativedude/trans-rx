@@ -39,7 +39,6 @@ async function createNEwClient(data: string) {
 }
 
 export async function sendErrorToSlack() {
-	const clientData = sessionStorage.getItem('formData')?.toString();
 	const message = {
 		blocks: [
 			{
@@ -61,15 +60,6 @@ export async function sendErrorToSlack() {
 			},
 			{
 				type: 'divider',
-			},
-			{
-				type: 'section',
-				fields: [
-					{
-						type: 'mrkdwn',
-						text: `*Client Data:*\n ${clientData ? clientData : 'No data'}`,
-					},
-				],
 			},
 		],
 	};

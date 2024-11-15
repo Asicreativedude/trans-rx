@@ -17,6 +17,8 @@ htmx.onLoad(function (content) {
 			} else if (source === 'eprime') {
 				console.log('sending eprime message');
 				sendMessageToIframe('eligibility-calc', { source: 'eprime' });
+			} else if (source === 'pinnacle') {
+				sendMessageToIframe('eligibility-calc', { source: 'pinnacle' });
 			}
 		}
 		if (iframe && iframe.contentWindow) {

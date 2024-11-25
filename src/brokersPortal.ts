@@ -100,9 +100,15 @@ htmx.onLoad(function (content) {
       return;
     }
 
-    if ((event.target as Element).id === 'video-tutorial') {
+    if (
+      (event.target as Element).id === 'video-tutorial' ||
+      'video-tutorial-pinnacle'
+    ) {
       //@ts-ignore
-      const player = new Plyr('#player');
+      const players = Array.from(document.querySelectorAll('.tprx-video')).map(
+        //@ts-ignore
+        (p) => new Plyr(p)
+      );
     }
     if ((event.target as Element).id === 'client-guidelines') {
       //@ts-ignore

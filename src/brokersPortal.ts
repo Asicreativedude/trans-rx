@@ -185,6 +185,9 @@ function checkQueryParams() {
       .querySelector('[hx-select="#video-tutorial"]')!
       .setAttribute('hx-select', '#video-tutorial-pinnacle');
     document
+      .querySelector('[hx-select="#client#client-guidelines"]')!
+      .setAttribute('hx-select', '#client-guidelines-medicare');
+    document
       .querySelector('.broker-copy-link')!
       .setAttribute(
         'r-copy-to-clipboard',

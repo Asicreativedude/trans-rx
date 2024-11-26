@@ -182,6 +182,9 @@ function checkQueryParams() {
       .querySelector('[hx-select="#marketing"]')!
       .setAttribute('hx-select', '#marketing-pinnacle');
     document
+      .querySelector('[hx-select="#pre-enrollment"]')!
+      .setAttribute('hx-select', '#pre-enrollment-pinnacle');
+    document
       .querySelector('[hx-select="#video-tutorial"]')!
       .setAttribute('hx-select', '#video-tutorial-pinnacle');
     document

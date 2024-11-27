@@ -11,22 +11,15 @@ htmx.onLoad(function (content) {
   const source = urlParams.get('utm_campaign');
   function sendPathnameToIframe(iframeId: string) {
     const iframe = document.getElementById(iframeId) as HTMLIFrameElement;
-    if (iframeId === 'eligibility-calc') {
-      if (source === 'chc') {
-        sendMessageToIframe('eligibility-calc', { source: 'chc' });
-      } else if (source === 'eprime') {
-        console.log('sending eprime message');
-        sendMessageToIframe('eligibility-calc', { source: 'eprime' });
-      } else if (source === 'pinnacle') {
-        if (source === 'pinnacle') {
-          sendMessageToIframe('eligibility-calc', { source: 'pinnacle' });
-        } else if (source === 'chc') {
-          sendMessageToIframe('eligibility-calc', { source: 'chc' });
-        }
-      }
-    } else if (iframeId === 'medication-list') {
-      sendMessageToIframe('medication-list', { source: 'pinnacle' });
+
+    if (source === 'chc') {
+      sendMessageToIframe(`${iframeId}`, { source: 'chc' });
+    } else if (source === 'eprime') {
+      sendMessageToIframe(`${iframeId}`, { source: 'eprime' });
+    } else if (source === 'pinnacle') {
+      sendMessageToIframe(`${iframeId}`, { source: 'pinnacle' });
     }
+
     if (iframe && iframe.contentWindow) {
       const pathname = window.location.pathname;
       iframe.contentWindow.postMessage({ pathname }, '*');

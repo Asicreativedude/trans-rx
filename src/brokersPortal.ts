@@ -116,7 +116,10 @@ htmx.onLoad(function (content) {
         (p) => new Plyr(p)
       );
     }
-    if ((event.target as Element).id === 'client-guidelines') {
+    if (
+      (event.target as Element).id === 'client-guidelines' ||
+      'client-guidelines-medicare'
+    ) {
       //@ts-ignore
       Webflow.require('tabs').redraw();
     }

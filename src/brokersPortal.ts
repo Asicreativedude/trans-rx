@@ -17,7 +17,8 @@ htmx.onLoad(function (content) {
     } else if (source === 'eprime') {
       sendMessageToIframe(`${iframeId}`, { source: 'eprime' });
     } else if (source === 'pinnacle') {
-      sendMessageToIframe(`${iframeId}`, { source: 'pinnacle' });
+      console.log(iframeId);
+      sendMessageToIframe(iframeId, { source: 'pinnacle' });
     }
 
     if (iframe && iframe.contentWindow) {
@@ -35,10 +36,14 @@ htmx.onLoad(function (content) {
   }
 
   content.addEventListener('htmx:load', function (event) {
-    setTimeout(() => sendPathnameToIframe('medication-list'), 350);
     if ((event.target as Element).id === 'eligibility-calc') {
       setTimeout(() => sendPathnameToIframe('eligibility-calc'), 1000);
+    } else if ((event.target as Element).id === 'medication-list') {
+      setTimeout(() => sendPathnameToIframe('medication-list'), 1000);
+    } else if ((event.target as Element).id === 'general-medicare-calc') {
+      setTimeout(() => sendPathnameToIframe('medicare-calc'), 1000);
     }
+
     if ((event.target as Element).id === 'request') {
       // Re-init forms
       //@ts-ignore

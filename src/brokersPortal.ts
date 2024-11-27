@@ -18,8 +18,14 @@ htmx.onLoad(function (content) {
         console.log('sending eprime message');
         sendMessageToIframe('eligibility-calc', { source: 'eprime' });
       } else if (source === 'pinnacle') {
-        sendMessageToIframe('eligibility-calc', { source: 'pinnacle' });
+        if (source === 'pinnacle') {
+          sendMessageToIframe('eligibility-calc', { source: 'pinnacle' });
+        } else if (source === 'chc') {
+          sendMessageToIframe('eligibility-calc', { source: 'chc' });
+        }
       }
+    } else if (iframeId === 'medication-list') {
+      sendMessageToIframe('medication-list', { source: 'pinnacle' });
     }
     if (iframe && iframe.contentWindow) {
       const pathname = window.location.pathname;
@@ -160,6 +166,7 @@ function checkQueryParams() {
     (document.querySelector('.chc-broker-logo') as HTMLElement)!.style.display =
       'block';
     sendMessageToIframe('eligibility-calc', { source: 'chc' });
+    sendMessageToIframe('medication-list', { source: 'chc' });
   } else if (source === 'eprime') {
     (document.querySelector(
       '.eprime-broker-logo'
@@ -175,6 +182,7 @@ function checkQueryParams() {
       );
   } else if (source === 'pinnacle') {
     sendMessageToIframe('eligibility-calc', { source: 'pinnacle' });
+    sendMessageToIframe('medication-list', { source: 'pinnacle' });
     (document.querySelector(
       '.pinnacle-broker-logo'
     ) as HTMLElement)!.style.display = 'block';

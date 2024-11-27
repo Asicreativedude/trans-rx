@@ -19,6 +19,8 @@ htmx.onLoad(function (content) {
     } else if (source === 'pinnacle') {
       console.log(iframeId);
       sendMessageToIframe(iframeId, { source: 'pinnacle' });
+    } else {
+      sendMessageToIframe(iframeId, { source: 'website' });
     }
 
     if (iframe && iframe.contentWindow) {

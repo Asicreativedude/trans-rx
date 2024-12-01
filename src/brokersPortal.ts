@@ -122,6 +122,16 @@ htmx.onLoad(function (content) {
     ) {
       //@ts-ignore
       Webflow.require('tabs').redraw();
+      const druglistLinks = document.querySelectorAll(
+        '[cdtarget="medication-list"]'
+      );
+      druglistLinks.forEach((link) => {
+        link.addEventListener('click', function () {
+          document
+            .querySelector('[hx-select="#medication-list"]')!
+            .dispatchEvent(new Event('click'));
+        });
+      });
     }
     if ((event.target as Element).id === 'contact-us') {
       const emailLink = document.getElementById(

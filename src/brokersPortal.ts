@@ -139,7 +139,7 @@ htmx.onLoad(function (content) {
       ) as HTMLLinkElement;
       const contactText = document.getElementById(
         'contact-text'
-      ) as HTMLDivElement;
+      ) as HTMLParagraphElement;
       let email = '';
       switch (source) {
         case 'chc':

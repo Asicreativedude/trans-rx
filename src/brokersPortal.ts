@@ -137,6 +137,9 @@ htmx.onLoad(function (content) {
       const emailLink = document.getElementById(
         'email-link'
       ) as HTMLLinkElement;
+      const contactText = document.getElementById(
+        'contact-text'
+      ) as HTMLDivElement;
       let email = '';
       switch (source) {
         case 'chc':
@@ -146,6 +149,8 @@ htmx.onLoad(function (content) {
         case 'pinnacle':
           emailLink.innerHTML = 'pinnacle@transparentpricerx.com';
           email = 'pinnacle@transparentpricerx.com';
+          contactText.innerHTML =
+            'For further information, reach out directly to the founder, Douglas Pierce, at <a href="mailto:douglas@transparentpricerx.com">douglas@transparentpricerx.com</a>"';
           break;
       }
 

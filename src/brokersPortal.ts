@@ -150,7 +150,7 @@ htmx.onLoad(function (content) {
           emailLink.innerHTML = 'pinnacle@transparentpricerx.com';
           email = 'pinnacle@transparentpricerx.com';
           contactText.innerHTML =
-            'For further information, reach out directly to the founder, Douglas Pierce, at <a href="mailto:douglas@transparentpricerx.com">douglas@transparentpricerx.com</a>"';
+            'For further information, reach out directly to the founder, Douglas Pierce, at <a href="mailto:douglas@transparentpricerx.com">douglas@transparentpricerx.com</a>';
           break;
       }
 

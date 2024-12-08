@@ -205,9 +205,6 @@ function checkQueryParams() {
       .querySelector('[hx-select="#marketing"]')!
       .setAttribute('hx-select', '#marketing-pinnacle');
     document
-      .querySelector('[hx-select="#client-guidelines"]')!
-      .setAttribute('hx-select', '#client-guidelines-medicare');
-    document
       .querySelector('.broker-copy-link')!
       .setAttribute(
         'r-copy-to-clipboard',

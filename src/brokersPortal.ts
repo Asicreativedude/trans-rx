@@ -106,10 +106,7 @@ htmx.onLoad(function (content) {
       return;
     }
 
-    if (
-      (event.target as Element).id === 'video-tutorial' ||
-      'video-tutorial-pinnacle'
-    ) {
+    if ((event.target as Element).id === 'video-tutorial') {
       //@ts-ignore
       const players = Array.from(document.querySelectorAll('.tprx-video')).map(
         //@ts-ignore
@@ -207,12 +204,6 @@ function checkQueryParams() {
     document
       .querySelector('[hx-select="#marketing"]')!
       .setAttribute('hx-select', '#marketing-pinnacle');
-    document
-      .querySelector('[hx-select="#pre-enrollment"]')!
-      .setAttribute('hx-select', '#pre-enrollment-pinnacle');
-    document
-      .querySelector('[hx-select="#video-tutorial"]')!
-      .setAttribute('hx-select', '#video-tutorial-pinnacle');
     document
       .querySelector('[hx-select="#client-guidelines"]')!
       .setAttribute('hx-select', '#client-guidelines-medicare');

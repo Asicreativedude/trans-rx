@@ -28,8 +28,8 @@ htmx.onLoad(function (content) {
       iframe.contentWindow.postMessage({ pathname }, '*');
     }
   }
-  const links = document.querySelectorAll('.brokers-menu-link');
   // Check if the function has already run
+  const links = document.querySelectorAll('.brokers-menu-link');
 
   // Run the function only if it hasn't run before
   if (!hasRun) {
@@ -67,7 +67,13 @@ htmx.onLoad(function (content) {
           return;
 
         e.preventDefault();
+        const emailTo =
+          source === 'pinnacle'
+            ? 'pinnacle@transparentpricerx.com'
+            : 'chcquotes@transparentpricrx.com';
         const data = {
+          toEmail: emailTo,
+          agentSource: source,
           agentName: (requestMedForm.querySelector(
             '#broker-name'
           ) as HTMLInputElement)!.value,

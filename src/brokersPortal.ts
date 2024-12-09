@@ -181,11 +181,18 @@ htmx.onLoad(function (content) {
 function checkQueryParams() {
   const urlParams = new URLSearchParams(window.location.search);
   const source = urlParams.get('utm_campaign');
-  console.log('source', source);
   const param1 = urlParams.get('section');
   if (source === 'chc') {
-    (document.querySelector('.chc-broker-logo') as HTMLElement)!.style.display =
-      'block';
+    console.log(urlParams.get('utm_source'));
+    if (urlParams.get('utm_source') === 'brokerportalabi') {
+      (document.querySelector(
+        '.abi-broker-logo'
+      ) as HTMLElement)!.style.display = 'block';
+    } else {
+      (document.querySelector(
+        '.chc-broker-logo'
+      ) as HTMLElement)!.style.display = 'block';
+    }
     sendMessageToIframe('eligibility-calc', { source: 'chc' });
     sendMessageToIframe('medication-list', { source: 'chc' });
   } else if (source === 'eprime') {

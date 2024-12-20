@@ -223,6 +223,9 @@ function checkQueryParams() {
         'r-copy-to-clipboard',
         'https://transparentpricerx.com/pinnacle-self-enroll'
       );
+  } else if (source === 'delta') {
+    (document.querySelector('.deltalogo-c') as HTMLElement)!.style.display =
+      'flex';
   }
   if (param1 === 'medications') {
     document

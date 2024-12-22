@@ -17,8 +17,9 @@ htmx.onLoad(function (content) {
     } else if (source === 'eprime') {
       sendMessageToIframe(`${iframeId}`, { source: 'eprime' });
     } else if (source === 'pinnacle') {
-      console.log(iframeId);
       sendMessageToIframe(iframeId, { source: 'pinnacle' });
+    } else if (source === 'delta') {
+      sendMessageToIframe(iframeId, { source: 'delta' });
     } else {
       sendMessageToIframe(iframeId, { source: 'website' });
     }
@@ -183,7 +184,6 @@ function checkQueryParams() {
   const source = urlParams.get('utm_campaign');
   const param1 = urlParams.get('section');
   if (source === 'chc') {
-    console.log(urlParams.get('utm_source'));
     if (urlParams.get('utm_source') === 'brokerportalabi') {
       (document.querySelector(
         '.abi-broker-logo'

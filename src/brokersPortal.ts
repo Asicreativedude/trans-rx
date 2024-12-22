@@ -226,6 +226,7 @@ function checkQueryParams() {
   } else if (source === 'delta') {
     (document.querySelector('.deltalogo-c') as HTMLElement)!.style.display =
       'flex';
+    sendMessageToIframe('medication-list', { source: 'delta' });
   }
   if (param1 === 'medications') {
     document

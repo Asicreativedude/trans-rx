@@ -227,6 +227,12 @@ function checkQueryParams() {
     (document.querySelector('.deltalogo-c') as HTMLElement)!.style.display =
       'flex';
     sendMessageToIframe('medication-list', { source: 'delta' });
+    document
+      .querySelector('.broker-copy-link')!
+      .setAttribute(
+        'r-copy-to-clipboard',
+        'https://transparentpricerx.com/delta-self-enroll'
+      );
   }
   if (param1 === 'medications') {
     document

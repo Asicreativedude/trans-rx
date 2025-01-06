@@ -20,6 +20,8 @@ htmx.onLoad(function (content) {
       sendMessageToIframe(iframeId, { source: 'pinnacle' });
     } else if (source === 'delta') {
       sendMessageToIframe(iframeId, { source: 'delta' });
+    } else if (source === 'sparks') {
+      sendMessageToIframe(iframeId, { source: 'sparks' });
     } else {
       sendMessageToIframe(iframeId, { source: 'website' });
     }
@@ -243,6 +245,16 @@ function checkQueryParams() {
       .setAttribute(
         'r-copy-to-clipboard',
         'https://transparentpricerx.com/delta-self-enroll'
+      );
+  } else if (source === 'sparks') {
+    (document.querySelector('.sparks-logo') as HTMLElement)!.style.display =
+      'block';
+    sendMessageToIframe('medication-list', { source: 'sparks' });
+    document
+      .querySelector('.broker-copy-link')!
+      .setAttribute(
+        'r-copy-to-clipboard',
+        'https://transparentpricerx.com/sparks-self-enroll'
       );
   }
   if (param1 === 'medications') {

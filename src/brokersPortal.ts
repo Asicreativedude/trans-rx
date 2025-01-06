@@ -68,10 +68,21 @@ htmx.onLoad(function (content) {
           return;
 
         e.preventDefault();
-        const emailTo =
-          source === 'pinnacle'
-            ? 'pinnacle@transparentpricerx.com'
-            : 'chcquotes@transparentpricrx.com';
+        let emailTo;
+        switch (source) {
+          case 'pinnacle':
+            emailTo = 'pinnacle@transparentpricerx.com';
+            break;
+          case 'chc':
+            emailTo = 'chcquotes@transparentpricrx.com';
+            break;
+          case 'delta':
+            emailTo = 'deltaagents@transparentpricerx.com';
+            break;
+          case 'sparks':
+            emailTo = 'sparksagnets@transparaentpricerx.com';
+            break;
+        }
         const data = {
           toEmail: emailTo,
           agentSource: source,

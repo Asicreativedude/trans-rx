@@ -75,7 +75,6 @@ htmx.onLoad(function (content) {
         let emailTo;
         switch (source) {
           case 'pinnacle':
-            emailText.innerHTML = 'pinnacle@transparentpricerx.com';
             emailTo = 'pinnacle@transparentpricerx.com';
             break;
           case 'chc':
@@ -175,6 +174,13 @@ htmx.onLoad(function (content) {
           contactText.innerHTML =
             'For further information, reach out directly to the founder, Douglas Pierce, at <a href="mailto:douglas@transparentpricerx.com">douglas@transparentpricerx.com</a>';
           break;
+        case 'delta':
+          emailLink.innerHTML = 'deltaagents@transparentpricerx.com';
+          email = 'deltaagents@transparentpricerx.com';
+          break;
+        case 'sparks':
+          emailLink.innerHTML = 'sparksagents@transparentpricerx.com';
+          email = 'sparksagents@transparentpricerx.com';
       }
 
       emailLink.href = `mailto:${email}`;

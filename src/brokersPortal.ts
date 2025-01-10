@@ -45,7 +45,10 @@ htmx.onLoad(function (content) {
       setTimeout(() => sendPathnameToIframe('eligibility-calc'), 1000);
     } else if ((event.target as Element).id === 'medication-list') {
       setTimeout(() => sendPathnameToIframe('medication-list'), 1000);
-    } else if ((event.target as Element).id === 'general-medicare-calc') {
+    } else if (
+      (event.target as Element).id === 'general-medicare-calc' ||
+      'medicare-calc'
+    ) {
       setTimeout(() => sendPathnameToIframe('medicare-calc'), 1000);
     }
 
@@ -219,6 +222,7 @@ function checkQueryParams() {
       ) as HTMLElement)!.style.display = 'block';
     }
     sendMessageToIframe('eligibility-calc', { source: 'chc' });
+    sendMessageToIframe('medicare-calc', { source: 'chc' });
     sendMessageToIframe('medication-list', { source: 'chc' });
   } else if (source === 'eprime') {
     (document.querySelector(
@@ -252,6 +256,7 @@ function checkQueryParams() {
     (document.querySelector('.deltalogo-c') as HTMLElement)!.style.display =
       'flex';
     sendMessageToIframe('medication-list', { source: 'delta' });
+    sendMessageToIframe('medicare-calc', { source: 'delta' });
     document
       .querySelector('.broker-copy-link')!
       .setAttribute(
@@ -262,6 +267,7 @@ function checkQueryParams() {
     (document.querySelector('.sparks-logo') as HTMLElement)!.style.display =
       'block';
     sendMessageToIframe('medication-list', { source: 'sparks' });
+    sendMessageToIframe('medicare-calc', { source: 'sparks' });
     document
       .querySelector('.broker-copy-link')!
       .setAttribute(

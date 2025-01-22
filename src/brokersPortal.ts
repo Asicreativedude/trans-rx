@@ -216,6 +216,9 @@ function checkQueryParams() {
       (document.querySelector(
         '.abi-broker-logo'
       ) as HTMLElement)!.style.display = 'block';
+      document
+        .querySelector('[hx-select="#marketing"]')!
+        .setAttribute('hx-select', '#marketing-abi');
     } else {
       (document.querySelector(
         '.chc-broker-logo'

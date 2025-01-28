@@ -62,9 +62,9 @@ htmx.onLoad(function (content) {
       const requestCta = document.getElementById(
         'submit-med-request'
       ) as HTMLButtonElement;
-      const emailText = document.getElementById(
-        'email-link'
-      ) as HTMLAnchorElement;
+      // const emailText = document.getElementById(
+      //   'email-link'
+      // ) as HTMLAnchorElement;
       requestCta.addEventListener('click', function (e) {
         if (
           (requestMedForm.querySelector('#broker-name') as HTMLInputElement)
@@ -81,15 +81,12 @@ htmx.onLoad(function (content) {
             emailTo = 'pinnacle@transparentpricerx.com';
             break;
           case 'chc':
-            emailText.innerHTML = 'chcquotes@transparentpricrx.com';
             emailTo = 'chcquotes@transparentpricrx.com';
             break;
           case 'delta':
-            emailText.innerHTML = 'deltaagents@transparentpricerx.com';
             emailTo = 'deltaagents@transparentpricerx.com';
             break;
           case 'sparks':
-            emailText.innerHTML = 'sparksagnets@transparaentpricerx.com';
             emailTo = 'sparksagnets@transparaentpricerx.com';
             break;
         }

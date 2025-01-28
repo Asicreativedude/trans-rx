@@ -81,13 +81,13 @@ htmx.onLoad(function (content) {
             emailTo = 'pinnacle@transparentpricerx.com';
             break;
           case 'chc':
-            emailTo = 'chcquotes@transparentpricrx.com';
+            emailTo = 'chcquotes@transparentpricerx.com';
             break;
           case 'delta':
             emailTo = 'deltaagents@transparentpricerx.com';
             break;
           case 'sparks':
-            emailTo = 'sparksagnets@transparaentpricerx.com';
+            emailTo = 'sparksagnets@transparentpricerx.com';
             break;
         }
         const data = {
@@ -104,7 +104,7 @@ htmx.onLoad(function (content) {
           ).value,
           timestamp: new Date(),
         };
-
+        console.log(data);
         requestCta!.value = 'Sending...';
         fetch(
           'https://us-central1-transparent-rx.cloudfunctions.net/requestMed',

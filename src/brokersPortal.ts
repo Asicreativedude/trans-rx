@@ -11,19 +11,27 @@ htmx.onLoad(function (content) {
   const source = urlParams.get('utm_campaign');
   function sendPathnameToIframe(iframeId: string) {
     const iframe = document.getElementById(iframeId) as HTMLIFrameElement;
-
-    if (source === 'chc') {
-      sendMessageToIframe(`${iframeId}`, { source: 'chc' });
-    } else if (source === 'eprime') {
-      sendMessageToIframe(`${iframeId}`, { source: 'eprime' });
-    } else if (source === 'pinnacle') {
-      sendMessageToIframe(iframeId, { source: 'pinnacle' });
-    } else if (source === 'delta') {
-      sendMessageToIframe(iframeId, { source: 'delta' });
-    } else if (source === 'sparks') {
-      sendMessageToIframe(iframeId, { source: 'sparks' });
-    } else {
-      sendMessageToIframe(iframeId, { source: 'website' });
+    switch (source) {
+      case 'chc':
+        sendMessageToIframe(iframeId, { source: 'chc' });
+        break;
+      case 'eprime':
+        sendMessageToIframe(iframeId, { source: 'eprime' });
+        break;
+      case 'pinnacle':
+        sendMessageToIframe(iframeId, { source: 'pinnacle' });
+        break;
+      case 'delta':
+        sendMessageToIframe(iframeId, { source: 'delta' });
+        break;
+      case 'sparks':
+        sendMessageToIframe(iframeId, { source: 'sparks' });
+        break;
+      case 'abi':
+        sendMessageToIframe(iframeId, { source: 'abi' });
+        break;
+      default:
+        sendMessageToIframe(iframeId, { source: 'website' });
     }
 
     if (iframe && iframe.contentWindow) {
@@ -208,72 +216,96 @@ function checkQueryParams() {
   const urlParams = new URLSearchParams(window.location.search);
   const source = urlParams.get('utm_campaign');
   const param1 = urlParams.get('section');
-  if (source === 'chc') {
-    if (urlParams.get('utm_source') === 'brokerportalabi') {
+
+  switch (source) {
+    case 'chc':
+      (document.querySelector(
+        '.chc-broker-logo'
+      ) as HTMLElement)!.style.display = 'block';
+      document
+        .querySelector('.broker-copy-link')!
+        .setAttribute(
+          'r-copy-to-clipboard',
+          'https://transparentpricerx.com/chc-self-enroll'
+        );
+      sendMessageToIframe('eligibility-calc', { source: 'chc' });
+      sendMessageToIframe('medicare-calc', { source: 'chc' });
+      sendMessageToIframe('medication-list', { source: 'chc' });
+      break;
+    case 'eprime':
+      (document.querySelector(
+        '.eprime-broker-logo'
+      ) as HTMLElement)!.style.display = 'block';
+      document
+        .querySelector('[hx-select="#general-medicare-calc"]')!
+        .classList.add('hidden');
+      document
+        .querySelector('.broker-copy-link')!
+        .setAttribute(
+          'r-copy-to-clipboard',
+          'https://transparentpricerx.com/ep-self-enroll'
+        );
+      sendMessageToIframe('eligibility-calc', { source: 'eprime' });
+      sendMessageToIframe('medicare-calc', { source: 'eprime' });
+      sendMessageToIframe('medication-list', { source: 'eprime' });
+      break;
+    case 'pinnacle':
+      sendMessageToIframe('eligibility-calc', { source: 'pinnacle' });
+      sendMessageToIframe('medication-list', { source: 'pinnacle' });
+      (document.querySelector(
+        '.pinnacle-broker-logo'
+      ) as HTMLElement)!.style.display = 'block';
+      document
+        .querySelector('[hx-select="#marketing"]')!
+        .setAttribute('hx-select', '#marketing-pinnacle');
+      document
+        .querySelector('.broker-copy-link')!
+        .setAttribute(
+          'r-copy-to-clipboard',
+          'https://transparentpricerx.com/pinnacle-self-enroll'
+        );
+      break;
+    case 'delta':
+      (document.querySelector('.deltalogo-c') as HTMLElement)!.style.display =
+        'flex';
+      sendMessageToIframe('medication-list', { source: 'delta' });
+      sendMessageToIframe('medicare-calc', { source: 'delta' });
+      document
+        .querySelector('.broker-copy-link')!
+        .setAttribute(
+          'r-copy-to-clipboard',
+          'https://transparentpricerx.com/delta-self-enroll'
+        );
+      break;
+    case 'sparks':
+      (document.querySelector('.sparks-logo') as HTMLElement)!.style.display =
+        'block';
+      sendMessageToIframe('medication-list', { source: 'sparks' });
+      sendMessageToIframe('medicare-calc', { source: 'sparks' });
+      document
+        .querySelector('.broker-copy-link')!
+        .setAttribute(
+          'r-copy-to-clipboard',
+          'https://transparentpricerx.com/sparks-self-enroll'
+        );
+      break;
+    case 'abi':
       (document.querySelector(
         '.abi-broker-logo'
       ) as HTMLElement)!.style.display = 'block';
       document
         .querySelector('[hx-select="#marketing"]')!
         .setAttribute('hx-select', '#marketing-abi');
-    } else {
-      (document.querySelector(
-        '.chc-broker-logo'
-      ) as HTMLElement)!.style.display = 'block';
-    }
-    sendMessageToIframe('eligibility-calc', { source: 'chc' });
-    sendMessageToIframe('medicare-calc', { source: 'chc' });
-    sendMessageToIframe('medication-list', { source: 'chc' });
-  } else if (source === 'eprime') {
-    (document.querySelector(
-      '.eprime-broker-logo'
-    ) as HTMLElement)!.style.display = 'block';
-    document
-      .querySelector('[hx-select="#general-medicare-calc"]')!
-      .classList.add('hidden');
-    document
-      .querySelector('.broker-copy-link')!
-      .setAttribute(
-        'r-copy-to-clipboard',
-        'https://transparentpricerx.com/ep-self-enroll'
-      );
-  } else if (source === 'pinnacle') {
-    sendMessageToIframe('eligibility-calc', { source: 'pinnacle' });
-    sendMessageToIframe('medication-list', { source: 'pinnacle' });
-    (document.querySelector(
-      '.pinnacle-broker-logo'
-    ) as HTMLElement)!.style.display = 'block';
-    document
-      .querySelector('[hx-select="#marketing"]')!
-      .setAttribute('hx-select', '#marketing-pinnacle');
-    document
-      .querySelector('.broker-copy-link')!
-      .setAttribute(
-        'r-copy-to-clipboard',
-        'https://transparentpricerx.com/pinnacle-self-enroll'
-      );
-  } else if (source === 'delta') {
-    (document.querySelector('.deltalogo-c') as HTMLElement)!.style.display =
-      'flex';
-    sendMessageToIframe('medication-list', { source: 'delta' });
-    sendMessageToIframe('medicare-calc', { source: 'delta' });
-    document
-      .querySelector('.broker-copy-link')!
-      .setAttribute(
-        'r-copy-to-clipboard',
-        'https://transparentpricerx.com/delta-self-enroll'
-      );
-  } else if (source === 'sparks') {
-    (document.querySelector('.sparks-logo') as HTMLElement)!.style.display =
-      'block';
-    sendMessageToIframe('medication-list', { source: 'sparks' });
-    sendMessageToIframe('medicare-calc', { source: 'sparks' });
-    document
-      .querySelector('.broker-copy-link')!
-      .setAttribute(
-        'r-copy-to-clipboard',
-        'https://transparentpricerx.com/sparks-self-enroll'
-      );
+      document
+        .querySelector('.broker-copy-link')!
+        .setAttribute(
+          'r-copy-to-clipboard',
+          'https://transparentpricerx.com/abi-self-enroll'
+        );
+      sendMessageToIframe('eligibility-calc', { source: 'abi' });
+      sendMessageToIframe('medicare-calc', { source: 'abi' });
+      sendMessageToIframe('medication-list', { source: 'abi' });
+      break;
   }
   if (param1 === 'medications') {
     document

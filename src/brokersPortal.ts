@@ -30,6 +30,9 @@ htmx.onLoad(function (content) {
       case 'abi':
         sendMessageToIframe(iframeId, { source: 'abi' });
         break;
+      case 'uip':
+        sendMessageToIframe(iframeId, { source: 'uip' });
+        break;
       default:
         sendMessageToIframe(iframeId, { source: 'website' });
     }
@@ -70,9 +73,7 @@ htmx.onLoad(function (content) {
       const requestCta = document.getElementById(
         'submit-med-request'
       ) as HTMLButtonElement;
-      // const emailText = document.getElementById(
-      //   'email-link'
-      // ) as HTMLAnchorElement;
+
       requestCta.addEventListener('click', function (e) {
         if (
           (requestMedForm.querySelector('#broker-name') as HTMLInputElement)
@@ -96,6 +97,9 @@ htmx.onLoad(function (content) {
             break;
           case 'sparks':
             emailTo = 'sparksagnets@transparentpricerx.com';
+            break;
+          case 'uip':
+            emailTo = 'uipagents@transparentpricerx.com';
             break;
         }
         const data = {
@@ -148,7 +152,7 @@ htmx.onLoad(function (content) {
     }
     if (
       (event.target as Element).id === 'client-guidelines' ||
-      'client-guidelines-medicare'
+      'client-guidelines-pap'
     ) {
       //@ts-ignore
       Webflow.require('tabs').redraw();
@@ -189,6 +193,11 @@ htmx.onLoad(function (content) {
         case 'sparks':
           emailLink.innerHTML = 'sparksagents@transparentpricerx.com';
           email = 'sparksagents@transparentpricerx.com';
+          break;
+        case 'uip':
+          emailLink.innerHTML = 'uipagents@transparentpricerx.com';
+          email = 'uipagents@transparentpricerx.com';
+          break;
       }
 
       emailLink.href = `mailto:${email}`;
@@ -305,6 +314,22 @@ function checkQueryParams() {
       sendMessageToIframe('eligibility-calc', { source: 'abi' });
       sendMessageToIframe('medicare-calc', { source: 'abi' });
       sendMessageToIframe('medication-list', { source: 'abi' });
+      break;
+    case 'uip':
+      (document.querySelector('.uip-logo') as HTMLElement)!.style.display =
+        'block';
+      document
+        .querySelector('.broker-copy-link')!
+        .setAttribute(
+          'r-copy-to-clipboard',
+          'https://transparentpricerx.com/uip-self-enroll'
+        );
+      document
+        .querySelector('[hx-select="client-guidelines"]')!
+        .setAttribute('hx-select', 'client-guidelines-pap');
+      sendMessageToIframe('eligibility-calc', { source: 'uip' });
+      sendMessageToIframe('medicare-calc', { source: 'uip' });
+      sendMessageToIframe('medication-list', { source: 'uip' });
       break;
   }
   if (param1 === 'medications') {

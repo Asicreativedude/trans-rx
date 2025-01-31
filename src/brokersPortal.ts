@@ -325,8 +325,8 @@ function checkQueryParams() {
           'https://transparentpricerx.com/uip-self-enroll'
         );
       document
-        .querySelector('[hx-select="client-guidelines"]')!
-        .setAttribute('hx-select', 'client-guidelines-pap');
+        .querySelector('[hx-select="#client-guidelines"]')!
+        .setAttribute('hx-select', '#client-guidelines-pap');
       sendMessageToIframe('eligibility-calc', { source: 'uip' });
       sendMessageToIframe('medicare-calc', { source: 'uip' });
       sendMessageToIframe('medication-list', { source: 'uip' });

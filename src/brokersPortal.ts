@@ -33,6 +33,9 @@ htmx.onLoad(function (content) {
       case 'uip':
         sendMessageToIframe(iframeId, { source: 'uip' });
         break;
+      case 'sterling':
+        sendMessageToIframe(iframeId, { source: 'sterling' });
+        break;
       default:
         sendMessageToIframe(iframeId, { source: 'website' });
     }
@@ -101,6 +104,8 @@ htmx.onLoad(function (content) {
           case 'uip':
             emailTo = 'uipagents@transparentpricerx.com';
             break;
+          case 'sterling':
+            emailTo = 'sterlingagents@transparentpricerx.com';
         }
         const data = {
           toEmail: emailTo,
@@ -197,6 +202,10 @@ htmx.onLoad(function (content) {
         case 'uip':
           emailLink.innerHTML = 'uipagents@transparentpricerx.com';
           email = 'uipagents@transparentpricerx.com';
+          break;
+        case 'sterling':
+          emailLink.innerHTML = 'sterling@transparentpricerx.com';
+          email = 'sterlingagents@transparentpricerx.com';
           break;
       }
 
@@ -330,6 +339,22 @@ function checkQueryParams() {
       sendMessageToIframe('eligibility-calc', { source: 'uip' });
       sendMessageToIframe('medicare-calc', { source: 'uip' });
       sendMessageToIframe('medication-list', { source: 'uip' });
+      break;
+    case 'sterling':
+      (document.querySelector('.sterling-logo') as HTMLElement)!.style.display =
+        'block';
+      document
+        .querySelector('.broker-copy-link')!
+        .setAttribute(
+          'r-copy-to-clipboard',
+          'https://transparentpricerx.com/sterling-self-enroll'
+        );
+      document
+        .querySelector('[hx-select="#client-guidelines"]')!
+        .setAttribute('hx-select', '#client-guidelines-pap');
+      sendMessageToIframe('eligibility-calc', { source: 'sterling' });
+      sendMessageToIframe('medicare-calc', { source: 'sterling' });
+      sendMessageToIframe('medication-list', { source: 'sterling' });
       break;
   }
   if (param1 === 'medications') {

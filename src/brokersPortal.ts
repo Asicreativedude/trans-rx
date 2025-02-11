@@ -105,7 +105,7 @@ htmx.onLoad(function (content) {
             emailTo = 'uipagents@transparentpricerx.com';
             break;
           case 'sterling':
-            emailTo = 'sterlingagents@transparentpricerx.com';
+            emailTo = 'sterling@transparentpricerx.com';
         }
         const data = {
           toEmail: emailTo,
@@ -205,7 +205,7 @@ htmx.onLoad(function (content) {
           break;
         case 'sterling':
           emailLink.innerHTML = 'sterling@transparentpricerx.com';
-          email = 'sterlingagents@transparentpricerx.com';
+          email = 'sterling@transparentpricerx.com';
           break;
       }
 

@@ -311,9 +311,15 @@ function checkQueryParams() {
       (document.querySelector(
         '.abi-broker-logo'
       ) as HTMLElement)!.style.display = 'block';
-      document
-        .querySelector('[hx-select="#marketing"]')!
-        .setAttribute('hx-select', '#marketing-abi');
+      if (window.location.pathname.includes('medicare-brokers-portal')) {
+        document
+          .querySelector('[hx-select="#marketing-medicare"]')!
+          .setAttribute('hx-select', '#marketing-abi-medicare');
+      } else {
+        document
+          .querySelector('[hx-select="#marketing"]')!
+          .setAttribute('hx-select', '#marketing-abi');
+      }
       document
         .querySelector('.broker-copy-link')!
         .setAttribute(

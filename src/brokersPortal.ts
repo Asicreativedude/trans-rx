@@ -330,7 +330,7 @@ function checkQueryParams() {
         .querySelector('.broker-copy-link')!
         .setAttribute(
           'r-copy-to-clipboard',
-          'https://transparentpricerx.com/fenyx-self-enroll'
+          'https://transparentpricerx.com/fenyxhealth-self-enroll'
         );
       break;
     case 'abi':

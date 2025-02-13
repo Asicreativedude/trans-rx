@@ -36,6 +36,9 @@ htmx.onLoad(function (content) {
       case 'sterling':
         sendMessageToIframe(iframeId, { source: 'sterling' });
         break;
+      case 'fenyx':
+        sendMessageToIframe(iframeId, { source: 'fenyx' });
+        break;
       default:
         sendMessageToIframe(iframeId, { source: 'website' });
     }
@@ -106,6 +109,13 @@ htmx.onLoad(function (content) {
             break;
           case 'sterling':
             emailTo = 'sterling@transparentpricerx.com';
+            break;
+          case 'abi':
+            emailTo = 'abi@transparentpricerx.com';
+            break;
+          case 'fenyx':
+            emailTo = 'fenyxhealth@transparentpricerx.com';
+            break;
         }
         const data = {
           toEmail: emailTo,
@@ -121,7 +131,6 @@ htmx.onLoad(function (content) {
           ).value,
           timestamp: new Date(),
         };
-        console.log(data);
         requestCta!.value = 'Sending...';
         fetch(
           'https://us-central1-transparent-rx.cloudfunctions.net/requestMed',
@@ -181,6 +190,10 @@ htmx.onLoad(function (content) {
       ) as HTMLParagraphElement;
       let email = '';
       switch (source) {
+        case 'abi':
+          emailLink.innerHTML = 'abi@transparentpricerx.com';
+          email = 'abi@transparentpricerx.com';
+          break;
         case 'chc':
           emailLink.innerHTML = 'CHCquotes@transparentpricerx.com';
           email = 'CHCquotes@transparentpricerx.com';
@@ -207,6 +220,7 @@ htmx.onLoad(function (content) {
           emailLink.innerHTML = 'sterling@transparentpricerx.com';
           email = 'sterling@transparentpricerx.com';
           break;
+        default:
       }
 
       emailLink.href = `mailto:${email}`;
@@ -305,6 +319,18 @@ function checkQueryParams() {
         .setAttribute(
           'r-copy-to-clipboard',
           'https://transparentpricerx.com/sparks-self-enroll'
+        );
+      break;
+    case 'fenyx':
+      (document.querySelector('.fenyx-logo') as HTMLElement)!.style.display =
+        'block';
+      sendMessageToIframe('medication-list', { source: 'fenyx' });
+      sendMessageToIframe('medicare-calc', { source: 'fenyx' });
+      document
+        .querySelector('.broker-copy-link')!
+        .setAttribute(
+          'r-copy-to-clipboard',
+          'https://transparentpricerx.com/fenyx-self-enroll'
         );
       break;
     case 'abi':

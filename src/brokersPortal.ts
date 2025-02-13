@@ -332,6 +332,9 @@ function checkQueryParams() {
           'r-copy-to-clipboard',
           'https://transparentpricerx.com/fenyxhealth-self-enroll'
         );
+      document
+        .querySelector('[hx-select="#marketing-medicare"]')!
+        .setAttribute('hx-select', '#marketing-medicare-fenyx');
       break;
     case 'abi':
       (document.querySelector(

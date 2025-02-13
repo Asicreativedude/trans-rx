@@ -164,10 +164,7 @@ htmx.onLoad(function (content) {
         (p) => new Plyr(p)
       );
     }
-    if (
-      (event.target as Element).id === 'client-guidelines' ||
-      'client-guidelines-pap'
-    ) {
+    if ((event.target as Element).id === 'client-guidelines') {
       //@ts-ignore
       Webflow.require('tabs').redraw();
       const druglistLinks = document.querySelectorAll(
@@ -372,9 +369,6 @@ function checkQueryParams() {
           'r-copy-to-clipboard',
           'https://transparentpricerx.com/uip-self-enroll'
         );
-      document
-        .querySelector('[hx-select="#client-guidelines"]')!
-        .setAttribute('hx-select', '#client-guidelines-pap');
       sendMessageToIframe('eligibility-calc', { source: 'uip' });
       sendMessageToIframe('medicare-calc', { source: 'uip' });
       sendMessageToIframe('medication-list', { source: 'uip' });
@@ -388,9 +382,7 @@ function checkQueryParams() {
           'r-copy-to-clipboard',
           'https://transparentpricerx.com/sterling-self-enroll'
         );
-      document
-        .querySelector('[hx-select="#client-guidelines"]')!
-        .setAttribute('hx-select', '#client-guidelines-pap');
+
       sendMessageToIframe('eligibility-calc', { source: 'sterling' });
       sendMessageToIframe('medicare-calc', { source: 'sterling' });
       sendMessageToIframe('medication-list', { source: 'sterling' });

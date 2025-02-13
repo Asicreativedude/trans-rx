@@ -220,6 +220,10 @@ htmx.onLoad(function (content) {
           emailLink.innerHTML = 'sterling@transparentpricerx.com';
           email = 'sterling@transparentpricerx.com';
           break;
+        case 'fenyx':
+          emailLink.innerHTML = 'fenyxhealth@transparentpricerx.com';
+          email = 'fenyxhealth@transparentpricerx.com';
+          break;
         default:
       }
 

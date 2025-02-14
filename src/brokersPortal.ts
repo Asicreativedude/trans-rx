@@ -353,7 +353,7 @@ function checkQueryParams() {
             'https://transparentpricerx.com/malooley-self-enroll'
           );
         document
-          .getElementById('#onepager')!
+          .getElementById('onepager')!
           .setAttribute(
             'href',
             'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/67af7ed155a8f4a32f9657a8_malooleyOnePager.pdf'
@@ -369,7 +369,7 @@ function checkQueryParams() {
             'https://transparentpricerx.com/horizon-self-enroll'
           );
         document
-          .getElementById('#onepager')!
+          .getElementById('onepager')!
           .setAttribute(
             'href',
             'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/67af7ed62c34cb09aea10b0b_horizonOnePager.pdf'

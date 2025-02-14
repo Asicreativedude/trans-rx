@@ -249,6 +249,7 @@ function checkQueryParams() {
   const urlParams = new URLSearchParams(window.location.search);
   const source = urlParams.get('utm_campaign');
   const param1 = urlParams.get('section');
+  const brokerage = urlParams.get('brokerage');
 
   switch (source) {
     case 'chc':
@@ -338,24 +339,41 @@ function checkQueryParams() {
         .setAttribute('hx-select', '#marketing-medicare-fenyx');
       break;
     case 'abi':
-      (document.querySelector(
-        '.abi-broker-logo'
-      ) as HTMLElement)!.style.display = 'block';
-      if (window.location.pathname.includes('medicare-brokers-portal')) {
-        document
-          .querySelector('[hx-select="#marketing-medicare"]')!
-          .setAttribute('hx-select', '#marketing-abi-medicare');
-      } else {
-        document
-          .querySelector('[hx-select="#marketing"]')!
-          .setAttribute('hx-select', '#marketing-abi');
-      }
       document
-        .querySelector('.broker-copy-link')!
-        .setAttribute(
-          'r-copy-to-clipboard',
-          'https://transparentpricerx.com/abi-self-enroll'
-        );
+        .querySelector('[hx-select="#marketing-medicare"]')!
+        .setAttribute('hx-select', '#marketing-abi-medicare');
+      if (brokerage === 'malooley') {
+        (document.querySelector(
+          '.malooley-logo'
+        ) as HTMLElement)!.style.display = 'block';
+        document
+          .querySelector('.broker-copy-link')!
+          .setAttribute(
+            'r-copy-to-clipboard',
+            'https://transparentpricerx.com/malooley-self-enroll'
+          );
+      } else if (brokerage === 'horizon') {
+        (document.querySelector(
+          '.horizon-logo'
+        ) as HTMLElement)!.style.display = 'block';
+        document
+          .querySelector('.broker-copy-link')!
+          .setAttribute(
+            'r-copy-to-clipboard',
+            'https://transparentpricerx.com/horizon-self-enroll'
+          );
+      } else {
+        (document.querySelector(
+          '.abi-broker-logo'
+        ) as HTMLElement)!.style.display = 'block';
+
+        document
+          .querySelector('.broker-copy-link')!
+          .setAttribute(
+            'r-copy-to-clipboard',
+            'https://transparentpricerx.com/abi-self-enroll'
+          );
+      }
       sendMessageToIframe('eligibility-calc', { source: 'abi' });
       sendMessageToIframe('medicare-calc', { source: 'abi' });
       sendMessageToIframe('medication-list', { source: 'abi' });

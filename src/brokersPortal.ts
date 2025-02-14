@@ -226,6 +226,23 @@ htmx.onLoad(function (content) {
 
       emailLink.href = `mailto:${email}`;
     }
+    if ((event.target as Element).id === 'marketing-medicare-abi') {
+      if (urlParams.get('brokerage') === 'malooley') {
+        document
+          .getElementById('onepager')!
+          .setAttribute(
+            'href',
+            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/67af7ed155a8f4a32f9657a8_malooleyOnePager.pdf'
+          );
+      } else if (urlParams.get('brokerage') === 'horizon') {
+        document
+          .getElementById('onepager')!
+          .setAttribute(
+            'href',
+            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/67af7ed62c34cb09aea10b0b_horizonOnePager.pdf'
+          );
+      }
+    }
   });
   content.addEventListener('htmx:afterSwap', function () {
     mainArea!.scrollTop = 0;
@@ -250,7 +267,6 @@ function checkQueryParams() {
   const source = urlParams.get('utm_campaign');
   const param1 = urlParams.get('section');
   const brokerage = urlParams.get('brokerage');
-  console.log(brokerage);
   switch (source) {
     case 'chc':
       (document.querySelector(
@@ -339,9 +355,6 @@ function checkQueryParams() {
         .setAttribute('hx-select', '#marketing-medicare-fenyx');
       break;
     case 'abi':
-      document
-        .querySelector('[hx-select="#marketing-medicare"]')!
-        .setAttribute('hx-select', '#marketing-medicare-abi');
       if (brokerage === 'malooley') {
         (document.querySelector(
           '.malooley-logo'
@@ -352,12 +365,6 @@ function checkQueryParams() {
             'r-copy-to-clipboard',
             'https://transparentpricerx.com/malooley-self-enroll'
           );
-        document
-          .getElementById('onepager')!
-          .setAttribute(
-            'href',
-            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/67af7ed155a8f4a32f9657a8_malooleyOnePager.pdf'
-          );
       } else if (brokerage === 'horizon') {
         (document.querySelector(
           '.horizon-logo'
@@ -367,12 +374,6 @@ function checkQueryParams() {
           .setAttribute(
             'r-copy-to-clipboard',
             'https://transparentpricerx.com/horizon-self-enroll'
-          );
-        document
-          .getElementById('onepager')!
-          .setAttribute(
-            'href',
-            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/67af7ed62c34cb09aea10b0b_horizonOnePager.pdf'
           );
       } else {
         (document.querySelector(
@@ -386,6 +387,9 @@ function checkQueryParams() {
             'https://transparentpricerx.com/abi-self-enroll'
           );
       }
+      document
+        .querySelector('[hx-select="#marketing-medicare"]')!
+        .setAttribute('hx-select', '#marketing-medicare-abi');
       sendMessageToIframe('eligibility-calc', { source: 'abi' });
       sendMessageToIframe('medicare-calc', { source: 'abi' });
       sendMessageToIframe('medication-list', { source: 'abi' });

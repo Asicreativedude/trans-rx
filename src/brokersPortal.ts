@@ -250,7 +250,7 @@ function checkQueryParams() {
   const source = urlParams.get('utm_campaign');
   const param1 = urlParams.get('section');
   const brokerage = urlParams.get('brokerage');
-
+  console.log(brokerage);
   switch (source) {
     case 'chc':
       (document.querySelector(
@@ -339,9 +339,6 @@ function checkQueryParams() {
         .setAttribute('hx-select', '#marketing-medicare-fenyx');
       break;
     case 'abi':
-      document
-        .querySelector('[hx-select="#marketing-medicare"]')!
-        .setAttribute('hx-select', '#marketing-abi-medicare');
       if (brokerage === 'malooley') {
         (document.querySelector(
           '.malooley-logo'

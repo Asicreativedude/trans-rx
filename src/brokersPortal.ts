@@ -339,6 +339,9 @@ function checkQueryParams() {
         .setAttribute('hx-select', '#marketing-medicare-fenyx');
       break;
     case 'abi':
+      document
+        .querySelector('[hx-select="#marketing-medicare"]')!
+        .setAttribute('hx-select', '#marketing-medicare-abi');
       if (brokerage === 'malooley') {
         (document.querySelector(
           '.malooley-logo'
@@ -349,6 +352,12 @@ function checkQueryParams() {
             'r-copy-to-clipboard',
             'https://transparentpricerx.com/malooley-self-enroll'
           );
+        document
+          .getElementById('#onepager')!
+          .setAttribute(
+            'href',
+            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/67af7ed155a8f4a32f9657a8_malooleyOnePager.pdf'
+          );
       } else if (brokerage === 'horizon') {
         (document.querySelector(
           '.horizon-logo'
@@ -358,6 +367,12 @@ function checkQueryParams() {
           .setAttribute(
             'r-copy-to-clipboard',
             'https://transparentpricerx.com/horizon-self-enroll'
+          );
+        document
+          .getElementById('#onepager')!
+          .setAttribute(
+            'href',
+            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/67af7ed62c34cb09aea10b0b_horizonOnePager.pdf'
           );
       } else {
         (document.querySelector(

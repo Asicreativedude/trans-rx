@@ -226,7 +226,23 @@ htmx.onLoad(function (content) {
 
       emailLink.href = `mailto:${email}`;
     }
-    if ((event.target as Element).id === 'marketing-medicare-abi') {
+    if ((event.target as Element).id === 'marketing-medicare') {
+      if (source === 'uip') {
+        document
+          .getElementById('onepager')!
+          .setAttribute(
+            'href',
+            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/67bdb608821f8f5bbec34520_uipOnePager.pdf'
+          );
+      } else if (source === 'sterling') {
+        document
+          .getElementById('onepager')!
+          .setAttribute(
+            'href',
+            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/67bdb7612340d51173953493_sterlingOnePager.pdf'
+          );
+      }
+
       if (urlParams.get('brokerage') === 'malooley') {
         document
           .getElementById('onepager')!
@@ -387,9 +403,6 @@ function checkQueryParams() {
             'https://transparentpricerx.com/abi-self-enroll'
           );
       }
-      document
-        .querySelector('[hx-select="#marketing-medicare"]')!
-        .setAttribute('hx-select', '#marketing-medicare-abi');
       sendMessageToIframe('eligibility-calc', { source: 'abi' });
       sendMessageToIframe('medicare-calc', { source: 'abi' });
       sendMessageToIframe('medication-list', { source: 'abi' });

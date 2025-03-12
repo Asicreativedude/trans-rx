@@ -241,8 +241,14 @@ htmx.onLoad(function (content) {
             'href',
             'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/67bdb7612340d51173953493_sterlingOnePager.pdf'
           );
+      } else if (source === 'delta') {
+        document
+          .getElementById('onepager')!
+          .setAttribute(
+            'href',
+            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/67d139f823f84b93578a09a7_deltaOnePager.pdf'
+          );
       }
-
       if (urlParams.get('brokerage') === 'malooley') {
         document
           .getElementById('onepager')!

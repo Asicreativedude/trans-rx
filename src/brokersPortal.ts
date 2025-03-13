@@ -12,6 +12,9 @@ htmx.onLoad(function (content) {
   function sendPathnameToIframe(iframeId: string) {
     const iframe = document.getElementById(iframeId) as HTMLIFrameElement;
     switch (source) {
+      case 'zch':
+        sendMessageToIframe(iframeId, { source: 'zch' });
+        break;
       case 'chc':
         sendMessageToIframe(iframeId, { source: 'chc' });
         break;
@@ -92,6 +95,9 @@ htmx.onLoad(function (content) {
         e.preventDefault();
         let emailTo;
         switch (source) {
+          case 'zch':
+            emailTo = 'brokers@transparentpricerx.com';
+            break;
           case 'pinnacle':
             emailTo = 'pinnacle@transparentpricerx.com';
             break;
@@ -227,7 +233,14 @@ htmx.onLoad(function (content) {
       emailLink.href = `mailto:${email}`;
     }
     if ((event.target as Element).id === 'marketing-medicare') {
-      if (source === 'uip') {
+      if (source === 'zch') {
+        document
+          .getElementById('onepager')!
+          .setAttribute(
+            'href',
+            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/67d2dc31f8d1c0c328a9203a_mpZchOnePager.pdf'
+          );
+      } else if (source === 'uip') {
         document
           .getElementById('onepager')!
           .setAttribute(
@@ -290,6 +303,17 @@ function checkQueryParams() {
   const param1 = urlParams.get('section');
   const brokerage = urlParams.get('brokerage');
   switch (source) {
+    case 'zch':
+      document
+        .querySelector('.broker-copy-link')!
+        .setAttribute(
+          'r-copy-to-clipboard',
+          'https://transparentpricerx.com/mp-self-enroll'
+        );
+      sendMessageToIframe('eligibility-calc', { source: 'zch' });
+      sendMessageToIframe('medicare-calc', { source: 'zch' });
+      sendMessageToIframe('medication-list', { source: 'zch' });
+      break;
     case 'chc':
       (document.querySelector(
         '.chc-broker-logo'

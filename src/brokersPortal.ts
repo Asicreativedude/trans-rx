@@ -313,6 +313,9 @@ function checkQueryParams() {
       sendMessageToIframe('eligibility-calc', { source: 'zch' });
       sendMessageToIframe('medicare-calc', { source: 'zch' });
       sendMessageToIframe('medication-list', { source: 'zch' });
+      document
+        .querySelector('[hx-select="#video-tutorial-medicare"]')!
+        .setAttribute('hx-select', '#video-tutorial-medicare-zch');
       break;
     case 'chc':
       (document.querySelector(

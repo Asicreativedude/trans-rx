@@ -12,6 +12,9 @@ htmx.onLoad(function (content) {
   function sendPathnameToIframe(iframeId: string) {
     const iframe = document.getElementById(iframeId) as HTMLIFrameElement;
     switch (source) {
+      case 'jr':
+        sendMessageToIframe(iframeId, { source: 'jr' });
+        break;
       case 'zch':
         sendMessageToIframe(iframeId, { source: 'zch' });
         break;
@@ -95,6 +98,9 @@ htmx.onLoad(function (content) {
         e.preventDefault();
         let emailTo;
         switch (source) {
+          case 'jr':
+            emailTo = 'brokers@transparentpricerx.com';
+            break;
           case 'zch':
             emailTo = 'brokers@transparentpricerx.com';
             break;
@@ -233,7 +239,14 @@ htmx.onLoad(function (content) {
       emailLink.href = `mailto:${email}`;
     }
     if ((event.target as Element).id === 'marketing-medicare') {
-      if (source === 'zch') {
+      if (source === 'jr') {
+        document
+          .getElementById('onepager')!
+          .setAttribute(
+            'href',
+            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/680bbf2a3e8b70a7734f9f07_mpJROnePager.pdf'
+          );
+      } else if (source === 'zch') {
         document
           .getElementById('onepager')!
           .setAttribute(
@@ -303,6 +316,20 @@ function checkQueryParams() {
   const param1 = urlParams.get('section');
   const brokerage = urlParams.get('brokerage');
   switch (source) {
+    case 'jr':
+      document
+        .querySelector('.broker-copy-link')!
+        .setAttribute(
+          'r-copy-to-clipboard',
+          'https://transparentpricerx.com/jr-self-enroll'
+        );
+      sendMessageToIframe('eligibility-calc', { source: 'jr' });
+      sendMessageToIframe('medicare-calc', { source: 'jr' });
+      sendMessageToIframe('medication-list', { source: 'jr' });
+      document
+        .querySelector('[hx-select="#video-tutorial-medicare"]')!
+        .setAttribute('hx-select', '#video-tutorial-medicare-zch');
+      break;
     case 'zch':
       document
         .querySelector('.broker-copy-link')!

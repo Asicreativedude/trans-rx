@@ -246,6 +246,14 @@ htmx.onLoad(function (content) {
     }
     if ((event.target as Element).id === 'marketing-medicare') {
       if (source === 'naacp') {
+        (
+          document.querySelector('.marketing-materials-c') as HTMLElement
+        ).style.display = 'block';
+        document
+          .querySelectorAll('.marketing-material-card:not([id="onepager"])')
+          .forEach((link) => {
+            link.remove();
+          });
         document
           .getElementById('onepager')!
           .setAttribute(

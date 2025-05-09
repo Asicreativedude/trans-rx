@@ -245,6 +245,14 @@ htmx.onLoad(function (content) {
       emailLink.href = `mailto:${email}`;
     }
     if ((event.target as Element).id === 'marketing-medicare') {
+      if (source === 'naacp') {
+        document
+          .getElementById('onepager')!
+          .setAttribute(
+            'href',
+            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/681e2685ee84880768b25b9b_naacp.pdf'
+          );
+      }
       if (source === 'jr') {
         document
           .getElementById('onepager')!

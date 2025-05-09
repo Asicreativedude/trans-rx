@@ -12,6 +12,9 @@ htmx.onLoad(function (content) {
   function sendPathnameToIframe(iframeId: string) {
     const iframe = document.getElementById(iframeId) as HTMLIFrameElement;
     switch (source) {
+      case 'naacp':
+        sendMessageToIframe(iframeId, { source: 'naacp' });
+        break;
       case 'jr':
         sendMessageToIframe(iframeId, { source: 'jr' });
         break;
@@ -98,6 +101,9 @@ htmx.onLoad(function (content) {
         e.preventDefault();
         let emailTo;
         switch (source) {
+          case 'naacp':
+            emailTo = 'brokers@transparentpricerx.com';
+            break;
           case 'jr':
             emailTo = 'brokers@transparentpricerx.com';
             break;
@@ -316,6 +322,20 @@ function checkQueryParams() {
   const param1 = urlParams.get('section');
   const brokerage = urlParams.get('brokerage');
   switch (source) {
+    case 'naacp':
+      document
+        .querySelector('.broker-copy-link')!
+        .setAttribute(
+          'r-copy-to-clipboard',
+          'https://transparentpricerx.com/naacp-self-enroll'
+        );
+      sendMessageToIframe('eligibility-calc', { source: 'naacp' });
+      sendMessageToIframe('medicare-calc', { source: 'naacp' });
+      sendMessageToIframe('medication-list', { source: 'naacp' });
+      document
+        .querySelector('[hx-select="#video-tutorial-medicare"]')!
+        .setAttribute('hx-select', '#video-tutorial-medicare-zch');
+      break;
     case 'jr':
       document
         .querySelector('.broker-copy-link')!

@@ -249,11 +249,7 @@ htmx.onLoad(function (content) {
         (
           document.querySelector('.marketing-materials-c') as HTMLElement
         ).style.display = 'block';
-        document
-          .querySelectorAll('.marketing-material-card:not([id="onepager"])')
-          .forEach((link) => {
-            link.remove();
-          });
+        document.getElementById('medicareemail')?.remove();
         document
           .getElementById('onepager')!
           .setAttribute(

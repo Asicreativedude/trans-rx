@@ -265,7 +265,13 @@ htmx.onLoad(function (content) {
         'contact-text'
       ) as HTMLParagraphElement;
       let email = '';
+      const phone = document.getElementById(
+        'contact-phone'
+      ) as HTMLParagraphElement;
       switch (source) {
+        case 'fym':
+          phone.innerHTML = '(772) 205 -  6404';
+          break;
         case 'abi':
           emailLink.innerHTML = 'abi@transparentpricerx.com';
           email = 'abi@transparentpricerx.com';
@@ -301,6 +307,8 @@ htmx.onLoad(function (content) {
           email = 'fenyxhealth@transparentpricerx.com';
           break;
         default:
+          emailLink.innerHTML = 'brokers@transparentpricerx.com';
+          email = 'brokers@transparentpricerx.com';
       }
 
       emailLink.href = `mailto:${email}`;
@@ -399,7 +407,7 @@ function checkQueryParams() {
       (document.querySelector('.fym-logo') as HTMLElement)!.style.display =
         'block';
       document
-        .querySelector('[hx-select="#marketing"]')!
+        .querySelector('[hx-select="#marketing-medicare"]')!
         .setAttribute('hx-select', '#marketing-medicare-fym');
       document
         .querySelector('.broker-copy-link')!

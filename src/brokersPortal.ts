@@ -5,6 +5,55 @@ const mobileMenuBurger = document.querySelector(
 ) as HTMLDivElement;
 
 let hasRun = false;
+const requestMedDeniedList = [
+  'Mounjaro',
+  'Monujaro',
+  'Mounjro',
+  'Moungaro',
+  'Mounjaro',
+  'Mounjaor',
+  'Mounjair',
+  'Monjaro',
+  'Mounjarro',
+  'Mounjrao',
+  'Mounjaryo',
+  'Zepbound',
+  'Zepboud',
+  'Zeppbound',
+  'Zepbonud',
+  'Zepbuond',
+  'Zeppboud',
+  'Zepbounde',
+  'Zepboun',
+  'Zepbouned',
+  'Zepbund',
+  'Zepobund',
+  'Trulicity',
+  'Trulicty',
+  'Truliciti',
+  'Trulicitys',
+  'Trulicety',
+  'Truliciy',
+  'Trulecity',
+  'Trulictiy',
+  'Truelicity',
+  'Trulycity',
+  'Trollicity',
+  'Tirzepatied',
+
+  'Tirzepatid',
+
+  'Tirzapatide',
+
+  'Tirzeptide',
+
+  'Tirzepetide',
+  'Tirzepatine',
+  'Terzepatide',
+  'Tirzepaide',
+  'Tirzapetide',
+  'Tirzepatidde',
+];
 
 htmx.onLoad(function (content) {
   const urlParams = new URLSearchParams(window.location.search);
@@ -100,8 +149,14 @@ htmx.onLoad(function (content) {
             .value === ''
         )
           return;
-
-        e.preventDefault();
+        const medicationName = (
+          requestMedForm.querySelector('#medication-name') as HTMLInputElement
+        ).value.trim();
+        if (requestMedDeniedList.includes(medicationName)) {
+          e.preventDefault();
+          alert('We currently not accepting requests for this medication.');
+          return;
+        }
         let emailTo;
         switch (source) {
           case 'naacp':

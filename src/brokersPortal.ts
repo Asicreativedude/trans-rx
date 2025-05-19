@@ -15,6 +15,9 @@ htmx.onLoad(function (content) {
       case 'naacp':
         sendMessageToIframe(iframeId, { source: 'naacp' });
         break;
+      case 'fym':
+        sendMessageToIframe(iframeId, { source: 'fym' });
+        break;
       case 'jr':
         sendMessageToIframe(iframeId, { source: 'jr' });
         break;
@@ -102,6 +105,9 @@ htmx.onLoad(function (content) {
         let emailTo;
         switch (source) {
           case 'naacp':
+            emailTo = 'brokers@transparentpricerx.com';
+            break;
+          case 'fym':
             emailTo = 'brokers@transparentpricerx.com';
             break;
           case 'jr':
@@ -257,6 +263,18 @@ htmx.onLoad(function (content) {
             'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/681e2685ee84880768b25b9b_naacp.pdf'
           );
       }
+      if (source === 'fym') {
+        (
+          document.querySelector('.marketing-materials-c') as HTMLElement
+        ).style.display = 'block';
+        document.getElementById('medicareemail')?.remove();
+        document
+          .getElementById('onepager')!
+          .setAttribute(
+            'href',
+            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/681e2685ee84880768b25b9b_naacp.pdf'
+          );
+      }
       if (source === 'jr') {
         document
           .getElementById('onepager')!
@@ -334,6 +352,20 @@ function checkQueryParams() {
   const param1 = urlParams.get('section');
   const brokerage = urlParams.get('brokerage');
   switch (source) {
+    case 'fym':
+      document
+        .querySelector('.broker-copy-link')!
+        .setAttribute(
+          'r-copy-to-clipboard',
+          'https://transparentpricerx.com/fym-self-enroll'
+        );
+      sendMessageToIframe('eligibility-calc', { source: 'fym' });
+      sendMessageToIframe('medicare-calc', { source: 'fym' });
+      sendMessageToIframe('medication-list', { source: 'fym' });
+      document
+        .querySelector('[hx-select="#video-tutorial-medicare"]')!
+        .setAttribute('hx-select', '#video-tutorial-medicare-zch');
+      break;
     case 'naacp':
       document
         .querySelector('.broker-copy-link')!

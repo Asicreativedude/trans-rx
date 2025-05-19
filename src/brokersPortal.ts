@@ -318,18 +318,6 @@ htmx.onLoad(function (content) {
             'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/681e2685ee84880768b25b9b_naacp.pdf'
           );
       }
-      if (source === 'fym') {
-        (
-          document.querySelector('.marketing-materials-c') as HTMLElement
-        ).style.display = 'block';
-        document.getElementById('medicareemail')?.remove();
-        document
-          .getElementById('onepager')!
-          .setAttribute(
-            'href',
-            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/681e2685ee84880768b25b9b_naacp.pdf'
-          );
-      }
       if (source === 'jr') {
         document
           .getElementById('onepager')!
@@ -408,6 +396,9 @@ function checkQueryParams() {
   const brokerage = urlParams.get('brokerage');
   switch (source) {
     case 'fym':
+      document
+        .querySelector('[hx-select="#marketing"]')!
+        .setAttribute('hx-select', '#marketing-medicare-fym');
       document
         .querySelector('.broker-copy-link')!
         .setAttribute(

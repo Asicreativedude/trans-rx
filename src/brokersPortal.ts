@@ -396,6 +396,8 @@ function checkQueryParams() {
   const brokerage = urlParams.get('brokerage');
   switch (source) {
     case 'fym':
+      (document.querySelector('.fym-logo') as HTMLElement)!.style.display =
+        'block';
       document
         .querySelector('[hx-select="#marketing"]')!
         .setAttribute('hx-select', '#marketing-medicare-fym');

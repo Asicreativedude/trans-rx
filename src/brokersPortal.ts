@@ -314,8 +314,14 @@ htmx.onLoad(function (content) {
             'href',
             'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/681e2685ee84880768b25b9b_naacp.pdf'
           );
-      }
-      if (source === 'jr') {
+      } else if (source === 'pc') {
+        document
+          .getElementById('onepager')!
+          .setAttribute(
+            'href',
+            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/682e0f13bf969a01082d4129_pcOnePager.pdf'
+          );
+      } else if (source === 'jr') {
         document
           .getElementById('onepager')!
           .setAttribute(

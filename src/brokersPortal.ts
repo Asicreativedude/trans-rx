@@ -314,13 +314,6 @@ htmx.onLoad(function (content) {
             'href',
             'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/681e2685ee84880768b25b9b_naacp.pdf'
           );
-      } else if (source === 'pc') {
-        document
-          .getElementById('onepager')!
-          .setAttribute(
-            'href',
-            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/682e0f13bf969a01082d4129_pcOnePager.pdf'
-          );
       } else if (source === 'jr') {
         document
           .getElementById('onepager')!
@@ -373,6 +366,16 @@ htmx.onLoad(function (content) {
           );
       }
     }
+    if ((event.target as Element).id === 'marketing-medicare-fym') {
+      if (source === 'pc') {
+        document
+          .getElementById('onepager')!
+          .setAttribute(
+            'href',
+            'https://cdn.prod.website-files.com/64c1145cbf2b6e07020d3b41/682e0f13bf969a01082d4129_pcOnePager.pdf'
+          );
+      }
+    }
   });
   content.addEventListener('htmx:afterSwap', function () {
     mainArea!.scrollTop = 0;
@@ -407,6 +410,9 @@ function checkQueryParams() {
           'r-copy-to-clipboard',
           'https://transparentpricerx.com/pc-self-enroll'
         );
+      document
+        .querySelector('[hx-select="#marketing-medicare"]')!
+        .setAttribute('hx-select', '#marketing-medicare-fym');
       sendMessageToIframe('eligibility-calc', { source: 'pc' });
       sendMessageToIframe('medicare-calc', { source: 'pc' });
       sendMessageToIframe('medication-list', { source: 'pc' });

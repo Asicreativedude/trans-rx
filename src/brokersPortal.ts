@@ -40,13 +40,9 @@ const requestMedDeniedList = [
   'Trulycity',
   'Trollicity',
   'Tirzepatied',
-
   'Tirzepatid',
-
   'Tirzapatide',
-
   'Tirzeptide',
-
   'Tirzepetide',
   'Tirzepatine',
   'Terzepatide',
@@ -61,6 +57,9 @@ htmx.onLoad(function (content) {
   function sendPathnameToIframe(iframeId: string) {
     const iframe = document.getElementById(iframeId) as HTMLIFrameElement;
     switch (source) {
+      case 'pc':
+        sendMessageToIframe(iframeId, { source: 'pc' });
+        break;
       case 'naacp':
         sendMessageToIframe(iframeId, { source: 'naacp' });
         break;
@@ -159,18 +158,6 @@ htmx.onLoad(function (content) {
         }
         let emailTo;
         switch (source) {
-          case 'naacp':
-            emailTo = 'brokers@transparentpricerx.com';
-            break;
-          case 'fym':
-            emailTo = 'brokers@transparentpricerx.com';
-            break;
-          case 'jr':
-            emailTo = 'brokers@transparentpricerx.com';
-            break;
-          case 'zch':
-            emailTo = 'brokers@transparentpricerx.com';
-            break;
           case 'pinnacle':
             emailTo = 'pinnacle@transparentpricerx.com';
             break;
@@ -195,6 +182,8 @@ htmx.onLoad(function (content) {
           case 'fenyx':
             emailTo = 'fenyxhealth@transparentpricerx.com';
             break;
+          default:
+            emailTo = 'brokers@transparentpricerx.com';
         }
         const data = {
           toEmail: emailTo,
@@ -403,6 +392,22 @@ function checkQueryParams() {
   const param1 = urlParams.get('section');
   const brokerage = urlParams.get('brokerage');
   switch (source) {
+    case 'pc':
+      (document.querySelector('.pc-logo') as HTMLElement)!.style.display =
+        'block';
+      document
+        .querySelector('.broker-copy-link')!
+        .setAttribute(
+          'r-copy-to-clipboard',
+          'https://transparentpricerx.com/pc-self-enroll'
+        );
+      sendMessageToIframe('eligibility-calc', { source: 'pc' });
+      sendMessageToIframe('medicare-calc', { source: 'pc' });
+      sendMessageToIframe('medication-list', { source: 'pc' });
+      document
+        .querySelector('[hx-select="#video-tutorial-medicare"]')!
+        .setAttribute('hx-select', '#video-tutorial-medicare-zch');
+      break;
     case 'fym':
       (document.querySelector('.fym-logo') as HTMLElement)!.style.display =
         'block';

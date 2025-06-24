@@ -432,6 +432,12 @@ function checkQueryParams() {
           'r-copy-to-clipboard',
           'https://transparentpricerx.com/fym-self-enroll'
         );
+      document
+        .querySelector('.main-cta')!
+        .setAttribute(
+          'href',
+          'https://app.transparentpricerx.com/?utm_source=brokerportal&utm_id=medicare&company=medicare&utm_medium=TPRX&utm_campaign=fym'
+        );
       sendMessageToIframe('eligibility-calc', { source: 'fym' });
       sendMessageToIframe('medicare-calc', { source: 'fym' });
       sendMessageToIframe('medication-list', { source: 'fym' });
